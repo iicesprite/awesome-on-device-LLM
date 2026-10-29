@@ -1,0 +1,63 @@
+# 规范标签作为键；label 用于说明，aliases 可用于命令行搜索。
+# 添加新标签后重新生成索引。不同标签不能共用相同的 label 或 alias。
+tags:
+  topic/quantization: {label: 量化, aliases: [quantization]}
+  topic/inference: {label: 推理加速, aliases: [inference, 推理]}
+  topic/memory: {label: 内存优化, aliases: [memory]}
+  topic/compilation: {label: 编译优化, aliases: [compilation]}
+  topic/benchmark: {label: 性能评测, aliases: [benchmark]}
+  target/weight: {label: 权重, aliases: [weight]}
+  target/activation: {label: 激活, aliases: [activation]}
+  target/kv-cache: {label: KV缓存, aliases: [kv-cache, KV cache]}
+  scheme/weight-only: {label: 仅权重量化, aliases: [weight-only]}
+  scheme/weight-activation: {label: 权重激活联合量化, aliases: [weight-activation]}
+  scheme/mixed-precision: {label: 混合精度, aliases: [mixed-precision]}
+  scheme/ptq: {label: 训练后量化, aliases: [ptq]}
+  scheme/qat: {label: 量化感知训练, aliases: [qat]}
+  granularity/per-tensor: {label: 逐张量量化, aliases: [per-tensor]}
+  granularity/per-channel: {label: 逐通道量化, aliases: [per-channel]}
+  granularity/per-group: {label: 分组量化, aliases: [per-group]}
+  granularity/per-token: {label: 逐Token量化, aliases: [per-token]}
+  precision/w4a16: {label: W4A16, aliases: []}
+  precision/w8a8: {label: W8A8, aliases: []}
+  precision/w4a8: {label: W4A8, aliases: []}
+  precision/w4a4: {label: W4A4, aliases: []}
+  precision/kv2: {label: KV2, aliases: []}
+  precision/kv4: {label: KV4, aliases: []}
+  precision/kv8: {label: KV8, aliases: []}
+  precision/fp8: {label: FP8, aliases: []}
+  precision/fp4: {label: FP4, aliases: []}
+  method/awq: {label: AWQ, aliases: []}
+  method/gptq: {label: GPTQ, aliases: []}
+  method/smoothquant: {label: SmoothQuant, aliases: []}
+  method/kivi: {label: KIVI, aliases: []}
+  method/kvquant: {label: KVQuant, aliases: []}
+  system/heterogeneous: {label: 异构计算, aliases: [heterogeneous, 异构]}
+  system/offloading: {label: 计算与存储卸载, aliases: [offloading, 卸载]}
+  system/operator-fusion: {label: 算子融合, aliases: [operator-fusion]}
+  system/memory-layout: {label: 内存布局, aliases: [memory-layout]}
+  system/speculative-decoding: {label: 推测解码, aliases: [speculative-decoding]}
+  system/sparse-inference: {label: 稀疏推理, aliases: [sparse-inference]}
+  system/kv-eviction: {label: KV淘汰, aliases: [kv-eviction]}
+  stage/prefill: {label: 预填充, aliases: [prefill]}
+  stage/decode: {label: 解码, aliases: [decode]}
+  memory/unified: {label: 统一内存, aliases: [unified-memory]}
+  memory/discrete: {label: 独立显存, aliases: [discrete-memory]}
+  hardware/jetson-orin: {label: Jetson Orin, aliases: [orin]}
+  hardware/qualcomm: {label: 高通, aliases: [qualcomm, snapdragon]}
+  hardware/nvidia-dgpu: {label: NVIDIA独显, aliases: [nvidia-dgpu]}
+  hardware/amd-gpu: {label: AMD显卡, aliases: [amd-gpu]}
+  hardware/apple-silicon: {label: Apple Silicon, aliases: [apple-silicon]}
+  hardware/x86: {label: x86处理器, aliases: [x86]}
+  hardware/arm: {label: Arm处理器, aliases: [arm]}
+  backend/cpu: {label: CPU后端, aliases: [cpu]}
+  backend/cuda: {label: CUDA后端, aliases: [cuda]}
+  backend/qnn: {label: QNN后端, aliases: [qnn]}
+  backend/opencl: {label: OpenCL后端, aliases: [opencl]}
+  backend/vulkan: {label: Vulkan后端, aliases: [vulkan]}
+  backend/metal: {label: Metal后端, aliases: [metal]}
+  backend/rocm: {label: ROCm后端, aliases: [rocm]}
+  evidence/fake-quant: {label: 模拟量化实现, aliases: [fake-quant]}
+  evidence/packed-weights: {label: 压缩权重存储, aliases: [packed-weights]}
+  evidence/kernel: {label: 量化内核实现, aliases: [kernel]}
+  evidence/end-to-end: {label: 端到端推理实现, aliases: [end-to-end]}

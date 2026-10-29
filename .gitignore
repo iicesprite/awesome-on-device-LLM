@@ -1,0 +1,7 @@
+# Downloaded papers, snapshots, supplementary material (local only).
+**/resource/
+
+# Local Python environment and caches.
+.venv/
+__pycache__/
+*.py[cod]

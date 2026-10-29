@@ -1,0 +1,26 @@
+# 复制到 papers/<id>/、blogs/<id>/ 或 docs/<id>/meta.yaml。
+# id 必须与目录名一致，且在整个仓库中唯一；使用小写英文、数字和连字符。
+id: resource-id
+title: ""
+type: paper                  # papers → paper；blogs → blog；docs → doc
+url: ""                      # 主要来源，使用完整的 https:// 或 http:// 地址
+status: unread               # unread / reading / read
+summary: ""                  # 一句话说明收藏理由；详细内容写入 notes.md
+tags: []                     # 填写 tags.yaml 中的规范标签，不填中文别名
+
+# 可选：代码、项目主页、关联资源等，名称自定，值为完整网址。
+links: {}
+# links:
+#   code: https://github.com/owner/project
+
+# 可选：记录下载来源，不要求文件已存在；文件放在当前条目的 resource/ 中。
+attachments: []
+# attachments:
+#   - url: https://example.org/paper.pdf
+#     path: resource/paper.pdf
+
+# 可选论文信息（不适用时省略）。
+# authors: ["作者姓名"]
+# year: 2024
+# venue: MLSys
+# doi: "10.xxxx/xxxx"
