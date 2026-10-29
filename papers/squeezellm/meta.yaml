@@ -1,0 +1,35 @@
+id: squeezellm
+title: 'SqueezeLLM: Dense-and-Sparse Quantization'
+type: paper
+url: http://arxiv.org/abs/2306.07629
+status: unread
+summary: 非均匀权重量化与 dense/sparse 分解，面向带宽受限推理。
+tags:
+- topic/quantization
+- target/weight
+- scheme/weight-only
+- scheme/ptq
+- topic/memory
+links: {}
+attachments:
+- url: https://arxiv.org/pdf/2306.07629v4
+  path: resource/squeezellm.pdf
+  source: zotero
+  zotero_item_key: MJ247X73
+  zotero_attachment_key: XQWXQVBZ
+authors:
+- Sehoon Kim
+- Coleman Hooper
+- Amir Gholami
+- Zhen Dong
+- Xiuyu Li
+- Sheng Shen
+- Michael W. Mahoney
+- Kurt Keutzer
+year: 2024
+doi: 10.48550/arXiv.2306.07629
+zotero:
+  item_key: MJ247X73
+  library_id: 0
+  source_date: '2024-06-05'
+  duplicate_item_keys: []

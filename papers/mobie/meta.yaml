@@ -1,0 +1,35 @@
+id: mobie
+title: 'MoBiE: Efficient Inference of Mixture of Binary Experts under Post-Training Quantization'
+type: paper
+url: http://arxiv.org/abs/2604.06798
+status: unread
+summary: 【已撤稿】二值 MoE 量化论文；作者撤稿说明涉及推导错误，不作为有效结论或性能依据。
+tags:
+- topic/quantization
+- architecture/moe
+- target/weight
+- scheme/ptq
+- topic/inference
+- publication/withdrawn
+links:
+  related-version-candidate: https://openreview.net/forum?id=GdnlENuK0D
+attachments: []
+authors:
+- Zhixiong Zhao
+- Zukang Xu
+- Zhixuan Chen
+- Dawei Yang
+year: 2026
+doi: 10.48550/arXiv.2604.06798
+zotero:
+  item_key: ZEYNNDSK
+  library_id: 0
+  source_date: '2026-04-20'
+  duplicate_item_keys: []
+version_note: 与 BiMoE 的摘要高度相近，但作者不同且关联身份未确认；不将二者自动合并，不以 BiMoE PDF 替代本条目。
+attachment_note: Zotero 中未找到该条目的 PDF 附件；未从网络下载。
+publication_status: withdrawn
+withdrawal:
+  source_url: https://arxiv.org/abs/2604.06798
+  checked_on: '2026-10-29'
+  reason: 作者说明存在 NGES 推导错误、署名单位问题及措辞重叠。

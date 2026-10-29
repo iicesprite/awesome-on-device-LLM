@@ -1,0 +1,29 @@
+id: smoothquant
+title: 'SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models'
+type: paper
+url: https://proceedings.mlr.press/v202/xiao23c.html
+status: unread
+summary: 等价变换处理激活离群值，连接校准与 W8A8 推理。
+tags:
+- topic/quantization
+- target/weight
+- target/activation
+- precision/w8a8
+- method/smoothquant
+links: {}
+attachments: []
+authors:
+- Guangxuan Xiao
+- Ji Lin
+- Mickael Seznec
+- Hao Wu
+- Julien Demouth
+- Song Han
+year: 2023
+venue: Proceedings of the 40th International Conference on Machine Learning
+zotero:
+  item_key: FS4HI2QV
+  library_id: 0
+  source_date: '2023-07-03'
+  duplicate_item_keys: []
+attachment_note: Zotero 中未找到该条目的 PDF 附件；未从网络下载。

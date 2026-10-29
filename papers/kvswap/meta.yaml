@@ -1,0 +1,29 @@
+id: kvswap
+title: 'KVSwap: Disk-aware KV Cache Offloading for Long-Context On-device Inference'
+type: paper
+url: https://arxiv.org/abs/2511.11907v2
+status: unread
+summary: 统一内存端侧设备的磁盘感知 KV cache 卸载与 I/O–计算重叠。
+tags:
+- topic/inference
+- topic/memory
+- target/kv-cache
+- system/offloading
+- memory/unified
+links: {}
+attachments:
+- url: https://arxiv.org/pdf/2511.11907
+  path: resource/kvswap.pdf
+  source: zotero
+  zotero_item_key: MHYWIRPY
+  zotero_attachment_key: 2PAN9UQL
+authors:
+- Huawei Zhang
+- Chunwei Xia
+- Zheng Wang
+year: 2025
+zotero:
+  item_key: MHYWIRPY
+  library_id: 0
+  source_date: 2025/11/14
+  duplicate_item_keys: []

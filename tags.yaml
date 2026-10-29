@@ -6,6 +6,9 @@ tags:
   topic/memory: {label: 内存优化, aliases: [memory]}
   topic/compilation: {label: 编译优化, aliases: [compilation]}
   topic/benchmark: {label: 性能评测, aliases: [benchmark]}
+  architecture/moe: {label: 混合专家架构, aliases: [moe]}
+  transform/rotation: {label: 旋转变换, aliases: [rotation]}
+  publication/withdrawn: {label: 已撤稿, aliases: [withdrawn]}
   target/weight: {label: 权重, aliases: [weight]}
   target/activation: {label: 激活, aliases: [activation]}
   target/kv-cache: {label: KV缓存, aliases: [kv-cache, KV cache]}
@@ -39,6 +42,7 @@ tags:
   system/speculative-decoding: {label: 推测解码, aliases: [speculative-decoding]}
   system/sparse-inference: {label: 稀疏推理, aliases: [sparse-inference]}
   system/kv-eviction: {label: KV淘汰, aliases: [kv-eviction]}
+  system/lut: {label: 查表计算, aliases: [lut, table-lookup]}
   stage/prefill: {label: 预填充, aliases: [prefill]}
   stage/decode: {label: 解码, aliases: [decode]}
   memory/unified: {label: 统一内存, aliases: [unified-memory]}
@@ -51,6 +55,7 @@ tags:
   hardware/x86: {label: x86处理器, aliases: [x86]}
   hardware/arm: {label: Arm处理器, aliases: [arm]}
   backend/cpu: {label: CPU后端, aliases: [cpu]}
+  backend/npu: {label: NPU后端, aliases: [npu]}
   backend/cuda: {label: CUDA后端, aliases: [cuda]}
   backend/qnn: {label: QNN后端, aliases: [qnn]}
   backend/opencl: {label: OpenCL后端, aliases: [opencl]}

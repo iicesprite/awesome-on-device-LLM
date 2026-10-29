@@ -1,0 +1,36 @@
+id: t-man
+title: 'T-MAN: Enabling End-to-End Low-Bit LLM Inference on NPUs via Unified Table Lookup'
+type: paper
+url: http://arxiv.org/abs/2511.11248
+status: unread
+summary: 统一查表布局、分块和流水线降低 NPU 低比特推理开销。
+tags:
+- topic/inference
+- topic/quantization
+- backend/npu
+- system/lut
+- system/memory-layout
+links: {}
+attachments:
+- url: http://arxiv.org/pdf/2511.11248v1
+  path: resource/t-man-w8fbwgvf.pdf
+  source: zotero
+  zotero_item_key: FMXYG6RX
+  zotero_attachment_key: W8FBWGVF
+  local_status: missing-in-zotero
+authors:
+- Jianyu Wei
+- Qingtao Li
+- Shijie Cao
+- Lingxiao Ma
+- Zixu Hao
+- Yanyong Zhang
+- Xiaoyan Hu
+- Ting Cao
+year: 2025
+doi: 10.48550/arXiv.2511.11248
+zotero:
+  item_key: FMXYG6RX
+  library_id: 0
+  source_date: '2025-11-14'
+  duplicate_item_keys: []

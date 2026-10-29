@@ -1,0 +1,31 @@
+id: shadownpu
+title: 'ShadowNPU: System and Algorithm Co-design for NPU-Centric On-Device LLM Inference'
+type: paper
+url: http://arxiv.org/abs/2508.16703
+status: unread
+summary: 针对 Attention 回退问题，协同设计稀疏 Attention 与 NPU 异构流水线。
+tags:
+- topic/inference
+- backend/npu
+- system/heterogeneous
+- system/sparse-inference
+links: {}
+attachments:
+- url: https://arxiv.org/pdf/2508.16703v4
+  path: resource/shadownpu.pdf
+  source: zotero
+  zotero_item_key: GWKCLUHM
+  zotero_attachment_key: SDQKX5WN
+authors:
+- Wangsong Yin
+- Daliang Xu
+- Mengwei Xu
+- Gang Huang
+- Xuanzhe Liu
+year: 2026
+doi: 10.48550/arXiv.2508.16703
+zotero:
+  item_key: GWKCLUHM
+  library_id: 0
+  source_date: '2026-04-08'
+  duplicate_item_keys: []

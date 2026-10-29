@@ -1,0 +1,38 @@
+id: flattenquant
+title: 'FlattenQuant: Breaking through the Inference Compute-bound for Large Language Models with Per-tensor Quantization'
+type: paper
+url: https://aclanthology.org/2024.lrec-main.648/
+status: unread
+summary: 通道展开实现逐张量量化，面向大 batch 或长序列计算受限场景。
+tags:
+- topic/quantization
+- scheme/weight-activation
+- granularity/per-tensor
+- scheme/mixed-precision
+links: {}
+attachments:
+- url: https://aclanthology.org/2024.lrec-main.648.pdf
+  path: resource/flattenquant.pdf
+  source: zotero
+  zotero_item_key: 7D8ZAKYK
+  zotero_attachment_key: 96UP8YEN
+- url: https://arxiv.org/pdf/2402.17985
+  path: resource/flattenquant-caq25dlt.pdf
+  source: zotero
+  zotero_item_key: BJXZYABE
+  zotero_attachment_key: CAQ25DLT
+authors:
+- Yi Zhang
+- Fei Yang
+- Shuang Peng
+- Fangyu Wang
+- Aimin Pan
+year: 2024
+venue: Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and
+  Evaluation (LREC-COLING 2024)
+zotero:
+  item_key: 7D8ZAKYK
+  library_id: 0
+  source_date: 2024-05
+  duplicate_item_keys:
+  - BJXZYABE

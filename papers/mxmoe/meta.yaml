@@ -1,0 +1,40 @@
+id: mxmoe
+title: 'MxMoE: Mixed-precision Quantization for MoE with Accuracy and Performance Co-Design'
+type: paper
+url: https://openreview.net/forum?id=pXoZLGMNDm
+status: unread
+summary: 联合精度分配、专家激活与硬件资源，生成混合精度 GroupGEMM 内核。
+tags:
+- topic/quantization
+- architecture/moe
+- scheme/mixed-precision
+- scheme/weight-activation
+- topic/inference
+links: {}
+attachments:
+- url: https://openreview.net/pdf?id=pXoZLGMNDm
+  path: resource/mxmoe.pdf
+  source: zotero
+  zotero_item_key: WQXY59FA
+  zotero_attachment_key: DQ9BCI5C
+- url: https://arxiv.org/pdf/2505.05799
+  path: resource/mxmoe-akffll3p.pdf
+  source: zotero
+  zotero_item_key: S2MCVR2T
+  zotero_attachment_key: AKFFLL3P
+authors:
+- Haojie Duanmu
+- Xiuhong Li
+- Zhihang Yuan
+- Size Zheng
+- Jiangfei Duan
+- Xingcheng Zhang
+- Dahua Lin
+year: 2025
+venue: Forty-second International Conference on Machine Learning
+zotero:
+  item_key: WQXY59FA
+  library_id: 0
+  source_date: 2025/06/18
+  duplicate_item_keys:
+  - S2MCVR2T

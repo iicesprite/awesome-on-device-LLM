@@ -1,0 +1,38 @@
+id: heteroinfer
+title: Characterizing Mobile SoC for Accelerating Heterogeneous LLM Inference
+type: paper
+url: https://dl.acm.org/doi/10.1145/3731569.3764808
+status: unread
+summary: 移动 SoC 的 GPU–NPU 算力、带宽、同步与异构推理。
+tags:
+- topic/inference
+- system/heterogeneous
+- memory/unified
+- backend/npu
+links:
+  related-version-candidate: http://arxiv.org/abs/2501.14794
+attachments:
+- url: https://dl.acm.org/doi/pdf/10.1145/3731569.3764808?download=true
+  path: resource/heteroinfer-vac3y7ae.pdf
+  source: zotero
+  zotero_item_key: EATZ3WZN
+  zotero_attachment_key: VAC3Y7AE
+  local_status: missing-in-zotero
+authors:
+- Le Chen
+- Dahu Feng
+- Erhu Feng
+- Yingrui Wang
+- Rong Zhao
+- Yubin Xia
+- Pinjie Xu
+- Haibo Chen
+year: 2025
+doi: 10.1145/3731569.3764808
+venue: Proceedings of the ACM SIGOPS 31st Symposium on Operating Systems Principles
+zotero:
+  item_key: EATZ3WZN
+  library_id: 0
+  source_date: 十月 12, 2025
+  duplicate_item_keys: []
+version_note: 与关联条目可能为预印本/发表版本关系，待阅读核对；按既定清单分别收录。

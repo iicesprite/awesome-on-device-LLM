@@ -1,0 +1,37 @@
+id: mobile-npu-test-time-compute
+title: Scaling LLM Test-Time Compute with Mobile NPU on Smartphones
+type: paper
+url: https://dl.acm.org/doi/10.1145/3767295.3769382
+status: unread
+summary: 高通手机 NPU 的测试时计算扩展、分块量化与查表运算。
+tags:
+- topic/inference
+- hardware/qualcomm
+- backend/npu
+- topic/quantization
+- system/lut
+links: {}
+attachments:
+- url: https://dl.acm.org/doi/pdf/10.1145/3767295.3769382?download=true
+  path: resource/mobile-npu-test-time-compute-xnsvnidb.pdf
+  source: zotero
+  zotero_item_key: 323PMB6L
+  zotero_attachment_key: XNSVNIDB
+  local_status: missing-in-zotero
+authors:
+- Zixu Hao
+- Jianyu Wei
+- Tuowei Wang
+- Minxing Huang
+- Huiqiang Jiang
+- Shiqi Jiang
+- Ting Cao
+- Ju Ren
+year: 2026
+doi: 10.1145/3767295.3769382
+venue: Proceedings of the 21st European Conference on Computer Systems
+zotero:
+  item_key: 323PMB6L
+  library_id: 0
+  source_date: 四月 26, 2026
+  duplicate_item_keys: []
