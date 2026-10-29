@@ -1,5 +1,6 @@
 # Downloaded papers, snapshots, supplementary material (local only).
 **/resource/
+tests/
 
 # Local Python environment and caches.
 .venv/
