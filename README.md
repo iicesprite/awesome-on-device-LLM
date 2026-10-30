@@ -71,6 +71,8 @@ blogs/<id>/meta.yaml        博客、技术解析、工程实践文章
 docs/<id>/meta.yaml         官方文档、API 文档、部署指南、硬件手册
 <分类>/<id>/notes.md        可选的阅读笔记
 <分类>/<id>/resource/       本地下载资料，不上传 Git
+<分类>/<id>/resources/assets/  笔记引用的原始图表摘图，不上传 Git
+<分类>/<id>/resources/asset-sources.yaml  摘图来源、页码及裁剪信息，随 Git 同步
 templates/                 元数据和笔记模板
 scripts/catalog.py         校验、索引生成与搜索
 tests/                     脚本测试
@@ -100,11 +102,11 @@ uv.lock                    跨设备依赖锁文件
 - `topic/*`：量化、推理、内存、编译、评测。
 - `target/*`、`scheme/*`、`granularity/*`、`precision/*`：量化对象、方案、粒度和精度。
 - `method/*`：AWQ、GPTQ、SmoothQuant 等方法。
-- `system/*`、`stage/*`：异构、卸载、融合及 prefill / decode。
+- `system/*`、`stage/*`：异构、卸载、融合、计算与传输流水线、动态调度、近数据处理、专家缓存及 prefill / decode。
+- `workload/*`：在线服务、离线批量推理和长上下文等工作负载。
 - `memory/*`、`hardware/*`、`backend/*`：内存架构、设备及计算后端。
-- `evidence/*`：来源中提供的模拟量化、压缩权重、量化内核、端到端实现证据。
+- `evidence/*`：来源中提供的模拟量化、压缩权重、量化内核、端到端实现或体系结构仿真评估证据。
 
-只标注来源实际涉及的内容。AWQ 的“激活感知”不等于激活被量化；`precision/w4a16` 也不等于所有算子都使用该精度。提供 kernel 不等于端到端加速。`evidence/*` 描述来源提供的实现，不表示本人复现成功；本人实测写入笔记，附测试条件。
 
 ## 下载 PDF 或网页快照
 
@@ -120,8 +122,26 @@ attachments:
 
 **跨设备克隆会恢复元数据、笔记和索引，不会恢复本地附件。** 新设备可按 `attachments` 中的来源重新下载；无法重新下载的资料应单独备份。不要用 `git add -f` 强制提交下载文件。忽略规则不会自动取消已经被 Git 跟踪的文件。
 
-## 检查脚本
+### 在笔记中引用图表
 
-```powershell
-uv run python -m unittest discover -s tests -v
+必要的原始图表摘图放在各条目的 `resources/assets/`，笔记用相对路径引用，并在图注中标明论文版本、图表编号和 PDF 页码。已有完整 PDF 继续放在 `resource/`，不因摘图而移动。
+
+在 `resources/asset-sources.yaml` 保存摘图对应的原 PDF、下载网址、页码、裁剪坐标和单位。摘图与完整 PDF 一样仅保存在本机；跨设备需另行复制，或根据随 Git 同步的来源清单重新生成。笔记中的关键结论仍用文字说明，避免缺少本地图片时无法理解。
+
+## 用 agent 收录和阅读
+
+仓库中的 [resource-curator skill](skills/resource-curator/SKILL.md) 指导 agent 收录、去重、打标签，并按需使用 `templates/notes.md` 撰写笔记。skill 源码随仓库同步；本机安装在用户的 Codex skills 目录中。
+
+可以这样调用：
+
+```text
+使用 $resource-curator 收录这篇论文：https://……，先不阅读。
+使用 $resource-curator 收录这个博客，推荐标签给我审阅后再应用：https://……
+使用 $resource-curator 阅读这篇论文，重点分析 Orin 上的量化实现，按默认模板写笔记：https://……
 ```
+
+默认仅收录、状态为未读；阅读分析不自动把用户的阅读进度改为已读。标签审阅模式会保留待审建议，不提前用于索引筛选。
+
+新设备需要将 `skills/resource-curator/` 安装到 `$CODEX_HOME/skills/`（未设置时为 `~/.codex/skills/`）。修改仓库内的 skill 后，也需更新本机安装副本；不要分别维护两套内容。
+
+**推荐使用**[humanizer](https://github.com/op7418/Humanizer-zh)润色note
