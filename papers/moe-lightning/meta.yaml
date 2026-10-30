@@ -1,0 +1,52 @@
+id: moe-lightning
+title: 'MoE-Lightning: High-Throughput MoE Inference on Memory-constrained GPUs'
+type: paper
+url: https://doi.org/10.1145/3669940.3707267
+status: unread
+summary: 面向离线批量 MoE 推理，用分页权重、CPU–GPU–I/O 流水线 CGOPipe 和分层 roofline 模型选择策略，提高有限显存下的吞吐与内存利用率。
+tags:
+- topic/inference
+- topic/memory
+- architecture/moe
+- target/weight
+- target/kv-cache
+- system/heterogeneous
+- system/offloading
+- system/pipelining
+- system/memory-layout
+- workload/offline-batch
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- hardware/x86
+- backend/cpu
+links:
+  arxiv: https://arxiv.org/abs/2411.11217
+  project: https://pschafhalter.com/moe-lightning/
+attachments:
+- url: https://pschafhalter.com/papers/2025-asplos-moe-lightning.pdf
+  path: resources/moe-lightning-asplos2025.pdf
+  version: ASPLOS 2025 author-hosted paper
+  downloaded_on: '2026-10-30'
+authors:
+- Shiyi Cao
+- Shu Liu
+- Tyler Griggs
+- Peter Schafhalter
+- Xiaoxuan Liu
+- Ying Sheng
+- Joseph E. Gonzalez
+- Matei Zaharia
+- Ion Stoica
+year: 2025
+venue: ASPLOS 2025, Volume 1
+doi: 10.1145/3669940.3707267
+first_published: '2024-11-18'
+source_checked_on: '2026-10-30'
+version_note: year 为正式发表年份；首次 arXiv 预印本发布于 2024 年，本地保存作者网站提供的 ASPLOS 2025 版本。
+code_availability:
+  url: https://github.com/caoshiyi/FastMoE
+  linked_from: https://pschafhalter.com/
+  checked_on: '2026-10-30'
+  status: http-404
+  detail: 作者主页提供的代码链接本次返回 404；未以第三方 fork 替代官方实现。

@@ -12,12 +12,12 @@ tags:
 links: {}
 attachments:
 - url: https://aclanthology.org/2024.lrec-main.648.pdf
-  path: resource/flattenquant.pdf
+  path: resources/flattenquant.pdf
   source: zotero
   zotero_item_key: 7D8ZAKYK
   zotero_attachment_key: 96UP8YEN
 - url: https://arxiv.org/pdf/2402.17985
-  path: resource/flattenquant-caq25dlt.pdf
+  path: resources/flattenquant-caq25dlt.pdf
   source: zotero
   zotero_item_key: BJXZYABE
   zotero_attachment_key: CAQ25DLT

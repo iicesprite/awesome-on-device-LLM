@@ -16,6 +16,7 @@ tags:
   scheme/weight-activation: {label: 权重激活联合量化, aliases: [weight-activation]}
   scheme/mixed-precision: {label: 混合精度, aliases: [mixed-precision]}
   scheme/ptq: {label: 训练后量化, aliases: [ptq]}
+  scheme/nonuniform: {label: 非均匀量化, aliases: [non-uniform]}
   scheme/qat: {label: 量化感知训练, aliases: [qat]}
   granularity/per-tensor: {label: 逐张量量化, aliases: [per-tensor]}
   granularity/per-channel: {label: 逐通道量化, aliases: [per-channel]}
@@ -43,6 +44,14 @@ tags:
   system/sparse-inference: {label: 稀疏推理, aliases: [sparse-inference]}
   system/kv-eviction: {label: KV淘汰, aliases: [kv-eviction]}
   system/lut: {label: 查表计算, aliases: [lut, table-lookup]}
+  system/error-compensation: {label: 运行时误差补偿, aliases: [error-compensation, dynamic-error-compensation]}
+  system/pipelining: {label: 计算与传输流水线, aliases: [pipelining, compute-io-overlap]}
+  system/dynamic-scheduling: {label: 动态执行调度, aliases: [dynamic-scheduling]}
+  system/near-data-processing: {label: 近数据处理, aliases: [near-data-processing, ndp, ndp-dimm]}
+  system/expert-caching: {label: 专家缓存, aliases: [expert-caching, expert-cache]}
+  workload/online-serving: {label: 在线推理服务, aliases: [online-serving]}
+  workload/offline-batch: {label: 离线批量推理, aliases: [offline-batch, batch-inference]}
+  workload/long-context: {label: 长上下文推理, aliases: [long-context]}
   stage/prefill: {label: 预填充, aliases: [prefill]}
   stage/decode: {label: 解码, aliases: [decode]}
   memory/unified: {label: 统一内存, aliases: [unified-memory]}
@@ -66,3 +75,4 @@ tags:
   evidence/packed-weights: {label: 压缩权重存储, aliases: [packed-weights]}
   evidence/kernel: {label: 量化内核实现, aliases: [kernel]}
   evidence/end-to-end: {label: 端到端推理实现, aliases: [end-to-end]}
+  evidence/simulation: {label: 体系结构仿真评估, aliases: [architecture-simulation]}

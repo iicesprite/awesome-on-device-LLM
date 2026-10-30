@@ -1,0 +1,24 @@
+schema_version: 1
+paths_relative_to: paper-directory
+source_url: https://www.usenix.org/system/files/osdi25-park-yeonhong.pdf
+source_pdf: resources/decdec-osdi2025.pdf
+source_version: OSDI 2025 proceedings, includes one cover page
+page_numbering: 1-based PDF page index including cover
+coordinate_system: top-left origin, PDF points (1/72 inch), [left, top, right, bottom]
+render_scale: 3
+render_dpi: 216
+renderer: pypdfium2
+extracted_on: '2026-10-30'
+assets:
+- path: resources/assets/figure-06-overview.png
+  figure: Figure 6
+  page: 6
+  printed_page: 807
+  crop_bbox: [50, 68, 560, 226]
+  description: Original DecDEC overview with CPU memory and GPU execution branches; caption retained.
+- path: resources/assets/figure-17-quality-latency.png
+  figure: Figure 17
+  page: 13
+  printed_page: 814
+  crop_bbox: [52, 68, 560, 289]
+  description: Original four-panel perplexity versus latency chart including legends and caption.

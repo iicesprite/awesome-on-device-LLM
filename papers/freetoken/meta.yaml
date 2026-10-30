@@ -1,0 +1,56 @@
+id: freetoken
+title: 'FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution'
+type: paper
+url: https://arxiv.org/abs/2608.16157
+status: unread
+summary: 面向笔记本、台式机和工作站的本地 MoE 服务，联合带宽感知 CPU–GPU 执行、专家缓存、prefill 流式加载与运行时内存管理，支持低比特专家权重。
+tags:
+- topic/inference
+- topic/memory
+- topic/quantization
+- architecture/moe
+- target/weight
+- precision/fp4
+- system/heterogeneous
+- system/offloading
+- system/pipelining
+- system/dynamic-scheduling
+- system/expert-caching
+- system/memory-layout
+- workload/online-serving
+- workload/long-context
+- stage/prefill
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- hardware/x86
+- backend/cpu
+- backend/cuda
+- evidence/packed-weights
+- evidence/kernel
+- evidence/end-to-end
+links:
+  code: https://github.com/FlashML-org/FreeToken
+  project: https://flashml.ai
+attachments:
+- url: https://arxiv.org/pdf/2608.16157v1
+  path: resources/freetoken-2608.16157v1.pdf
+  version: arXiv:2608.16157v1
+  downloaded_on: '2026-10-30'
+authors:
+- Shuo Yang
+- Xiaoze Fan
+- Melissa Pan
+- Haocheng Xi
+- Zhe Wang
+- Shanlin Sun
+- Kurt Keutzer
+- Song Han
+- Matei Zaharia
+- Chenfeng Xu
+- Ion Stoica
+year: 2026
+doi: 10.48550/arXiv.2608.16157
+first_published: '2026-08-17'
+source_checked_on: '2026-10-30'
+tag_note: FP4 标签对应论文评测使用的 MXFP4/NVFP4 专家权重；异构标签对应独显与主机 CPU 协同，不表示统一物理内存。实现证据结合论文端到端服务评测与 2026-10-30 对官方 commit ecbbce457769a75810df83517250cd3ce3263ea5 的只读源码核对，未本地运行；源码版本差异与量化内核路径见 notes.md。

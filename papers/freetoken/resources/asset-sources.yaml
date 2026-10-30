@@ -1,0 +1,32 @@
+paper_id: freetoken
+paper_version: arXiv:2608.16157v1
+source_url: https://arxiv.org/pdf/2608.16157v1
+source_pdf: resources/freetoken-2608.16157v1.pdf
+extracted_on: '2026-10-30'
+path_base: paper entry directory
+render:
+  tool: pdftoppm
+  dpi: 170
+  page_size_points: [612, 792]
+  raster_size_pixels: [1445, 1870]
+crop_convention:
+  origin: top-left
+  order: [left, top, right, bottom]
+  points_unit: pt (1/72 inch)
+  pixels_unit: pixel
+  right_bottom_exclusive: true
+assets:
+  - path: resources/assets/fig2-overview.png
+    figure: Figure 2
+    pdf_page: 6
+    crop_points: [68, 59, 544, 377]
+    crop_pixels: [160, 139, 1285, 891]
+    size_pixels: [1125, 752]
+    description: System overview; prefill double buffering, semantic checkpoints, and decode expert split. Original caption omitted; note supplies version and context.
+  - path: resources/assets/fig4-prefill-cache.png
+    figure: Figure 4
+    pdf_page: 12
+    crop_points: [66, 58, 548, 246]
+    crop_pixels: [155, 136, 1294, 581]
+    size_pixels: [1139, 445]
+    description: Prefill overlap ablation and expert-cache miss-rate trace replay. Original caption omitted; note explains model, units, workload, and aggregation.

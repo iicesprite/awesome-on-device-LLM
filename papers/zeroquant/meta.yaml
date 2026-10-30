@@ -13,17 +13,17 @@ tags:
 links: {}
 attachments:
 - url: https://proceedings.neurips.cc/paper_files/paper/2022/file/adf7fa39d65e2983d724ff7da57f00ac-Paper-Conference.pdf
-  path: resource/zeroquant.pdf
+  path: resources/zeroquant.pdf
   source: zotero
   zotero_item_key: 5WZ3EPAE
   zotero_attachment_key: TJ2M9YK3
 - url: https://arxiv.org/pdf/2206.01861
-  path: resource/zeroquant-zathrbd8.pdf
+  path: resources/zeroquant-zathrbd8.pdf
   source: zotero
   zotero_item_key: 9KJY9PPD
   zotero_attachment_key: ZATHRBD8
 - url: https://arxiv.org/pdf/2206.01861
-  path: resource/zeroquant-yicka85g.pdf
+  path: resources/zeroquant-yicka85g.pdf
   source: zotero
   zotero_item_key: 3WUXDXS9
   zotero_attachment_key: YICKA85G

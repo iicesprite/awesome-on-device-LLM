@@ -1,138 +1,187 @@
 # 端侧 LLM 推理与量化工程资源库
 
-收集端侧大模型推理加速、量化及软硬件协同相关的论文、博客和技术文档。重点关注 Jetson / Orin、高通手机、台式机、独显笔记本和小型 AI 工作站。
+收集端侧大模型推理加速、量化及软硬件协同相关的论文、博客和技术文档。
 
-**[浏览资源索引](INDEX.md)** · [表格索引](catalog.csv) · [标签词表](tags.yaml)
+关注的设备：Jetson / Orin、高通手机、台式机、独显笔记本和小型 AI 工作站。
+
+## 文档入口
+
+| 想做什么 | 去哪里 |
+| --- | --- |
+| 浏览全部资源，按类型或标签查阅 | [INDEX.md](INDEX.md) |
+| 用 Excel 筛选、排序 | [catalog.csv](catalog.csv) |
+| 查看或新增标签 | [tags.yaml](tags.yaml) |
+| 配置环境、迁移到新设备、运行测试 | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| 新建条目或笔记 | [templates/](templates/) |
+| 让 agent 代为收录和阅读 | [resource-curator skill](skills/resource-curator/SKILL.md) |
+
+## 快速开始
+
+先安装 [uv](https://docs.astral.sh/uv/getting-started/installation/)，然后在仓库根目录运行（以下命令均在仓库根目录执行）：
+
+```powershell
+uv sync --locked                           # 准备 Python 环境，首次需要联网
+uv run python scripts/catalog.py search --tag 量化 --tag orin   # 试一下搜索
+```
 
 ## 添加一条资源
 
-每条资源一个目录，`meta.yaml` 保存网址和标签；开始阅读后再创建 `notes.md`。以下以新增一篇论文为例，命令在仓库根目录运行：
+以新增论文 `my-paper` 为例。
 
-```powershell
-New-Item -ItemType Directory -Path papers/my-paper
-Copy-Item templates/meta.yaml papers/my-paper/meta.yaml
-```
+1. 创建条目目录，复制元数据模板：
 
-编辑新建的 `meta.yaml`，填写标题、网址、收藏理由和标签。将 `id` 改成目录名 `my-paper`；`papers/` 的 `type` 为 `paper`，`blogs/` 为 `blog`，`docs/` 为 `doc`。条目 ID 在整个仓库中唯一，使用小写英文、数字和连字符。
+   ```powershell
+   New-Item -ItemType Directory -Path papers/my-paper
+   Copy-Item templates/meta.yaml papers/my-paper/meta.yaml
+   ```
 
-开始阅读时复制笔记模板，按资源内容删改章节：
+2. 编辑 `meta.yaml`：填写标题、网址、收藏理由和标签，并把 `id` 改成目录名 `my-paper`。
+3. 开始阅读时复制笔记模板，按内容删改章节，并将 `status` 改为 `reading`：
 
-```powershell
-Copy-Item templates/notes.md papers/my-paper/notes.md
-```
+   ```powershell
+   Copy-Item templates/notes.md papers/my-paper/notes.md
+   ```
 
-将 `status` 改成 `reading`，读完改成 `read`。索引自动链接已存在的 `notes.md`；没有笔记时显示 `—`。
+4. 读完后将 `status` 改为 `read`。
+5. 重新生成索引：
 
-## 生成索引和搜索
+   ```powershell
+   uv run python scripts/catalog.py build
+   ```
 
-使用 [uv](https://docs.astral.sh/uv/getting-started/installation/) 管理 Python 环境和依赖。安装 uv 后，在仓库根目录运行：
+命名规则：
 
-```powershell
-uv sync --locked
-```
+- 条目 ID 在整个仓库中唯一，只用小写英文、数字和连字符，且必须与目录名一致。
+- 条目放在对应类型的目录下，`type` 随目录而定：
 
-uv 会在本机准备 `.venv`，无需手动激活。项目支持 Python 3.10 及以上版本，`.python-version` 将默认开发环境固定在 Python 3.11。新增条目、修改元数据或增加笔记后运行：
+  | 目录 | `type` | 收录内容 |
+  | --- | --- | --- |
+  | `papers/` | `paper` | 论文、综述、学术技术报告（不限 PDF/HTML） |
+  | `blogs/` | `blog` | 博客、技术解析、工程实践文章 |
+  | `docs/` | `doc` | 官方文档、API 文档、部署指南、硬件手册 |
+
+- 同一篇论文的 PDF、网页、代码链接放进同一个条目。独立解读它的博客另建条目，并在 `links` 中互相关联。
+
+## 生成索引
 
 ```powershell
 uv run python scripts/catalog.py build
 ```
 
-这会先校验所有条目，再生成 `INDEX.md` 和 `catalog.csv`。**人工只维护元数据和笔记，不直接编辑生成的索引。** `INDEX.md` 包含分类表和按标签的交叉索引；CSV 使用 UTF-8 BOM，方便 Excel 导入，标签以分号分隔，链接和附件字段使用 JSON。
+`build` 先校验所有条目，再生成 `INDEX.md`（分类表和标签交叉索引）与 `catalog.csv`。
 
-以下命令在仓库根目录运行。`uv run` 会自动同步项目环境，不需要指定 Windows 或 Linux 的虚拟环境路径。
+> **只维护 `meta.yaml` 和 `notes.md`，不要直接编辑 `INDEX.md` 和 `catalog.csv`。** 它们每次都会被覆盖。
+
+- 笔记：存在 `notes.md` 时，索引自动生成链接；不存在则显示 `—`。
+- 离线：脚本不检查链接是否可访问，不下载附件，也不要求附件已存在。
+
+## 搜索
 
 ```powershell
-# 只检查格式、分类、ID、标签、网址格式和附件路径，不写文件
+# 只校验，不写文件
 uv run python scripts/catalog.py check
 
-# 同时包含“量化”和“Jetson Orin”的条目；支持中文名称和英文别名
+# 同时带有“量化”和“Jetson Orin”标签（中文名和英文别名均可）
 uv run python scripts/catalog.py search --tag 量化 --tag orin
 
-# 查找已读的 KV cache 论文
+# 已读的 KV cache 论文
 uv run python scripts/catalog.py search --tag kv-cache --type paper --status read
 
-# 搜索元数据关键字，不搜索笔记正文
+# 在元数据中搜索关键字（不搜索笔记正文）
 uv run python scripts/catalog.py search --query AWQ
 ```
 
-多个 `--tag` 以及类型、状态、关键字之间均取交集。索引脚本本身离线运行，不验证链接是否可访问、不下载附件，也不要求本机存在附件。uv 首次准备环境或安装依赖时需要网络。
+多个 `--tag` 以及类型、状态、关键字之间取交集。
 
-### 依赖与跨设备迁移
+## 条目结构与元数据
 
-`pyproject.toml` 声明依赖，`uv.lock` 锁定解析结果，两者与 `.python-version` 一起上传 Git；各设备的 `.venv/` 不上传。在新设备克隆仓库后运行 `uv sync --locked`，即可按锁文件准备环境。
+每个条目是分类目录下的一层子目录：
 
-增加依赖用 `uv add 包名`，升级已锁定依赖用 `uv lock --upgrade-package 包名`，随后运行 `uv sync --locked` 和测试。无需另行维护 `requirements.txt`。
+| 路径 | 内容 | 是否入 Git |
+| --- | --- | --- |
+| `<分类>/<id>/meta.yaml` | 元数据（必需） | 是 |
+| `<分类>/<id>/notes.md` | 阅读笔记（可选） | 是 |
+| `<分类>/<id>/resources/` | 本地资料：PDF、网页快照、笔记引用的原图 | 否 |
+| `<分类>/<id>/resources/asset-sources.yaml` | 原图的来源、页码和裁剪信息 | 是 |
 
-## 目录与元数据约定
+分类只按资源类型划分。量化、异构、具体硬件等一律用标签表达，不建主题子目录。
+
+`meta.yaml` 字段：
+
+| 字段 | 是否必填 | 说明 |
+| --- | --- | --- |
+| `id`、`title`、`type`、`url` | 必填 | 身份、标题、资源类型、主要来源 |
+| `status` | 必填 | `unread` / `reading` / `read`，只表示阅读进度 |
+| `summary` | 必填，可为空 | 收藏理由，建议一句话 |
+| `tags` | 必填，可为空 | 使用 `tags.yaml` 中的规范键 |
+| `links` | 可选 | 名称到网址的映射，如 `code`、`project`、`related-paper` |
+| `attachments` | 可选 | 下载来源 `url` 和相对路径 `path` |
+| `authors`、`year`、`venue`、`doi` | 可选 | 论文信息，不适用时省略 |
+
+其他自定义字段会保留，可被关键字搜索，但不会增加 CSV 列。
+
+## 标签
+
+标签格式为 `前缀/名称`。规范键、中文名称和搜索别名都在 [tags.yaml](tags.yaml) 中维护。新标签必须先加入词表再使用，脚本会拒绝未知标签和重复标签。
+
+| 前缀 | 含义 | 示例 |
+| --- | --- | --- |
+| `topic/` | 研究主题 | 量化、推理加速、内存优化、编译优化、性能评测 |
+| `architecture/` | 模型架构 | `architecture/moe` |
+| `target/` | 量化对象 | 权重、激活、KV 缓存 |
+| `scheme/` | 量化方案 | 仅权重、权重激活联合、混合精度、PTQ、QAT |
+| `granularity/` | 量化粒度 | 逐张量、逐通道、分组、逐 Token |
+| `precision/` | 位宽组合 | W4A16、W8A8、W4A4、KV4 |
+| `method/` | 具体方法 | AWQ、GPTQ、SmoothQuant、KIVI、KVQuant |
+| `transform/` | 数值变换 | `transform/rotation` |
+| `system/` | 系统技术 | 异构计算、卸载、算子融合、流水线、动态调度、近数据处理、专家缓存 |
+| `stage/` | 推理阶段 | prefill、decode |
+| `workload/` | 工作负载 | 在线服务、离线批量、长上下文 |
+| `memory/` | 内存架构 | 统一内存、独立显存 |
+| `hardware/` | 设备 | Jetson Orin、高通、NVIDIA 独显、Apple Silicon |
+| `backend/` | 计算后端 | CPU、NPU、CUDA、Metal、Vulkan |
+| `evidence/` | 来源提供的实现或评估证据 | 模拟量化、压缩权重、量化内核、端到端实现、体系结构仿真 |
+| `publication/` | 发表状态 | `publication/withdrawn`（已撤稿） |
+
+## 本地资料与笔记配图
+
+每个条目的 `resources/` 目录用来存放本地资料。整个目录被 Git 忽略，只有 `asset-sources.yaml` 例外。
 
 ```text
-papers/<id>/meta.yaml       论文、综述、学术技术报告（不限 PDF/HTML）
-blogs/<id>/meta.yaml        博客、技术解析、工程实践文章
-docs/<id>/meta.yaml         官方文档、API 文档、部署指南、硬件手册
-<分类>/<id>/notes.md        可选的阅读笔记
-<分类>/<id>/resource/       本地下载资料，不上传 Git
-<分类>/<id>/resources/assets/  笔记引用的原始图表摘图，不上传 Git
-<分类>/<id>/resources/asset-sources.yaml  摘图来源、页码及裁剪信息，随 Git 同步
-templates/                 元数据和笔记模板
-scripts/catalog.py         校验、索引生成与搜索
-tests/                     脚本测试
-pyproject.toml             项目与依赖声明
-uv.lock                    跨设备依赖锁文件
-.python-version            默认 Python 版本
+<分类>/<id>/resources/
+├── paper.pdf               # 下载的 PDF 或网页快照（不入 Git）
+├── assets/                 # 笔记引用的原图（不入 Git）
+│   └── figure-05-xxx.png
+└── asset-sources.yaml      # 原图来源（入 Git）
 ```
 
-目录只按资源类型区分。量化、异构、具体硬件等通过标签表达，不再创建主题子目录。每条记录直接位于分类目录下一层。同一篇论文的 PDF、网页和代码链接放在一个条目中；独立解读它的博客可另建条目，在 `links` 中关联。
+### 下载 PDF 或网页快照
 
-| 字段 | 用途 |
-| --- | --- |
-| `id`、`title`、`type`、`url` | 必填的身份、标题、资源类型和主要来源 |
-| `status` | 必填：`unread` / `reading` / `read`，仅表示阅读进度 |
-| `summary` | 必填字符串，可为空；建议写一句收藏理由 |
-| `tags` | 必填列表，可为空；使用词表里的规范键 |
-| `links` | 可选，名称到网址的映射，如 `code`、`project`、`related-paper` |
-| `attachments` | 可选，下载来源 `url` 和条目内的相对 `path` |
-| `authors`、`year`、`venue`、`doi` | 可选的论文信息；不适用时省略 |
-
-其他扩展字段会保留在元数据中，可被关键字搜索，但不会自动增加 CSV 列。
-
-## 标签：对象、方法、硬件和实现证据分开
-
-在 `tags.yaml` 中维护规范标签、中文名称和搜索别名。新标签先加入词表，再用于条目；脚本会拒绝未知标签和重复标签。
-
-- `topic/*`：量化、推理、内存、编译、评测。
-- `target/*`、`scheme/*`、`granularity/*`、`precision/*`：量化对象、方案、粒度和精度。
-- `method/*`：AWQ、GPTQ、SmoothQuant 等方法。
-- `system/*`、`stage/*`：异构、卸载、融合、计算与传输流水线、动态调度、近数据处理、专家缓存及 prefill / decode。
-- `workload/*`：在线服务、离线批量推理和长上下文等工作负载。
-- `memory/*`、`hardware/*`、`backend/*`：内存架构、设备及计算后端。
-- `evidence/*`：来源中提供的模拟量化、压缩权重、量化内核、端到端实现或体系结构仿真评估证据。
-
-
-## 下载 PDF 或网页快照
-
-在对应条目中创建 `resource/` 并保存资料；`.gitignore` 的 `**/resource/` 规则会忽略所有这类目录。例如在元数据中记录：
+在 `meta.yaml` 中记录来源，再把文件保存到 `resources/`：
 
 ```yaml
 attachments:
   - url: https://example.org/paper.pdf
-    path: resource/paper.pdf
+    path: resources/paper.pdf
 ```
 
-附件路径使用正斜杠，必须位于该条目的 `resource/` 中，不能使用本机绝对路径。记录附件来源不要求文件已下载，也不会改变阅读状态。
+- `path` 必须以 `resources/` 开头，使用正斜杠，不能是本机绝对路径。
+- 只记录来源即可，不要求文件已下载，也不改变阅读状态。
 
-**跨设备克隆会恢复元数据、笔记和索引，不会恢复本地附件。** 新设备可按 `attachments` 中的来源重新下载；无法重新下载的资料应单独备份。不要用 `git add -f` 强制提交下载文件。忽略规则不会自动取消已经被 Git 跟踪的文件。
+### 在笔记中引用原图
 
-### 在笔记中引用图表
+- 原图放在 `resources/assets/`，笔记用相对路径引用，例如 `![说明](resources/assets/figure-05-xxx.png)`。
+- 图注中写明论文版本、图表编号和 PDF 页码。
+- 在 `resources/asset-sources.yaml` 记录原 PDF、下载网址、页码、裁剪坐标和单位，方便在新设备上重新生成。
+- 笔记中的关键结论仍要用文字写出，缺少本地图片时也能读懂。
 
-必要的原始图表摘图放在各条目的 `resources/assets/`，笔记用相对路径引用，并在图注中标明论文版本、图表编号和 PDF 页码。已有完整 PDF 继续放在 `resource/`，不因摘图而移动。
+### 换设备时
 
-在 `resources/asset-sources.yaml` 保存摘图对应的原 PDF、下载网址、页码、裁剪坐标和单位。摘图与完整 PDF 一样仅保存在本机；跨设备需另行复制，或根据随 Git 同步的来源清单重新生成。笔记中的关键结论仍用文字说明，避免缺少本地图片时无法理解。
+克隆仓库会恢复元数据、笔记、索引和 `asset-sources.yaml`，**不会**恢复 PDF 和原图。需要时按 `attachments` 的来源重新下载，原图按 `asset-sources.yaml` 重新裁剪。无法重新获取的资料请自行备份。
 
 ## 用 agent 收录和阅读
 
-仓库中的 [resource-curator skill](skills/resource-curator/SKILL.md) 指导 agent 收录、去重、打标签，并按需使用 `templates/notes.md` 撰写笔记。skill 源码随仓库同步；本机安装在用户的 Codex skills 目录中。
-
-可以这样调用：
+[resource-curator skill](skills/resource-curator/SKILL.md) 指导 agent 收录、去重、打标签，并按需用 `templates/notes.md` 写笔记。调用示例：
 
 ```text
 使用 $resource-curator 收录这篇论文：https://……，先不阅读。
@@ -140,8 +189,14 @@ attachments:
 使用 $resource-curator 阅读这篇论文，重点分析 Orin 上的量化实现，按默认模板写笔记：https://……
 ```
 
-默认仅收录、状态为未读；阅读分析不自动把用户的阅读进度改为已读。标签审阅模式会保留待审建议，不提前用于索引筛选。
+默认行为：
 
-新设备需要将 `skills/resource-curator/` 安装到 `$CODEX_HOME/skills/`（未设置时为 `~/.codex/skills/`）。修改仓库内的 skill 后，也需更新本机安装副本；不要分别维护两套内容。
+- 只收录，状态为 `unread`。
+- 阅读分析不会自动把状态改成 `read`，阅读进度由你自己维护。
+- 选择“审阅标签”时，agent 只给出建议，不会提前写入索引。
 
-**推荐使用**[humanizer](https://github.com/op7418/Humanizer-zh)润色note
+新设备上需要先安装 skill，安装方法见 [CONTRIBUTING.md](CONTRIBUTING.md#安装-agent-skill)。
+
+## 笔记润色
+
+笔记初稿可以用 [humanizer](https://github.com/op7418/Humanizer-zh) 润色，减少生硬的机器腔。

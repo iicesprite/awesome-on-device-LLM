@@ -1,0 +1,45 @@
+id: decdec
+title: 'DecDEC: A Systems Approach to Advancing Low-Bit LLM Quantization'
+type: paper
+url: https://www.usenix.org/conference/osdi25/presentation/park-yeonhong
+status: unread
+summary: 在GPU常驻低比特基座之外，以主存4-bit残差、动态激活通道选择和并行CUDA补偿恢复模型质量，重点研究显存、PCIe与解码延迟的软硬件取舍。
+tags:
+- topic/quantization
+- topic/inference
+- topic/memory
+- target/weight
+- scheme/weight-only
+- scheme/ptq
+- scheme/mixed-precision
+- granularity/per-channel
+- precision/w4a16
+- method/awq
+- system/heterogeneous
+- system/offloading
+- system/operator-fusion
+- system/memory-layout
+- system/error-compensation
+- system/lut
+- system/pipelining
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- backend/cuda
+- evidence/packed-weights
+- evidence/kernel
+- evidence/end-to-end
+links:
+  arxiv: https://arxiv.org/abs/2412.20185
+  code: https://github.com/SNU-ARC/DecDEC
+attachments:
+- url: https://www.usenix.org/system/files/osdi25-park-yeonhong.pdf
+  path: resources/decdec-osdi2025.pdf
+  version: OSDI 2025 proceedings
+  downloaded_on: '2026-10-30'
+authors: [Yeonhong Park, Jake Hyun, Hojoon Kim, Jae W. Lee]
+year: 2025
+venue: OSDI
+first_published: '2024-12-28'
+source_checked_on: '2026-10-30'
+tag_note: 4-bit标签覆盖论文基座的一种精度，另有3/3.5-bit；残差默认4-bit。激活感知通道选择不表示激活量化。CPU提供残差存储，计算在GPU；未验证统一内存端侧设备。实现证据来自正文及官方commit 5f3f237cf0c2e2a1fbb17fe562bb0e1850ab004b的只读源码核对，未本机运行。

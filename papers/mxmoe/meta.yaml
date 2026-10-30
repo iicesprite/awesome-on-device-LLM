@@ -13,12 +13,12 @@ tags:
 links: {}
 attachments:
 - url: https://openreview.net/pdf?id=pXoZLGMNDm
-  path: resource/mxmoe.pdf
+  path: resources/mxmoe.pdf
   source: zotero
   zotero_item_key: WQXY59FA
   zotero_attachment_key: DQ9BCI5C
 - url: https://arxiv.org/pdf/2505.05799
-  path: resource/mxmoe-akffll3p.pdf
+  path: resources/mxmoe-akffll3p.pdf
   source: zotero
   zotero_item_key: S2MCVR2T
   zotero_attachment_key: AKFFLL3P

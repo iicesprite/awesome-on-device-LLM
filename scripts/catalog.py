@@ -123,7 +123,7 @@ def validate_entry(data, folder, category, vocabulary):
         path = item.get("path")
         require(is_text(path) and "\\" not in path and ":" not in path, "附件 path 应使用相对路径和正斜杠")
         parts = PurePosixPath(path).parts
-        require(len(parts) >= 2 and parts[0] == "resource" and ".." not in parts and not path.endswith("/"), "附件 path 必须指向当前条目的 resource/ 内的文件")
+        require(len(parts) >= 2 and parts[0] == "resources" and ".." not in parts and not path.endswith("/"), "附件 path 必须指向当前条目的 resources/ 内的文件")
         require(path not in paths, f"附件 path 重复：{path}")
         paths.add(path)
     if "authors" in data:

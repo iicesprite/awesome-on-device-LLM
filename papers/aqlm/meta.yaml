@@ -13,12 +13,12 @@ tags:
 links: {}
 attachments:
 - url: https://raw.githubusercontent.com/mlresearch/v235/main/assets/egiazarian24a/egiazarian24a.pdf
-  path: resource/aqlm.pdf
+  path: resources/aqlm.pdf
   source: zotero
   zotero_item_key: JUC83VV9
   zotero_attachment_key: EWDIXZTF
 - url: https://arxiv.org/pdf/2401.06118
-  path: resource/aqlm-gr6yvlh4.pdf
+  path: resources/aqlm-gr6yvlh4.pdf
   source: zotero
   zotero_item_key: AR3HNYWU
   zotero_attachment_key: GR6YVLH4

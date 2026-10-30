@@ -1,0 +1,21 @@
+schema_version: 1
+paths_relative_to: paper-directory
+source_url: https://proceedings.mlsys.org/paper_files/paper/2025/file/698cfaf72a208aef2e78bcac55b74328-Paper-Conference.pdf
+source_pdf: resources/flexinfer-mlsys2025.pdf
+source_version: MLSys 2025 proceedings
+page_numbering: 1-based PDF page index
+coordinate_system: top-left origin, PDF points (1/72 inch), [left, top, right, bottom]
+render_scale: 3
+render_dpi: 216
+renderer: pypdfium2
+assets:
+- path: resources/assets/figure-7-execution-planner.png
+  figure: Figure 7
+  page: 6
+  crop_bbox: [54, 64, 544, 180]
+  description: Execution Planner 与 Inference Executor 的阶段策略切换，保留原图标题。
+- path: resources/assets/figure-9-ttft-tpot.png
+  figure: Figure 9
+  page: 9
+  crop_bbox: [54, 300, 294, 557]
+  description: OPT-66B 的归一化 TTFT/TPOT 对比，保留两平台、图例、坐标及原图标题。

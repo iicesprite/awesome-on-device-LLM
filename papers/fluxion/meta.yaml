@@ -1,0 +1,35 @@
+id: fluxion
+title: An Efficient Hybrid Sparse Attention with CPU-GPU Parallelism for Long-Context Inference
+type: paper
+url: https://arxiv.org/abs/2605.07719
+status: unread
+summary: 面向主存驻留 KV 的长上下文解码，以输出误差预测、逐头粒度与预算选择、CPU–GPU 动态调度联合优化稀疏注意力；重点关注选择开销、质量与实际传输成本。
+tags:
+- topic/inference
+- topic/memory
+- target/kv-cache
+- system/heterogeneous
+- system/offloading
+- system/sparse-inference
+- system/dynamic-scheduling
+- system/pipelining
+- workload/long-context
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- hardware/x86
+- backend/cpu
+- backend/cuda
+links:
+  fulltext: https://arxiv.org/html/2605.07719v1
+attachments:
+- url: https://arxiv.org/pdf/2605.07719v1
+  path: resources/fluxion-2605.07719v1.pdf
+  version: arXiv:2605.07719v1
+  downloaded_on: '2026-10-30'
+authors: [Feiyu Yao, Zhixiong Niu, Xiaqing Li, Yongqiang Xiong, Juan Fang, Qian Wang]
+year: 2026
+doi: 10.48550/arXiv.2605.07719
+first_published: '2026-05-08'
+source_checked_on: '2026-10-30'
+tag_note: 稀疏选择与 KV 卸载不等于 KV 量化；UVA 不等于统一物理内存。已读正文和附录，未找到可确认的官方源码入口，故不添加实现核验类 evidence 标签，未本地运行。

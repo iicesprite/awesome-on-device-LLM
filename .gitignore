@@ -1,6 +1,7 @@
-# Downloaded papers, snapshots, supplementary material (local only).
-**/resource/
-tests/
+# 本地资料：PDF、网页快照、笔记引用的原图，仅保存在本机。
+# 例外：asset-sources.yaml 记录原图来源，随 Git 同步。
+**/resources/*
+!**/resources/asset-sources.yaml
 
 # Local Python environment and caches.
 .venv/

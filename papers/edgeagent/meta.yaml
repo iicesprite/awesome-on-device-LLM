@@ -1,0 +1,45 @@
+id: edgeagent
+title: 'EdgeAgent: Orchestrating On-Device LLM inference for End-User Multi-Agent Systems on CPU-GPU Unified Memory Architectures'
+type: paper
+url: https://arxiv.org/abs/2610.03394
+status: unread
+summary: 在 Apple M4 统一内存上联合零拷贝 CPU–GPU 张量并行、SME 内核与多 agent 推测解码调度，适合研究共享带宽约束下的实际异构执行。
+tags:
+- topic/inference
+- topic/memory
+- topic/compilation
+- target/kv-cache
+- system/heterogeneous
+- system/memory-layout
+- system/speculative-decoding
+- system/dynamic-scheduling
+- workload/online-serving
+- stage/prefill
+- stage/decode
+- memory/unified
+- hardware/apple-silicon
+- hardware/arm
+- backend/cpu
+- backend/metal
+links:
+  publication: https://doi.org/10.1145/3845814.3850072
+  author: https://dujiangsu.github.io/
+attachments:
+- url: https://arxiv.org/pdf/2610.03394v1
+  path: resources/edgeagent-2610.03394v1.pdf
+  version: arXiv:2610.03394v1
+  downloaded_on: '2026-10-30'
+authors:
+- Yuhai Long
+- Yuanxin Wei
+- Kai Wu
+- Jinhui Wei
+- Dan Huang
+- Jiangsu Du
+year: 2026
+venue: ASPLOS 2027 (accepted)
+doi: 10.1145/3845814.3850072
+first_published: '2026-10-02'
+source_checked_on: '2026-10-30'
+publication_note: year 记录首次预印本年份；PDF 带 ASPLOS 2027 引用信息，作者主页确认录用，当前阅读附件为 arXiv v1。
+tag_note: 实验全部为 FP16，未标量化或量化 kernel 标签；Apple M4/M4 Pro 为实测平台，不把可迁移讨论当作 Orin/高通支持。论文给出端到端实现与测量，但本次未找到可确认的官方代码入口，未核验源码。

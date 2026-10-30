@@ -1,0 +1,40 @@
+id: apex
+title: 'APEX: Asynchronous Parallel CPU-GPU Execution for Online LLM Inference on Constrained GPUs'
+type: paper
+url: https://arxiv.org/abs/2506.03296
+status: unread
+summary: 在显存受限的在线服务中，以性能预测、异步 CPU attention 和延迟同步扩大 CPU–GPU 重叠执行窗口，改善 decode 密集请求的吞吐。
+tags:
+- topic/inference
+- topic/memory
+- target/kv-cache
+- system/heterogeneous
+- system/offloading
+- system/pipelining
+- system/dynamic-scheduling
+- workload/online-serving
+- stage/prefill
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- hardware/x86
+- backend/cpu
+- backend/cuda
+links:
+  related-paper-neo: https://proceedings.mlsys.org/paper_files/paper/2025/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html
+attachments:
+- url: https://arxiv.org/pdf/2506.03296v4
+  path: resources/apex-2506.03296v4.pdf
+  version: arXiv:2506.03296v4
+  downloaded_on: '2026-10-30'
+authors:
+- Jiakun Fan
+- Yanglin Zhang
+- Xiangchen Li
+- Dimitrios S. Nikolopoulos
+year: 2025
+doi: 10.48550/arXiv.2506.03296
+first_published: '2025-06-03'
+last_revised: '2026-01-14'
+source_checked_on: '2026-10-30'
+version_note: year 记录首次预印本年份；本地保存本次核对时 arXiv 的最新版本 v4。

@@ -1,0 +1,41 @@
+id: flexinfer
+title: 'FlexInfer: Flexible LLM Inference with CPU Computations'
+type: paper
+url: https://proceedings.mlsys.org/paper_files/paper/2025/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html
+status: unread
+summary: 根据硬件配置与请求形状估算性能，为 prefill 和 decode 分别选择 CPU–GPU 执行策略，缓解卸载推理的 PCIe 瓶颈。
+tags:
+- topic/inference
+- topic/memory
+- target/weight
+- target/kv-cache
+- system/heterogeneous
+- system/offloading
+- system/dynamic-scheduling
+- system/pipelining
+- stage/prefill
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- hardware/x86
+- backend/cpu
+- backend/cuda
+links: {}
+attachments:
+- url: https://proceedings.mlsys.org/paper_files/paper/2025/file/698cfaf72a208aef2e78bcac55b74328-Paper-Conference.pdf
+  path: resources/flexinfer-mlsys2025.pdf
+  version: MLSys 2025 proceedings
+  downloaded_on: '2026-10-30'
+authors:
+- Seonjin Na
+- Geonhwa Jeong
+- Byung Hoon Ahn
+- Aaron Jezghani
+- Jeffrey Young
+- Christopher J. Hughes
+- Tushar Krishna
+- Hyesoon Kim
+year: 2025
+venue: Proceedings of Machine Learning and Systems 7 (MLSys 2025)
+source_checked_on: '2026-10-30'
+source_note: 以 MLSys 2025 发表版收录；这是 Seonjin Na 等人的 CPU 计算论文，不是另一篇同名的端侧 FlexInfer 论文。

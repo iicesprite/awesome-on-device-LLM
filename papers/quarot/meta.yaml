@@ -14,17 +14,17 @@ tags:
 links: {}
 attachments:
 - url: https://arxiv.org/pdf/2404.00456
-  path: resource/quarot.pdf
+  path: resources/quarot.pdf
   source: zotero
   zotero_item_key: 3JX35DJ2
   zotero_attachment_key: ETDZBWGN
 - url: https://proceedings.neurips.cc/paper_files/paper/2024/file/b5b939436789f76f08b9d0da5e81af7c-Paper-Conference.pdf
-  path: resource/quarot-xjathrv4.pdf
+  path: resources/quarot-xjathrv4.pdf
   source: zotero
   zotero_item_key: K6BJYZTY
   zotero_attachment_key: XJATHRV4
 - url: https://proceedings.neurips.cc/paper_files/paper/2024/file/b5b939436789f76f08b9d0da5e81af7c-Paper-Conference.pdf
-  path: resource/quarot-x4pnmt6u.pdf
+  path: resources/quarot-x4pnmt6u.pdf
   source: zotero
   zotero_item_key: FTKB2B3N
   zotero_attachment_key: X4PNMT6U

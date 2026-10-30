@@ -1,0 +1,43 @@
+id: neo
+title: 'NEO: Saving GPU Memory Crisis with CPU Offloading for Online LLM Inference'
+type: paper
+url: https://proceedings.mlsys.org/paper_files/paper/2025/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html
+status: unread
+summary: 将部分 attention 计算与 KV cache 卸载到主机 CPU，通过非对称 CPU–GPU 流水线和负载感知调度扩大在线服务的 batch。
+tags:
+- topic/inference
+- topic/memory
+- target/kv-cache
+- system/heterogeneous
+- system/offloading
+- system/pipelining
+- system/dynamic-scheduling
+- workload/online-serving
+- stage/prefill
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- hardware/x86
+- backend/cpu
+- backend/cuda
+- evidence/end-to-end
+links:
+  code: https://github.com/NEO-MLSys25/NEO
+attachments:
+- url: https://proceedings.mlsys.org/paper_files/paper/2025/file/66a026c0d17040889b50f0dfa650e5e0-Paper-Conference.pdf
+  path: resources/neo-mlsys2025.pdf
+  version: MLSys 2025 proceedings
+  downloaded_on: '2026-10-30'
+authors:
+- Xuanlin Jiang
+- Yang Zhou
+- Shiyi Cao
+- Ion Stoica
+- Minlan Yu
+year: 2025
+venue: Proceedings of Machine Learning and Systems 7 (MLSys 2025)
+source_checked_on: '2026-10-30'
+implementation_evidence:
+- tag: evidence/end-to-end
+  url: https://github.com/NEO-MLSys25/NEO/blob/master/examples/example.py
+  detail: 已检查真实模型加载、prefill、逐步 decode 和 token 输出路径；该示例注明使用对称流水线，论文非对称配置另见 evaluation。未运行复现。

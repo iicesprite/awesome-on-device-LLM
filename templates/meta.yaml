@@ -13,11 +13,11 @@ links: {}
 # links:
 #   code: https://github.com/owner/project
 
-# 可选：记录下载来源，不要求文件已存在；文件放在当前条目的 resource/ 中。
+# 可选：记录下载来源，不要求文件已存在；文件放在当前条目的 resources/ 中。
 attachments: []
 # attachments:
 #   - url: https://example.org/paper.pdf
-#     path: resource/paper.pdf
+#     path: resources/paper.pdf
 
 # 可选论文信息（不适用时省略）。
 # authors: ["作者姓名"]

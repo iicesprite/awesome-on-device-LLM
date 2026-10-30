@@ -1,0 +1,4 @@
+interface:
+  display_name: "资源收录与阅读"
+  short_description: "收录论文、博客和技术文档，推荐可审阅标签，按仓库模板撰写阅读笔记"
+  default_prompt: "使用 $resource-curator 收录我提供的资源，按需阅读分析并用仓库模板整理笔记；需要审阅时先推荐标签。"

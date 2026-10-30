@@ -1,22 +1,38 @@
 id: squeezellm
 title: 'SqueezeLLM: Dense-and-Sparse Quantization'
 type: paper
-url: http://arxiv.org/abs/2306.07629
+url: https://arxiv.org/abs/2306.07629
 status: unread
-summary: 非均匀权重量化与 dense/sparse 分解，面向带宽受限推理。
+summary: 以敏感度加权的非均匀码本和高精度稀疏例外压缩权重，提供 3/4-bit 打包、LUT CUDA 内核及单请求解码实现；重点分析精度、实际计算 dtype 与稀疏负载均衡的取舍。
 tags:
 - topic/quantization
 - target/weight
 - scheme/weight-only
 - scheme/ptq
+- scheme/nonuniform
 - topic/memory
-links: {}
+- topic/inference
+- granularity/per-channel
+- system/lut
+- system/sparse-inference
+- system/memory-layout
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- backend/cuda
+- evidence/packed-weights
+- evidence/kernel
+- evidence/end-to-end
+links:
+  code: https://github.com/SqueezeAILab/SqueezeLLM
+  publication: https://proceedings.mlr.press/v235/kim24f.html
 attachments:
 - url: https://arxiv.org/pdf/2306.07629v4
-  path: resource/squeezellm.pdf
+  path: resources/squeezellm.pdf
   source: zotero
   zotero_item_key: MJ247X73
   zotero_attachment_key: XQWXQVBZ
+  version: arXiv:2306.07629v4
 authors:
 - Sehoon Kim
 - Coleman Hooper
@@ -33,3 +49,6 @@ zotero:
   library_id: 0
   source_date: '2024-06-05'
   duplicate_item_keys: []
+venue: ICML 2024
+source_checked_on: '2026-10-30'
+tag_note: 3/4-bit 指码本索引存储；论文叙述 FP16 运算，但所查官方 commit 的 NUQ 路径使用 FP32 中间计算。实现证据来自 packed 权重、CUDA 源码及完整模型入口，只读核对而未本地运行。
