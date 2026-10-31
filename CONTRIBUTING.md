@@ -61,8 +61,13 @@ uv run python -m unittest discover -s tests
 | `templates/` | `meta.yaml` 和 `notes.md` 模板 |
 | `tags.yaml` | 标签词表：规范键、中文名称、搜索别名 |
 | `scripts/catalog.py` | 校验、索引生成与搜索 |
+| `scripts/zotero_sync.py`、`scripts/zotero_import.js` | 生成带账号约束的 Zotero MCP 同步计划，核验回执并保存本地关联，见 [ZOTERO.md](ZOTERO.md) |
 | `skills/resource-curator/` | agent 收录与阅读 skill 的源码 |
 | `INDEX.md`、`catalog.csv` | 自动生成，不手工编辑 |
+| `.local/zotero/config.json` | 本机 API 源地址与当前 Zotero 用户 ID，不入 Git，不含 token |
+| `.local/zotero/bindings.json` | 按 `user:<id>` 隔离的个人条目/附件关联与可用状态，不入 Git |
+| `.local/zotero/plan.json`、`import.js`、`receipt.json` | 本机待执行计划、MCP 脚本和实际回执，不入 Git |
+| `.local/zotero/index.md` | 当前用户的个人 Zotero 阅读入口，不入 Git |
 | `pyproject.toml`、`uv.lock`、`.python-version` | 环境与依赖 |
 
 ## 生成文件的格式
@@ -72,8 +77,15 @@ uv run python -m unittest discover -s tests
 - 编码为 UTF-8 BOM，方便 Excel 直接打开。
 - 标签以分号分隔。
 - 链接和附件字段使用 JSON。
+- 固定列依次为 `id,title,type,url,status,summary,tags,authors,year,venue,doi,links,attachments,metadata_path,notes_path`。
+- 不再提供 `zotero_item_uri`、`zotero_pdf_uri` 列，也不保留空兼容列；使用这些旧列的下游脚本需迁移。公共 Markdown 同样没有 Zotero 列。
+- 公共构建不读取 `.local/zotero/`，不受个人绑定、下载状态或本机 PDF 是否存在影响。
 
 `INDEX.md` 顶部有自动生成的提示。需要修改内容时，改 `meta.yaml` 后重新运行 `build`。
+
+公开元数据禁止顶层 `zotero`，附件禁止 `zotero_item_key`、`zotero_attachment_key`、`local_status`；校验时即使值为空也会拒绝。个人下载时间 `downloaded_on` 也不应写进共享元数据。可核实的 `downloaded_from`、`downloaded_version` 及历史 `source_zotero_*` 可作为来源事实保留，但不是当前账号绑定。
+
+个人 Zotero 联动仅支持已登录账号的个人库：各用户独立运行 `configure`，再按 `prepare`（下载须显式 `--download`）、已认证 MCP、`record`、`index` 的顺序执行，完整命令见 [ZOTERO.md](ZOTERO.md)。空库必须配置自己的正整数 `--user-id`。不同账号不能共用绑定；同一账号换设备先完成 Zotero 数据/文件同步，再重新核验并生成个人索引。不要复制作者的绑定、旧计划或回执。
 
 ## 本地资料的 Git 规则
 

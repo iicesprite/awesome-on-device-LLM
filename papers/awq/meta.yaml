@@ -16,8 +16,6 @@ attachments:
 - url: https://proceedings.mlsys.org/paper_files/paper/2024/file/42a452cbafa9dd64e9ba4aa95cc1ef21-Paper-Conference.pdf
   path: resources/awq.pdf
   source: zotero
-  zotero_item_key: AU93W5G8
-  zotero_attachment_key: YXJR2SKD
 authors:
 - Ji Lin
 - Jiaming Tang
@@ -31,8 +29,3 @@ authors:
 - Song Han
 year: 2024
 venue: Proceedings of Machine Learning and Systems
-zotero:
-  item_key: AU93W5G8
-  library_id: 0
-  source_date: '2024-05-29'
-  duplicate_item_keys: []

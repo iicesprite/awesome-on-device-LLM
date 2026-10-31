@@ -14,6 +14,7 @@ links: {}
 #   code: https://github.com/owner/project
 
 # 可选：记录下载来源，不要求文件已存在；文件放在当前条目的 resources/ 中。
+# 只保存可公开的来源、版本事实；不记录个人下载状态或 downloaded_on。
 attachments: []
 # attachments:
 #   - url: https://example.org/paper.pdf
@@ -24,3 +25,7 @@ attachments: []
 # year: 2024
 # venue: MLSys
 # doi: "10.xxxx/xxxx"
+
+# Zotero 账号配置、条目/附件 key 和可用状态只在 .local/zotero/ 中保存，不入 Git。
+# 禁止顶层 zotero，以及附件中的 zotero_item_key、zotero_attachment_key、local_status、downloaded_on。
+# 历史 source_zotero_* 仅用于追溯来源，不代表当前用户绑定；流程见 ZOTERO.md。

@@ -25,7 +25,6 @@ attachments:
 - url: https://proceedings.mlsys.org/paper_files/paper/2025/file/698cfaf72a208aef2e78bcac55b74328-Paper-Conference.pdf
   path: resources/flexinfer-mlsys2025.pdf
   version: MLSys 2025 proceedings
-  downloaded_on: '2026-10-30'
 authors:
 - Seonjin Na
 - Geonhwa Jeong

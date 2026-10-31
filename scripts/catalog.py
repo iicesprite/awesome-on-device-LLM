@@ -96,6 +96,7 @@ def load_tags(root):
 
 
 def validate_entry(data, folder, category, vocabulary):
+    require("zotero" not in data, "公开元数据禁止 zotero 绑定；请使用 .local/zotero/bindings.json")
     for key in ("id", "title", "type", "url", "status", "summary", "tags"):
         require(key in data, f"缺少字段 {key}")
     entry_id = data["id"]
@@ -120,6 +121,8 @@ def validate_entry(data, folder, category, vocabulary):
     paths = set()
     for item in attachments:
         require(isinstance(item, dict) and is_url(item.get("url")), "每个 attachment 必须有完整的 url")
+        for key in ("zotero_item_key", "zotero_attachment_key", "local_status", "downloaded_on"):
+            require(key not in item, f"公开附件禁止 {key}；请使用 .local/zotero/bindings.json")
         path = item.get("path")
         require(is_text(path) and "\\" not in path and ":" not in path, "附件 path 应使用相对路径和正斜杠")
         parts = PurePosixPath(path).parts

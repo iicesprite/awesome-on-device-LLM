@@ -29,23 +29,15 @@ attachments:
 - url: https://arxiv.org/pdf/2511.11907
   path: resources/kvswap.pdf
   source: zotero
-  zotero_item_key: MHYWIRPY
-  zotero_attachment_key: 2PAN9UQL
   version: arXiv:2511.11907v2
 - url: https://eprints.whiterose.ac.uk/id/eprint/240121/8/3745756.3809234.pdf
   path: resources/kvswap-mobisys2026.pdf
   version: MobiSys 2026 published version
-  downloaded_on: '2026-10-30'
 authors:
 - Huawei Zhang
 - Chunwei Xia
 - Zheng Wang
 year: 2026
-zotero:
-  item_key: MHYWIRPY
-  library_id: 0
-  source_date: 2025/11/14
-  duplicate_item_keys: []
 venue: MobiSys 2026
 doi: 10.1145/3745756.3809234
 first_published: '2025-11-14'

@@ -1,9 +1,5 @@
 # DecDEC: A Systems Approach to Advancing Low-Bit LLM Quantization
 
-阅读版本：[OSDI 2025 正式论文](https://www.usenix.org/conference/osdi25/presentation/park-yeonhong)，[本地 PDF](resources/decdec-osdi2025.pdf)。已读完整 18 页：PDF p1 为封面，p2–14 为正文，p15–18 为参考文献，无独立附录。下文使用 **PDF 页码**，比书内论文页码 803–819 多一张封面；例如 PDF p13 对应论文 p814。
-
-阅读日期：2026-10-30。重点是低比特格式、主存残差、GPU 内核并行与实际端到端代价。另只读核对了[官方实现](https://github.com/SNU-ARC/DecDEC/tree/5f3f237cf0c2e2a1fbb17fe562bb0e1850ab004b)，固定 commit 为 `5f3f237cf0c2e2a1fbb17fe562bb0e1850ab004b`；未运行模型或基准。
-
 ## 研究问题与核心思路
 
 **DecDEC 适合回答“低比特模型已经塞进显存，怎样用很小的延迟代价挽回质量”，而不是“怎样把放不下的整个模型卸载出去”。** 量化基座和激活常驻 GPU，CPU 主存额外存储权重量化残差；每个 decode step 按当前激活幅值选少量输入通道，仅读取这些通道的残差，在 GPU 上计算修正项。（§3–4，p4–8）

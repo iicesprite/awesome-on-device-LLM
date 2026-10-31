@@ -16,9 +16,9 @@ attachments:
 - url: http://arxiv.org/pdf/2501.14794v1
   path: resources/heterollm-a4tkj8k5.pdf
   source: zotero
-  zotero_item_key: ZIFDD6QU
-  zotero_attachment_key: A4TKJ8K5
-  local_status: missing-in-zotero
+- url: https://arxiv.org/pdf/2501.14794v1
+  path: resources/heterollm.pdf
+  version: arXiv:2501.14794v1
 authors:
 - Le Chen
 - Dahu Feng
@@ -30,9 +30,4 @@ authors:
 - Pinjie Xu
 year: 2025
 doi: 10.48550/arXiv.2501.14794
-zotero:
-  item_key: ZIFDD6QU
-  library_id: 0
-  source_date: '2025-01-11'
-  duplicate_item_keys: []
 version_note: 与关联条目可能为预印本/发表版本关系，待阅读核对；按既定清单分别收录。

@@ -27,7 +27,6 @@ attachments:
 - url: https://pschafhalter.com/papers/2025-asplos-moe-lightning.pdf
   path: resources/moe-lightning-asplos2025.pdf
   version: ASPLOS 2025 author-hosted paper
-  downloaded_on: '2026-10-30'
 authors:
 - Shiyi Cao
 - Shu Liu

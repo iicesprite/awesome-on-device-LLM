@@ -15,13 +15,11 @@ attachments:
 - url: https://openreview.net/pdf?id=pXoZLGMNDm
   path: resources/mxmoe.pdf
   source: zotero
-  zotero_item_key: WQXY59FA
-  zotero_attachment_key: DQ9BCI5C
 - url: https://arxiv.org/pdf/2505.05799
   path: resources/mxmoe-akffll3p.pdf
   source: zotero
-  zotero_item_key: S2MCVR2T
-  zotero_attachment_key: AKFFLL3P
+  source_zotero_attachment_key: AKFFLL3P
+  source_zotero_item_key: S2MCVR2T
 authors:
 - Haojie Duanmu
 - Xiuhong Li
@@ -32,9 +30,3 @@ authors:
 - Dahua Lin
 year: 2025
 venue: Forty-second International Conference on Machine Learning
-zotero:
-  item_key: WQXY59FA
-  library_id: 0
-  source_date: 2025/06/18
-  duplicate_item_keys:
-  - S2MCVR2T

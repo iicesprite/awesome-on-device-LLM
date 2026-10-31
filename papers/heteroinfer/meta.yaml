@@ -15,9 +15,9 @@ attachments:
 - url: https://dl.acm.org/doi/pdf/10.1145/3731569.3764808?download=true
   path: resources/heteroinfer-vac3y7ae.pdf
   source: zotero
-  zotero_item_key: EATZ3WZN
-  zotero_attachment_key: VAC3Y7AE
-  local_status: missing-in-zotero
+  downloaded_from: https://ipads.se.sjtu.edu.cn/zh/publications/sosp25-chen.pdf
+  downloaded_version: SOSP 2025 author-hosted version
+  source_zotero_attachment_key: VAC3Y7AE
 authors:
 - Le Chen
 - Dahu Feng
@@ -30,9 +30,4 @@ authors:
 year: 2025
 doi: 10.1145/3731569.3764808
 venue: Proceedings of the ACM SIGOPS 31st Symposium on Operating Systems Principles
-zotero:
-  item_key: EATZ3WZN
-  library_id: 0
-  source_date: 十月 12, 2025
-  duplicate_item_keys: []
 version_note: 与关联条目可能为预印本/发表版本关系，待阅读核对；按既定清单分别收录。

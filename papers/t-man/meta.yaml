@@ -15,9 +15,9 @@ attachments:
 - url: http://arxiv.org/pdf/2511.11248v1
   path: resources/t-man-w8fbwgvf.pdf
   source: zotero
-  zotero_item_key: FMXYG6RX
-  zotero_attachment_key: W8FBWGVF
-  local_status: missing-in-zotero
+- url: https://arxiv.org/pdf/2511.11248v1
+  path: resources/t-man.pdf
+  version: arXiv:2511.11248v1
 authors:
 - Jianyu Wei
 - Qingtao Li
@@ -29,8 +29,3 @@ authors:
 - Ting Cao
 year: 2025
 doi: 10.48550/arXiv.2511.11248
-zotero:
-  item_key: FMXYG6RX
-  library_id: 0
-  source_date: '2025-11-14'
-  duplicate_item_keys: []

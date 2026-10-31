@@ -27,7 +27,6 @@ attachments:
 - url: https://proceedings.mlsys.org/paper_files/paper/2025/file/66a026c0d17040889b50f0dfa650e5e0-Paper-Conference.pdf
   path: resources/neo-mlsys2025.pdf
   version: MLSys 2025 proceedings
-  downloaded_on: '2026-10-30'
 authors:
 - Xuanlin Jiang
 - Yang Zhou

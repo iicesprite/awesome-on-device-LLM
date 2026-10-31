@@ -15,8 +15,6 @@ attachments:
 - url: https://openreview.net/pdf?id=NXVXiJmhe1
   path: resources/milo.pdf
   source: zotero
-  zotero_item_key: PZ43IDT7
-  zotero_attachment_key: LWCNAWWG
 authors:
 - Beichen Huang
 - Yueming Yuan
@@ -24,9 +22,3 @@ authors:
 - Minjia Zhang
 year: 2025
 venue: Eighth Conference on Machine Learning and Systems
-zotero:
-  item_key: PZ43IDT7
-  library_id: 0
-  source_date: 2025/05/13
-  duplicate_item_keys:
-  - 5ZXIPE6P

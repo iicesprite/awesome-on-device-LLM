@@ -15,9 +15,9 @@ attachments:
 - url: https://arxiv.org/pdf/2407.05858
   path: resources/llm-npu-aggggkdz.pdf
   source: zotero
-  zotero_item_key: 8XF65AVL
-  zotero_attachment_key: AGGGGKDZ
-  local_status: missing-in-zotero
+- url: https://arxiv.org/pdf/2407.05858v1
+  path: resources/llm-npu.pdf
+  version: arXiv:2407.05858v1
 authors:
 - Daliang Xu
 - Hao Zhang
@@ -28,8 +28,3 @@ authors:
 - Xuanzhe Liu
 year: 2024
 doi: 10.48550/arXiv.2407.05858
-zotero:
-  item_key: 8XF65AVL
-  library_id: 0
-  source_date: '2024-12-15'
-  duplicate_item_keys: []

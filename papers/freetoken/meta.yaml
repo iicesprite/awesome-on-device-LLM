@@ -36,7 +36,6 @@ attachments:
 - url: https://arxiv.org/pdf/2608.16157v1
   path: resources/freetoken-2608.16157v1.pdf
   version: arXiv:2608.16157v1
-  downloaded_on: '2026-10-30'
 authors:
 - Shuo Yang
 - Xiaoze Fan
@@ -53,4 +52,5 @@ year: 2026
 doi: 10.48550/arXiv.2608.16157
 first_published: '2026-08-17'
 source_checked_on: '2026-10-30'
-tag_note: FP4 标签对应论文评测使用的 MXFP4/NVFP4 专家权重；异构标签对应独显与主机 CPU 协同，不表示统一物理内存。实现证据结合论文端到端服务评测与 2026-10-30 对官方 commit ecbbce457769a75810df83517250cd3ce3263ea5 的只读源码核对，未本地运行；源码版本差异与量化内核路径见 notes.md。
+tag_note: FP4 标签对应论文评测使用的 MXFP4/NVFP4 专家权重；异构标签对应独显与主机 CPU 协同，不表示统一物理内存。实现证据结合论文端到端服务评测与 2026-10-30 对官方 commit ecbbce457769a75810df83517250cd3ce3263ea5
+  的只读源码核对，未本地运行；源码版本差异与量化内核路径见 notes.md。

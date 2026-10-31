@@ -14,8 +14,6 @@ attachments:
 - url: https://arxiv.org/pdf/2508.16703v4
   path: resources/shadownpu.pdf
   source: zotero
-  zotero_item_key: GWKCLUHM
-  zotero_attachment_key: SDQKX5WN
 authors:
 - Wangsong Yin
 - Daliang Xu
@@ -24,8 +22,3 @@ authors:
 - Xuanzhe Liu
 year: 2026
 doi: 10.48550/arXiv.2508.16703
-zotero:
-  item_key: GWKCLUHM
-  library_id: 0
-  source_date: '2026-04-08'
-  duplicate_item_keys: []

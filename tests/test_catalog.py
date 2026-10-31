@@ -3,6 +3,7 @@ import csv
 from datetime import date
 import importlib.util
 import io
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -83,6 +84,14 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(len(rows), 3)
         self.assertEqual(rows[0]["title"], "量化研究 | A [B]")
         self.assertIn("resources/paper.pdf", rows[0]["attachments"])
+        self.assertEqual(
+            list(rows[0]),
+            ["id", "title", "type", "url", "status", "summary", "tags", "authors",
+             "year", "venue", "doi", "links", "attachments", "metadata_path", "notes_path"],
+        )
+        self.assertNotIn("Zotero", index)
+        self.assertNotIn("zotero://", index)
+        self.assertNotIn("zotero://", raw_csv.decode("utf-8-sig"))
 
     def test_attachments_do_not_need_to_exist(self):
         self.add_entry()
@@ -125,6 +134,80 @@ class CatalogTests(unittest.TestCase):
         before = [(self.root / name).read_bytes() for name in ("INDEX.md", "catalog.csv")]
         self.run_command("build")
         self.assertEqual(before, [(self.root / name).read_bytes() for name in ("INDEX.md", "catalog.csv")])
+
+    def test_public_build_ignores_personal_zotero_state_and_downloads(self):
+        path = self.add_entry()
+        self.assertEqual(self.run_command("build")[0], 0)
+        before = [(self.root / name).read_bytes() for name in ("INDEX.md", "catalog.csv")]
+        local = self.root / ".local" / "zotero"
+        local.mkdir(parents=True)
+        for user_id, item_key in ((123, "ABCD1234"), (456, "WXYZ5678")):
+            with self.subTest(user_id=user_id):
+                (local / "config.json").write_text(
+                    json.dumps({"api_base": "http://127.0.0.1:23119", "user_id": user_id}),
+                    encoding="utf-8",
+                )
+                (local / "bindings.json").write_text(json.dumps({
+                    "version": 1,
+                    "libraries": {f"user:{user_id}": {
+                        "library": {"type": "user", "id": user_id},
+                        "entries": {"example": {
+                            "item_key": item_key,
+                            "reading_attachment_key": "PDF12345",
+                            "attachments": {"resources/paper.pdf": {
+                                "key": "PDF12345", "status": "available",
+                            }},
+                        }},
+                    }},
+                }), encoding="utf-8")
+                (local / "index.md").write_text(
+                    f"[个人条目](zotero://select/library/items/{item_key})", encoding="utf-8",
+                )
+                resources = path.parent / "resources"
+                resources.mkdir(exist_ok=True)
+                (resources / "paper.pdf").write_bytes(b"%PDF-1.7\nlocal-only")
+                self.assertEqual(self.run_command("build")[0], 0)
+                self.assertEqual(
+                    before,
+                    [(self.root / name).read_bytes() for name in ("INDEX.md", "catalog.csv")],
+                )
+        (local / "bindings.json").write_text("不是 JSON", encoding="utf-8")
+        self.assertEqual(self.run_command("build")[0], 0)
+        self.assertEqual(before, [(self.root / name).read_bytes() for name in ("INDEX.md", "catalog.csv")])
+
+    def test_public_metadata_rejects_zotero_binding_even_when_empty(self):
+        for value in (None, {}, {"item_key": "ABCD1234", "library_id": 0}):
+            with self.subTest(value=value):
+                self.add_entry(zotero=value)
+                with self.assertRaisesRegex(catalog.CatalogError, "禁止 zotero"):
+                    self.load()
+
+    def test_public_attachments_reject_private_binding_and_status_fields(self):
+        for key in ("zotero_item_key", "zotero_attachment_key", "local_status", "downloaded_on"):
+            for value in (None, "", "ABCD1234"):
+                with self.subTest(key=key, value=value):
+                    self.add_entry(attachments=[{
+                        "url": "https://example.org/paper.pdf",
+                        "path": "resources/paper.pdf",
+                        key: value,
+                    }])
+                    with self.assertRaisesRegex(catalog.CatalogError, f"禁止 {key}"):
+                        self.load()
+
+    def test_historical_zotero_provenance_does_not_create_personal_links(self):
+        self.add_entry(attachments=[{
+            "url": "https://example.org/paper.pdf",
+            "path": "resources/paper.pdf",
+            "source_zotero_item_key": "ABCD1234",
+            "source_zotero_attachment_key": "PDF12345",
+        }])
+        self.assertEqual(self.run_command("build")[0], 0)
+        index = (self.root / "INDEX.md").read_text(encoding="utf-8")
+        csv_text = (self.root / "catalog.csv").read_text(encoding="utf-8-sig")
+        attachment = json.loads(next(csv.DictReader(io.StringIO(csv_text)))["attachments"])[0]
+        self.assertEqual(attachment["source_zotero_item_key"], "ABCD1234")
+        self.assertEqual(attachment["source_zotero_attachment_key"], "PDF12345")
+        self.assertNotIn("zotero://", index + csv_text)
 
     def test_invalid_build_preserves_existing_outputs(self):
         self.add_entry(tags=["topic/typo"])

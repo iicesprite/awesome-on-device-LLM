@@ -14,13 +14,11 @@ attachments:
 - url: https://aclanthology.org/2024.lrec-main.648.pdf
   path: resources/flattenquant.pdf
   source: zotero
-  zotero_item_key: 7D8ZAKYK
-  zotero_attachment_key: 96UP8YEN
 - url: https://arxiv.org/pdf/2402.17985
   path: resources/flattenquant-caq25dlt.pdf
   source: zotero
-  zotero_item_key: BJXZYABE
-  zotero_attachment_key: CAQ25DLT
+  source_zotero_attachment_key: CAQ25DLT
+  source_zotero_item_key: BJXZYABE
 authors:
 - Yi Zhang
 - Fei Yang
@@ -28,11 +26,5 @@ authors:
 - Fangyu Wang
 - Aimin Pan
 year: 2024
-venue: Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and
-  Evaluation (LREC-COLING 2024)
-zotero:
-  item_key: 7D8ZAKYK
-  library_id: 0
-  source_date: 2024-05
-  duplicate_item_keys:
-  - BJXZYABE
+venue: Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation
+  (LREC-COLING 2024)

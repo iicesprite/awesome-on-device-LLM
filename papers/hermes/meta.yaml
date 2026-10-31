@@ -23,7 +23,6 @@ attachments:
 - url: https://arxiv.org/pdf/2502.16963v1
   path: resources/hermes-2502.16963v1.pdf
   version: arXiv:2502.16963v1
-  downloaded_on: '2026-10-30'
 authors:
 - Lian Liu
 - Shixin Zhao

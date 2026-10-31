@@ -15,8 +15,6 @@ attachments:
 - url: https://proceedings.neurips.cc/paper_files/paper/2024/file/028fcbcf85435d39a40c4d61b42c99a4-Paper-Conference.pdf
   path: resources/kvquant.pdf
   source: zotero
-  zotero_item_key: CJ3TECUN
-  zotero_attachment_key: FIWL7KQG
 authors:
 - Coleman Hooper
 - Sehoon Kim
@@ -28,8 +26,3 @@ authors:
 year: 2024
 doi: 10.52202/079017-0040
 venue: Advances in Neural Information Processing Systems
-zotero:
-  item_key: CJ3TECUN
-  library_id: 0
-  source_date: '2024-12-16'
-  duplicate_item_keys: []

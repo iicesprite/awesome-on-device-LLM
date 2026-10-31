@@ -15,13 +15,11 @@ attachments:
 - url: http://arxiv.org/pdf/2501.04052v3
   path: resources/razer.pdf
   source: zotero
-  zotero_item_key: LW63KGZ4
-  zotero_attachment_key: ATZQ8J4E
 - url: http://arxiv.org/pdf/2501.04052v3
   path: resources/razer-657x6tne.pdf
   source: zotero
-  zotero_item_key: A7QP7PQU
-  zotero_attachment_key: 657X6TNE
+  source_zotero_attachment_key: 657X6TNE
+  source_zotero_item_key: A7QP7PQU
 authors:
 - Yuzong Chen
 - Xilai Dai
@@ -34,9 +32,3 @@ authors:
 - Mohamed S. Abdelfattah
 year: 2026
 doi: 10.48550/arXiv.2501.04052
-zotero:
-  item_key: LW63KGZ4
-  library_id: 0
-  source_date: '2026-01-31'
-  duplicate_item_keys:
-  - A7QP7PQU

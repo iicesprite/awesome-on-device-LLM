@@ -15,9 +15,9 @@ attachments:
 - url: https://dl.acm.org/doi/pdf/10.1145/3767295.3769382?download=true
   path: resources/mobile-npu-test-time-compute-xnsvnidb.pdf
   source: zotero
-  zotero_item_key: 323PMB6L
-  zotero_attachment_key: XNSVNIDB
-  local_status: missing-in-zotero
+- url: https://arxiv.org/pdf/2509.23324v1
+  path: resources/mobile-npu-test-time-compute-arxiv-v1.pdf
+  version: arXiv:2509.23324v1; preprint, not the missing EuroSys version
 authors:
 - Zixu Hao
 - Jianyu Wei
@@ -30,8 +30,3 @@ authors:
 year: 2026
 doi: 10.1145/3767295.3769382
 venue: Proceedings of the 21st European Conference on Computer Systems
-zotero:
-  item_key: 323PMB6L
-  library_id: 0
-  source_date: 四月 26, 2026
-  duplicate_item_keys: []

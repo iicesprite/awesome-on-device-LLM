@@ -10,6 +10,7 @@
 | --- | --- |
 | 浏览全部资源，按类型或标签查阅 | [INDEX.md](INDEX.md) |
 | 用 Excel 筛选、排序 | [catalog.csv](catalog.csv) |
+| 用自己的 Zotero 阅读论文与按标签筛选 | [Zotero 联动](ZOTERO.md)，本机入口为 `.local/zotero/index.md` |
 | 查看或新增标签 | [tags.yaml](tags.yaml) |
 | 配置环境、迁移到新设备、运行测试 | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | 新建条目或笔记 | [templates/](templates/) |
@@ -74,6 +75,7 @@ uv run python scripts/catalog.py build
 
 - 笔记：存在 `notes.md` 时，索引自动生成链接；不存在则显示 `—`。
 - 离线：脚本不检查链接是否可访问，不下载附件，也不要求附件已存在。
+- 公共索引与 CSV 不包含个人 Zotero 链接，也不读取本机绑定或下载状态。登录自己的 Zotero 账号并完成 [联动流程](ZOTERO.md) 后，运行 `uv run --locked python scripts/zotero_sync.py index` 生成 `.local/zotero/index.md`，在本机打开它进入自己的条目或 PDF。该文件不入 Git，不要复制作者的关联。
 
 ## 搜索
 
@@ -118,7 +120,7 @@ uv run python scripts/catalog.py search --query AWQ
 | `attachments` | 可选 | 下载来源 `url` 和相对路径 `path` |
 | `authors`、`year`、`venue`、`doi` | 可选 | 论文信息，不适用时省略 |
 
-其他自定义字段会保留，可被关键字搜索，但不会增加 CSV 列。
+其他公开的自定义字段会保留，可被关键字搜索，但不会增加 CSV 列。**个人 Zotero 状态不是公开扩展字段**：禁止顶层 `zotero` 以及附件中的 `zotero_item_key`、`zotero_attachment_key`、`local_status`，即使值为空也会校验失败。账号配置、条目/附件关联及可用状态保存在 `.local/zotero/`；个人下载时间 `downloaded_on` 不写进共享元数据。历史 `source_zotero_*` 仅追溯来源，不作为当前绑定，来源和版本事实仍可保留。
 
 ## 标签
 

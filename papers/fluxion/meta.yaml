@@ -26,8 +26,13 @@ attachments:
 - url: https://arxiv.org/pdf/2605.07719v1
   path: resources/fluxion-2605.07719v1.pdf
   version: arXiv:2605.07719v1
-  downloaded_on: '2026-10-30'
-authors: [Feiyu Yao, Zhixiong Niu, Xiaqing Li, Yongqiang Xiong, Juan Fang, Qian Wang]
+authors:
+- Feiyu Yao
+- Zhixiong Niu
+- Xiaqing Li
+- Yongqiang Xiong
+- Juan Fang
+- Qian Wang
 year: 2026
 doi: 10.48550/arXiv.2605.07719
 first_published: '2026-05-08'

@@ -11,7 +11,10 @@ tags:
 - precision/w8a8
 - method/smoothquant
 links: {}
-attachments: []
+attachments:
+- url: https://proceedings.mlr.press/v202/xiao23c/xiao23c.pdf
+  path: resources/smoothquant-icml2023.pdf
+  version: ICML 2023 proceedings
 authors:
 - Guangxuan Xiao
 - Ji Lin
@@ -21,9 +24,4 @@ authors:
 - Song Han
 year: 2023
 venue: Proceedings of the 40th International Conference on Machine Learning
-zotero:
-  item_key: FS4HI2QV
-  library_id: 0
-  source_date: '2023-07-03'
-  duplicate_item_keys: []
-attachment_note: Zotero 中未找到该条目的 PDF 附件；未从网络下载。
+attachment_note: 已补充 ICML 2023 官方 PDF，并交由 Zotero 管理副本。

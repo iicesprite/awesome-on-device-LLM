@@ -28,7 +28,6 @@ attachments:
 - url: https://arxiv.org/pdf/2610.03394v1
   path: resources/edgeagent-2610.03394v1.pdf
   version: arXiv:2610.03394v1
-  downloaded_on: '2026-10-30'
 authors:
 - Yuhai Long
 - Yuanxin Wei

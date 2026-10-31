@@ -36,8 +36,11 @@ attachments:
 - url: https://www.usenix.org/system/files/osdi25-park-yeonhong.pdf
   path: resources/decdec-osdi2025.pdf
   version: OSDI 2025 proceedings
-  downloaded_on: '2026-10-30'
-authors: [Yeonhong Park, Jake Hyun, Hojoon Kim, Jae W. Lee]
+authors:
+- Yeonhong Park
+- Jake Hyun
+- Hojoon Kim
+- Jae W. Lee
 year: 2025
 venue: OSDI
 first_published: '2024-12-28'

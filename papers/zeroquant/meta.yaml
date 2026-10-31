@@ -15,18 +15,16 @@ attachments:
 - url: https://proceedings.neurips.cc/paper_files/paper/2022/file/adf7fa39d65e2983d724ff7da57f00ac-Paper-Conference.pdf
   path: resources/zeroquant.pdf
   source: zotero
-  zotero_item_key: 5WZ3EPAE
-  zotero_attachment_key: TJ2M9YK3
 - url: https://arxiv.org/pdf/2206.01861
   path: resources/zeroquant-zathrbd8.pdf
   source: zotero
-  zotero_item_key: 9KJY9PPD
-  zotero_attachment_key: ZATHRBD8
+  source_zotero_attachment_key: ZATHRBD8
+  source_zotero_item_key: 9KJY9PPD
 - url: https://arxiv.org/pdf/2206.01861
   path: resources/zeroquant-yicka85g.pdf
   source: zotero
-  zotero_item_key: 3WUXDXS9
-  zotero_attachment_key: YICKA85G
+  source_zotero_attachment_key: YICKA85G
+  source_zotero_item_key: 3WUXDXS9
 authors:
 - Zhewei Yao
 - Reza Yazdani Aminabadi
@@ -36,10 +34,3 @@ authors:
 - Yuxiong He
 year: 2022
 venue: Advances in Neural Information Processing Systems
-zotero:
-  item_key: 5WZ3EPAE
-  library_id: 0
-  source_date: '2022-12-06'
-  duplicate_item_keys:
-  - 9KJY9PPD
-  - 3WUXDXS9

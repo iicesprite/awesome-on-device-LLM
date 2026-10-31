@@ -31,7 +31,6 @@ attachments:
 - url: https://mpslab-asu.github.io/publications/papers/Khedkar2026CASES.pdf
   path: resources/helm-tcad2026.pdf
   version: Author-hosted IEEE TCAD 2026 article, 14 pages
-  downloaded_on: '2026-10-30'
 authors:
 - Atharva Khedkar
 - Shashwat Pandey

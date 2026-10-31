@@ -15,13 +15,11 @@ attachments:
 - url: https://raw.githubusercontent.com/mlresearch/v235/main/assets/egiazarian24a/egiazarian24a.pdf
   path: resources/aqlm.pdf
   source: zotero
-  zotero_item_key: JUC83VV9
-  zotero_attachment_key: EWDIXZTF
 - url: https://arxiv.org/pdf/2401.06118
   path: resources/aqlm-gr6yvlh4.pdf
   source: zotero
-  zotero_item_key: AR3HNYWU
-  zotero_attachment_key: GR6YVLH4
+  source_zotero_attachment_key: GR6YVLH4
+  source_zotero_item_key: AR3HNYWU
 authors:
 - Vage Egiazarian
 - Andrei Panferov
@@ -31,9 +29,3 @@ authors:
 - Dan Alistarh
 year: 2024
 venue: Proceedings of the 41st International Conference on Machine Learning
-zotero:
-  item_key: JUC83VV9
-  library_id: 0
-  source_date: '2024-07-08'
-  duplicate_item_keys:
-  - AR3HNYWU

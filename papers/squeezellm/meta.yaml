@@ -30,8 +30,6 @@ attachments:
 - url: https://arxiv.org/pdf/2306.07629v4
   path: resources/squeezellm.pdf
   source: zotero
-  zotero_item_key: MJ247X73
-  zotero_attachment_key: XQWXQVBZ
   version: arXiv:2306.07629v4
 authors:
 - Sehoon Kim
@@ -44,11 +42,6 @@ authors:
 - Kurt Keutzer
 year: 2024
 doi: 10.48550/arXiv.2306.07629
-zotero:
-  item_key: MJ247X73
-  library_id: 0
-  source_date: '2024-06-05'
-  duplicate_item_keys: []
 venue: ICML 2024
 source_checked_on: '2026-10-30'
 tag_note: 3/4-bit 指码本索引存储；论文叙述 FP16 运算，但所查官方 commit 的 NUQ 路径使用 FP32 中间计算。实现证据来自 packed 权重、CUDA 源码及完整模型入口，只读核对而未本地运行。

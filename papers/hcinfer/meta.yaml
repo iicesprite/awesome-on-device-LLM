@@ -31,7 +31,6 @@ attachments:
 - url: https://arxiv.org/pdf/2605.05819v1
   path: resources/hcinfer-2605.05819v1.pdf
   version: arXiv:2605.05819v1
-  downloaded_on: '2026-10-30'
 authors:
 - Shen Xu
 - Xiangwen Zhuge
@@ -43,4 +42,5 @@ year: 2026
 doi: 10.48550/arXiv.2605.05819
 first_published: '2026-05-07'
 source_checked_on: '2026-10-30'
-tag_note: 标签依据论文正文及附录；未确认公开源码，故未添加 packed-weights/kernel 等实现核验标签。主干为 GPTQ INT4/INT3，论文未完整交代激活与补偿矩阵 dtype，不强填 W4A16。与 RTSS 2025 同名 HCInfer 是不同论文。
+tag_note: 标签依据论文正文及附录；未确认公开源码，故未添加 packed-weights/kernel 等实现核验标签。主干为 GPTQ INT4/INT3，论文未完整交代激活与补偿矩阵 dtype，不强填 W4A16。与 RTSS
+  2025 同名 HCInfer 是不同论文。

@@ -30,7 +30,6 @@ attachments:
 - url: https://raw.githubusercontent.com/mlresearch/v267/main/assets/zhou25j/zhou25j.pdf
   path: resources/floe-icml2025.pdf
   version: ICML 2025 proceedings
-  downloaded_on: '2026-10-30'
 authors:
 - Yuxin Zhou
 - Zheng Li
