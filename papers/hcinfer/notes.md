@@ -1,6 +1,6 @@
 # HCInfer: An Efficient Inference System via Error Compensation for Resource-Constrained Devices
 
-阅读版本：[arXiv:2605.05819v1](https://arxiv.org/abs/2605.05819v1)，2026-05-07；[本地 PDF](resources/hcinfer-2605.05819v1.pdf)。已读 29 页：正文 p1–9、参考文献 p10–12、附录 A–C p13–22、checklist p23–29。下文页码均为 PDF 页码。阅读日期：2026-10-30。
+阅读版本：[arXiv:2605.05819v1](https://arxiv.org/abs/2605.05819v1)，2026-05-07
 
 
 
