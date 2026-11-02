@@ -1,5 +1,7 @@
 # 规范标签作为键；label 用于说明，aliases 可用于命令行搜索。
-# 添加新标签后重新生成索引。不同标签不能共用相同的 label 或 alias。
+# 规范键为 dimension/value；两段仅用小写英文字母、数字及连接它们的单个连字符。
+# 不同标签的规范键、label、aliases 共用大小写不敏感的唯一命名空间，不能互相冲突。
+# 添加新标签后重新生成索引。
 tags:
   topic/quantization: {label: 量化, aliases: [quantization]}
   topic/inference: {label: 推理加速, aliases: [inference, 推理]}

@@ -5,8 +5,8 @@ title: ""
 type: paper                  # papers → paper；blogs → blog；docs → doc
 url: ""                      # 主要来源，使用完整的 https:// 或 http:// 地址
 status: unread               # unread / reading / read
-summary: ""                  # 一句话说明收藏理由；详细内容写入 notes.md
-tags: []                     # 填写 tags.yaml 中的规范标签，不填中文别名
+summary: ""                  # 字符串，可为 ""；不能留成 summary: 或写 null；详细内容写入 notes.md
+tags: []                     # 规范标签的字符串列表，可为 []；不能写 null、中文名或别名
 
 # 可选：代码、项目主页、关联资源等，名称自定，值为完整网址。
 links: {}
@@ -20,7 +20,9 @@ attachments: []
 #   - url: https://example.org/paper.pdf
 #     path: resources/paper.pdf
 
-# 可选论文信息（不适用时省略）。
+# 可选论文信息：未知或不适用时省略字段，不用 null 占位。
+# authors 必须是字符串列表，每个姓名非空；year 必须是 1..9999 的整数，不能加引号或用布尔值。
+# venue、doi 如填写则必须是非空字符串。
 # authors: ["作者姓名"]
 # year: 2024
 # venue: MLSys
@@ -29,3 +31,6 @@ attachments: []
 # Zotero 账号配置、条目/附件 key 和可用状态只在 .local/zotero/ 中保存，不入 Git。
 # 禁止顶层 zotero，以及附件中的 zotero_item_key、zotero_attachment_key、local_status、downloaded_on。
 # 历史 source_zotero_* 仅用于追溯来源，不代表当前用户绑定；流程见 ZOTERO.md。
+#
+# metadata_path、notes_path 是脚本派生的保留字段，不用于自定义数据。
+# 外部笔记链接放入 links 或其他非保留字段。

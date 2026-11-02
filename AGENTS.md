@@ -1,6 +1,6 @@
 # AGENTS.md
 
-端侧 LLM 推理与量化的学习资源库：每条资源一个目录，元数据是 YAML，阅读笔记是 Markdown，索引由脚本生成。没有应用代码，只有 `scripts/catalog.py` 一个脚本。
+端侧 LLM 推理与量化的学习资源库：每条资源一个目录，元数据是 YAML，阅读笔记是 Markdown，索引由脚本生成。没有应用代码；`scripts/catalog.py` 负责校验、构建与搜索，`scripts/zotero_sync.py` 和 `scripts/zotero_import.js` 负责 Zotero 联动，流程见 [ZOTERO.md](ZOTERO.md)。
 
 用户文档在 [README.md](README.md)，维护流程在 [CONTRIBUTING.md](CONTRIBUTING.md)。本文只写 agent 容易出错的约束。
 
@@ -96,7 +96,7 @@ skills/resource-curator/       收录与阅读 skill 的源码
 ## 修改脚本或模板
 
 - `scripts/catalog.py` 的校验规则、`templates/` 和 `skills/resource-curator/SKILL.md` 需保持一致。改其中一个，要检查另外两个是否需要同步。
-- 修改 `scripts/catalog.py` 后运行测试。`tests/` 被 `.gitignore` 忽略，只存在于本机。
+- 修改 `scripts/` 后运行测试。`tests/test_catalog.py` 和 `tests/test_zotero_sync.py` 分别覆盖目录脚本与 Zotero 联动。
 - 修改 `skills/resource-curator/` 后，需要提醒用户重新复制到本机 skill 目录，见 CONTRIBUTING。
 
 ## 交付时说明

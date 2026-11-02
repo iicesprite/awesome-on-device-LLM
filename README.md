@@ -114,17 +114,27 @@ uv run python scripts/catalog.py search --query AWQ
 | --- | --- | --- |
 | `id`、`title`、`type`、`url` | 必填 | 身份、标题、资源类型、主要来源 |
 | `status` | 必填 | `unread` / `reading` / `read`，只表示阅读进度 |
-| `summary` | 必填，可为空 | 收藏理由，建议一句话 |
-| `tags` | 必填，可为空 | 使用 `tags.yaml` 中的规范键 |
+| `summary` | 必填，可为空字符串 | 收藏理由，建议一句话；留空时写 `summary: ""` |
+| `tags` | 必填，可为空列表 | 规范标签组成的字符串列表；无标签时写 `tags: []`，不填中文名或别名 |
 | `links` | 可选 | 名称到网址的映射，如 `code`、`project`、`related-paper` |
 | `attachments` | 可选 | 下载来源 `url` 和相对路径 `path` |
-| `authors`、`year`、`venue`、`doi` | 可选 | 论文信息，不适用时省略 |
+| `authors` | 可选 | 字符串列表，如 `["Alice", "Bob"]`；每个姓名须为非空字符串 |
+| `year` | 可选 | `1` 至 `9999` 的整数，如 `2024`；不能写成字符串 `"2024"` 或布尔值 |
+| `venue`、`doi` | 可选 | 非空字符串；信息未知或不适用时省略字段 |
 
-其他公开的自定义字段会保留，可被关键字搜索，但不会增加 CSV 列。**个人 Zotero 状态不是公开扩展字段**：禁止顶层 `zotero` 以及附件中的 `zotero_item_key`、`zotero_attachment_key`、`local_status`，即使值为空也会校验失败。账号配置、条目/附件关联及可用状态保存在 `.local/zotero/`；个人下载时间 `downloaded_on` 不写进共享元数据。历史 `source_zotero_*` 仅追溯来源，不作为当前绑定，来源和版本事实仍可保留。
+YAML 中的 `summary:`、`tags:` 或显式的 `null` 都不是上述空字符串、空列表，会校验失败。可选字段的信息未知时直接省略，不用 `null` 占位。
+
+其他公开的自定义字段可被关键字搜索，但不会增加 CSV 列。`metadata_path` 和 `notes_path` 是脚本加载时计算的**保留字段**，不能用作自定义字段：同名元数据值会被派生路径覆盖，不参与后续搜索或导出；原始 `meta.yaml` 不会被改写。外部笔记链接应放入 `links` 或其他非保留的自定义字段。
+
+**个人 Zotero 状态不是公开扩展字段**：禁止顶层 `zotero` 以及附件中的 `zotero_item_key`、`zotero_attachment_key`、`local_status`，即使值为空也会校验失败。账号配置、条目/附件关联及可用状态保存在 `.local/zotero/`；个人下载时间 `downloaded_on` 不写进共享元数据。历史 `source_zotero_*` 仅追溯来源，不作为当前绑定，来源和版本事实仍可保留。
 
 ## 标签
 
 标签格式为 `前缀/名称`。规范键、中文名称和搜索别名都在 [tags.yaml](tags.yaml) 中维护。新标签必须先加入词表再使用，脚本会拒绝未知标签和重复标签。
+
+- 规范键的两段都由小写英文字母或数字组成，可用单个连字符连接，例如 `target/kv-cache`、`precision/w4a16`；不能使用大写、下划线、空格、中文、首尾连字符或连续连字符。`precision/INT4`、`target/kv_cache` 均不合法。
+- 每个标签的 `label` 必须是非空字符串；`aliases` 可省略，填写时必须是非空字符串组成的列表，也可为空列表 `[]`。
+- 不同标签的规范键、`label` 和 `aliases` 共用大小写不敏感的唯一命名空间。例如一个标签已有别名 `quantization`，另一个标签就不能使用 `QUANTIZATION` 作为 `label` 或 `aliases` 中的值；其他标签的规范键也不能用作 `label` 或别名。
 
 | 前缀 | 含义 | 示例 |
 | --- | --- | --- |
