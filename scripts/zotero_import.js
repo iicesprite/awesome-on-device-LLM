@@ -27,7 +27,7 @@ for (const p of plan.papers) {
   }
   if (!item) {
     // A retry after partial success must reuse the item we already created.
-    const marker = `awesome-LLM-infra: ${p.id}`;
+    const marker = `awesome-on-device-LLM: ${p.id}`;
     const search = new Zotero.Search();
     search.libraryID = libraryID;
     search.addCondition('extra', 'contains', marker);

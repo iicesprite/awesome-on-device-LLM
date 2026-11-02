@@ -1,5 +1,5 @@
 [project]
-name = "awesome-llm-infra"
+name = "awesome-on-device-llm"
 version = "0.1.0"
 description = "端侧 LLM 推理与量化工程资源索引"
 readme = "README.md"

@@ -463,7 +463,7 @@ class ImporterBehaviorTests(unittest.TestCase):
 
     def execute(self, *, account=ACCOUNT, files=(), available=True):
         source = Path(sync.__file__).with_name('zotero_import.js').read_text(encoding='utf-8')
-        plan = {'library': {'type': 'user', 'id': ACCOUNT}, 'collection': 'awesome-LLM-infra',
+        plan = {'library': {'type': 'user', 'id': ACCOUNT}, 'collection': 'awesome-on-device-LLM',
                 'papers': [{'id': 'a', 'key': ITEM, 'title': 'A', 'tags': ['topic/inference'],
                             'authors': [], 'files': list(files)}]}
         harness = r"""

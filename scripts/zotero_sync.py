@@ -324,7 +324,7 @@ def prepare(download=False):
                      "files": files, "missing_files": missing,
                      "before_tags": zotero["data"].get("tags", []) if zotero else []})
     verify_account(config)
-    payload = {"library": library(config), "collection": "awesome-LLM-infra", "papers": jobs}
+    payload = {"library": library(config), "collection": "awesome-on-device-LLM", "papers": jobs}
     save_json(LOCAL / "plan.json", payload)
     template = (ROOT / "scripts" / "zotero_import.js").read_text(encoding="utf-8")
     atomic_text(LOCAL / "import.js", "const plan = " + json.dumps(payload, ensure_ascii=False) + ";\n" + template)

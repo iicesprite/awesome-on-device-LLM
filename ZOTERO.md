@@ -2,7 +2,9 @@
 
 公开仓库只保存资源身份、来源、版本、标签和阅读笔记；每个人独立选择自己的 Zotero 个人库、保存关联并生成个人索引。公共 `INDEX.md` 和 `catalog.csv` 不含个人 Zotero 链接，也不读取 `.local/`。不要复制作者或其他用户的绑定来使用。
 
-同步目标是个人库中的 `awesome-LLM-infra` 集合。已有论文、标签、笔记、其他集合和阅读状态保留；仓库的 PDF 复制为 Zotero 存储附件，不移动原件。**目前只支持已登录 Zotero 账号的个人库，不支持群组库或未登录的本地库。** 正整数账号 ID 是账号隔离的必要条件，不是本地路由 `0`，也不是插件内部的 libraryID。
+同步目标是个人库中的 `awesome-on-device-LLM` 集合。已有论文、标签、笔记、其他集合和阅读状态保留；仓库的 PDF 复制为 Zotero 存储附件，不移动原件。**目前只支持已登录 Zotero 账号的个人库，不支持群组库或未登录的本地库。** 正整数账号 ID 是账号隔离的必要条件，不是本地路由 `0`，也不是插件内部的 libraryID。
+
+仓库已更名为 `awesome-on-device-LLM`；Zotero 集合名和导入标记仍保留 `awesome-on-device-LLM`，避免更名影响已有同步记录。
 
 ## 先连接自己的 Zotero
 
@@ -69,7 +71,7 @@ uv run --locked python scripts/zotero_sync.py prepare --download
 让已连接自己 Zotero MCP 的 agent 按顺序执行：
 
 1. 阅读 `.local/zotero/plan.json`，先通过**只读 MCP 调用**取得 `Zotero.Users.getCurrentUserID()`，与 `plan.library.id` 比较。不相等或无法确认时停止，不执行后续写入。
-2. 通过 MCP 的 `library_update`（`kind: collection`、`action: create`）在已核对的个人库创建 `awesome-LLM-infra` 集合；已有则复用。不要在未核对账号时预先建集合。
+2. 通过 MCP 的 `library_update`（`kind: collection`、`action: create`）在已核对的个人库创建 `awesome-on-device-LLM` 集合；已有则复用。不要在未核对账号时预先建集合。
 3. 阅读并通过 `zotero_script` 执行 `.local/zotero/import.js`。脚本再次核对计划账号，查找已有集合，然后创建缺失条目、增量添加规范标签及复制缺失 PDF。源码模板为 `scripts/zotero_import.js`。集合创建不由导入模板负责。
 
 任一步骤之间如果切换了账号，必须停止并重新核对。不得以直接改库、未认证接口或其他脚本执行入口替代。
