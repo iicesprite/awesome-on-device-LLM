@@ -1,0 +1,32 @@
+id: scoutattention
+title: "ScoutAttention: Efficient KV Cache Offloading via Layer-Ahead CPU Pre-computation for LLM Inference"
+type: paper
+url: https://arxiv.org/abs/2603.27138
+status: unread
+summary: 通过 CPU–GPU 协同的分块稀疏注意力、跨层提前 CPU 预计算和异步周期性召回，降低长上下文解码中 KV 缓存卸载的通信与 CPU 计算瓶颈。
+tags:
+  - topic/inference
+  - topic/memory
+  - system/offloading
+  - system/heterogeneous
+  - system/sparse-inference
+  - stage/decode
+  - workload/long-context
+links:
+  arxiv_version: https://arxiv.org/abs/2603.27138v1
+attachments:
+  - url: https://arxiv.org/pdf/2603.27138v1
+    path: resources/scoutattention-2603.27138v1.pdf
+    version: arXiv v1
+authors:
+  - Qiuyang Zhang
+  - Kai Zhou
+  - Ding Tang
+  - Kai Lu
+  - Cheng Li
+  - Zhenyu Yang
+  - Peng Xu
+  - Jiguang Wan
+year: 2026
+venue: DAC
+doi: 10.48550/arXiv.2603.27138

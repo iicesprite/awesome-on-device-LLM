@@ -1,0 +1,42 @@
+id: magicpig
+title: "MagicPIG: LSH Sampling for Efficient LLM Generation"
+type: paper
+url: https://arxiv.org/abs/2410.16179
+status: unread
+summary: 以具有理论保证的 LSH 采样估计注意力输出，而非直接截取 TopK 键值对，并将哈希表存储与注意力计算放到 CPU，在 CPU–GPU 异构系统中降低长上下文解码的计算与显存压力。
+tags:
+  - topic/inference
+  - topic/memory
+  - system/heterogeneous
+  - system/offloading
+  - system/sparse-inference
+  - stage/decode
+  - workload/long-context
+links:
+  arxiv_version: https://arxiv.org/abs/2410.16179v4
+  publication: https://proceedings.iclr.cc/paper_files/paper/2025/hash/6d50d824ae819d5a961c1d8edc15e833-Abstract-Conference.html
+  code: https://github.com/Infini-AI-Lab/MagicPIG
+attachments:
+  - url: https://arxiv.org/pdf/2410.16179v4
+    path: resources/magicpig-2410.16179v4.pdf
+    version: arXiv v4
+  - url: https://proceedings.iclr.cc/paper_files/paper/2025/file/6d50d824ae819d5a961c1d8edc15e833-Paper-Conference.pdf
+    path: resources/magicpig-iclr2025.pdf
+    version: ICLR 2025 proceedings
+authors:
+  - Zhuoming Chen
+  - Ranajoy Sadhukhan
+  - Zihao Ye
+  - Yang Zhou
+  - Jianyu Zhang
+  - Niklas Nolte
+  - Yuandong Tian
+  - Matthijs Douze
+  - Leon Bottou
+  - Zhihao Jia
+  - Beidi Chen
+year: 2025
+venue: ICLR
+doi: 10.48550/arXiv.2410.16179
+version_note: arXiv 首次提交为 2024-10-21（v1），后续版本为 2024-10-28（v2）、2024-12-17（v3）和 2024-12-18（v4）；附件固定 v4，另关联正式会议版。
+publication_note: ICLR 官方发表页标记为 Conference，发表日期为 2025-05-01，因此 year 使用正式发表年份 2025；doi 为 arXiv 签发的预印本 DOI，官方会议页未提供会议 DOI。核对的 arXiv 页面未列 Comments 或 Journal reference，arXiv 与 ICLR 发表页均未见撤稿或更正标记。

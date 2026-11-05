@@ -1,0 +1,29 @@
+id: hisparse
+title: "HiSparse: Scaling Sparse-Attention Decoding with Hierarchical KV Cache Management"
+type: paper
+url: https://arxiv.org/abs/2608.07009
+status: unread
+summary: 将完整 KV 历史保存在主存，以固定容量 GPU 缓存和融合 CUDA 内核处理稀疏解码的命中、LRU 替换与数据取回，并用跨层预取降低传输开销；仅改变 KV 放置而不改变模型输出。
+tags:
+  - topic/inference
+  - topic/memory
+  - system/offloading
+  - system/sparse-inference
+  - system/operator-fusion
+  - stage/decode
+  - workload/long-context
+links:
+  arxiv_version: https://arxiv.org/abs/2608.07009v1
+attachments:
+  - url: https://arxiv.org/pdf/2608.07009v1
+    path: resources/hisparse-2608.07009v1.pdf
+    version: arXiv v1
+authors:
+  - Zhiqiang Xie
+  - Zhangheng Huang
+  - Tingwei Huang
+  - Ziyi Xu
+  - Ruiyang Ma
+  - Christos Kozyrakis
+year: 2026
+doi: 10.48550/arXiv.2608.07009

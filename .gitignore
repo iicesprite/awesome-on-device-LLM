@@ -2,9 +2,11 @@
 # 例外：asset-sources.yaml 记录原图来源，随 Git 同步。
 **/resources/*
 !**/resources/asset-sources.yaml
+!**/resources/assets/
 
 # Local Python environment and caches.
 .venv/
 .local/
+.obsidian/
 __pycache__/
 *.py[cod]

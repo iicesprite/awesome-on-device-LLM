@@ -1,0 +1,35 @@
+id: nosa
+title: "NOSA: Native and Offloadable Sparse Attention"
+type: paper
+url: https://aclanthology.org/2026.emnlp-main.279/
+status: unread
+summary: 面向 KV 缓存卸载设计可训练稀疏注意力 NOSA，显式约束 CPU–GPU 间的 KV 传输，并以 NOSI 推理系统兼顾长输入、长生成质量与解码吞吐。
+tags:
+  - topic/inference
+  - topic/memory
+  - system/offloading
+  - system/sparse-inference
+  - stage/decode
+  - workload/long-context
+links:
+  doi: https://doi.org/10.18653/2026.emnlp-main.279
+attachments:
+  - url: https://aclanthology.org/2026.emnlp-main.279.pdf
+    path: resources/nosa-emnlp2026.pdf
+    version: EMNLP 2026
+authors:
+  - Yuxiang Huang
+  - Pengjie Wang
+  - Jicheng Han
+  - Weilin Zhao
+  - Zhou su
+  - Ao Sun
+  - Hongya Lyu
+  - Hengyu Zhao
+  - Yudong Wang
+  - Chaojun Xiao
+  - Xu Han
+  - Zhiyuan Liu
+year: 2026
+venue: EMNLP
+doi: 10.18653/2026.emnlp-main.279

@@ -1,0 +1,32 @@
+id: guidedquant
+title: "GuidedQuant: Large Language Model Quantization via Exploiting End Loss Guidance"
+type: paper
+url: https://proceedings.mlr.press/v267/kim25d.html
+status: unread
+summary: 利用端到端损失的梯度信息引导训练后量化，在输出通道内保留权重间依赖，覆盖仅权重标量、向量及权重激活联合量化，并提出非均匀标量量化算法 LNQ。
+tags:
+  - topic/quantization
+  - target/weight
+  - target/activation
+  - scheme/weight-only
+  - scheme/weight-activation
+  - scheme/ptq
+  - scheme/nonuniform
+links:
+  arxiv: https://arxiv.org/abs/2505.07004
+  openreview: https://openreview.net/forum?id=ZawsPjlIGu
+  code: https://github.com/snu-mllab/GuidedQuant
+attachments:
+  - url: https://raw.githubusercontent.com/mlresearch/v267/main/assets/kim25d/kim25d.pdf
+    path: resources/guidedquant-icml2025.pdf
+authors:
+  - Jinuk Kim
+  - Marwa El Halabi
+  - Wonpyo Park
+  - Clemens JS Schaefer
+  - Deokjae Lee
+  - Yeonhong Park
+  - Jae W. Lee
+  - Hyun Oh Song
+year: 2025
+venue: ICML
