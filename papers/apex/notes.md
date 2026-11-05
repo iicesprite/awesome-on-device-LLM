@@ -42,7 +42,7 @@ APEX 针对的是：权重已能由 GPU 执行，但越来越长的 KV 和在线
 
 ![APEX 的跨 GPU 迭代异步 attention 时间线](resources/assets/figure-05-asynchronous-overlap.png)
 
-*原论文图 5，v4，PDF p.5。蓝色组的 `cpu_attn₁` 跨越多个 GPU 层，到下一次循环中的层 `i` 才接回。保留原图及图注；摘图坐标见 [来源清单](resources/asset-sources.yaml)。*
+*原论文图 5，v4，PDF p.5。蓝色组的 `cpu_attn₁` 跨越多个 GPU 层，到下一次循环中的层 `i` 才接回。保留原图及图注。*
 
 因此，**GPU 不停顿不等于每个请求都以同样速度前进**。运行时必须保存 CPU 请求所处的层、残差/中间结果和 KV 状态，再与 GPU 上其他请求的进度协调。论文 §6 说明当前 CPU attention 仍是按单层成批处理；跨层任务池和更细粒度优先级属于后续设想，不能写成现有能力。
 

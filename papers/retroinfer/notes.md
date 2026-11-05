@@ -1,8 +1,6 @@
 # RetroInfer: A Vector Storage Engine for Scalable Long-Context LLM Inference
 
-- 来源版本：[arXiv:2505.02922v3](https://arxiv.org/abs/2505.02922v3)，2026-04-27；[本地 PDF](resources/retroinfer-2505.02922v3.pdf)。发表信息为 PVLDB 19(5): 1016–1031, 2026，DOI：[10.14778/3796195.3796212](https://doi.org/10.14778/3796195.3796212)。以下页码均为 PDF 页码。
-- 阅读日期与范围：2026-11-04；全文 16 页，正文至第 13 页，参考文献在第 13–16 页，无独立附录。核查了第 5–12 页的机制图、公式、结果和消融图表。
-- 实现核查：只读抽查官方仓库提交 [`03f912c6e917c380d9d90c5ec85bb0f161ba53ef`](https://github.com/microsoft/RetrievalAttention/tree/03f912c6e917c380d9d90c5ec85bb0f161ba53ef) 的聚类、KV 管理、CPU 缓存管理及部分实验脚本，未运行论文代码、模型或 GPU 实验。下文数值均为作者报告；代码观察与个人判断另行注明。
+- 来源版本：[arXiv:2505.02922v3](https://arxiv.org/abs/2505.02922v3)，2026-04-27
 
 ## 研究问题与核心思路
 

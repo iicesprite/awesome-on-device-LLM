@@ -28,8 +28,8 @@ uv run --locked python -m unittest discover -s tests   # 仅在修改 scripts/ �
 papers/ blogs/ docs/           资源条目，目录即类型
 <分类>/<id>/meta.yaml          必需
 <分类>/<id>/notes.md           可选，阅读后才创建
-<分类>/<id>/resources/         本地 PDF、网页快照、assets/ 原图；整体被 Git 忽略
-<分类>/<id>/resources/asset-sources.yaml   原图来源，唯一入 Git 的文件
+<分类>/<id>/resources/         本地 PDF、网页快照，被 Git 忽略
+<分类>/<id>/resources/assets/  笔记配图，随 Git 同步
 templates/                     meta.yaml、notes.md 模板，以模板为准
 tags.yaml                      标签词表
 skills/resource-curator/       收录与阅读 skill 的源码
@@ -66,7 +66,7 @@ skills/resource-curator/       收录与阅读 skill 的源码
 - `attachments[].path` 必须是 `resources/<文件名>`：正斜杠、相对路径，不含 `..`、盘符或绝对路径。
 - 附件只记录来源，不要求文件存在。下载后不代表已读。
 - 笔记里用相对路径引用：`resources/xxx.pdf`、`resources/assets/xxx.png`。
-- 不用 `git add -f` 提交 `resources/` 下的 PDF 或图片。
+- 不用 `git add -f` 提交 `resources/` 下的 PDF。
 
 **Git**
 
@@ -76,13 +76,13 @@ skills/resource-curator/       收录与阅读 skill 的源码
 ## 写笔记
 
 - 从 `templates/notes.md` 出发，标题改成资源题名，删掉不适用的章节和 HTML 注释提示。已有笔记先通读再整合，不整体覆盖。
-- 开头写来源版本、阅读范围、阅读日期。页码一律注明是 PDF 页码还是论文页码。
+- 开头写来源版本。页码一律注明是 PDF 页码还是论文页码。
 - 数字要带单位、基线、设备、模型、batch、输入输出长度，以及 prefill 或 decode 条件。
 - 区分三类内容：作者报告的结果、你的解释、本人实测。没运行过的东西不要写复现结果。
 - 不把 kernel 加速当端到端收益，不把云端结果直接当端侧结论。
 - 论文中有内部不一致、撤稿或证据缺口时要明确写出。
 - 用自己的话总结，不整段复制正文。
-- 引用原图时：图注写论文版本、图号、PDF 页码；在 `resources/asset-sources.yaml` 记录来源 PDF、网址、页码、裁剪坐标；关键结论仍用文字说明。
+- 引用原图时：图注写论文版本、图号、PDF 页码，来源 PDF 或公开网址保留在条目元数据、笔记中；关键结论仍用文字说明。
 
 ## 收录与阅读流程
 

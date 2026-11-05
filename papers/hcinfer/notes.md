@@ -102,7 +102,7 @@ CPU worker 自己维护层号、投影类型等状态，以减少反复发送元
 
 ![HCInfer 的 attention 与 MoE 补偿流水线](resources/assets/figure-9-pipeline.png)
 
-*原文 Figure 9，arXiv v1，PDF p14，保留图例和原图注。绿色为 I/O，紫色为非线性计算；[摘图来源记录](resources/asset-sources.yaml)。*
+*原文 Figure 9，arXiv v1，PDF p14，保留图例和原图注。绿色为 I/O，紫色为非线性计算。*
 
 - **Attention：** Q/K/V 共用输入，因此一次分发激活，把三个补偿分支放进同一窗口；O 投影依赖 attention 输出，需要单独窗口。
 - **Dense FFN：** gate/up 共用一个窗口；非线性之后的 down 另开窗口。

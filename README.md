@@ -103,8 +103,8 @@ uv run python scripts/catalog.py search --query AWQ
 | --- | --- | --- |
 | `<分类>/<id>/meta.yaml` | 元数据（必需） | 是 |
 | `<分类>/<id>/notes.md` | 阅读笔记（可选） | 是 |
-| `<分类>/<id>/resources/` | 本地资料：PDF、网页快照、笔记引用的原图 | 否 |
-| `<分类>/<id>/resources/asset-sources.yaml` | 原图的来源、页码和裁剪信息 | 是 |
+| `<分类>/<id>/resources/` | 本地 PDF、网页快照（配图子目录除外） | 否 |
+| `<分类>/<id>/resources/assets/` | 笔记引用的图片 | 是 |
 
 分类只按资源类型划分。量化、异构、具体硬件等一律用标签表达，不建主题子目录。
 
@@ -157,14 +157,13 @@ YAML 中的 `summary:`、`tags:` 或显式的 `null` 都不是上述空字符串
 
 ## 本地资料与笔记配图
 
-每个条目的 `resources/` 目录用来存放本地资料。整个目录被 Git 忽略，只有 `asset-sources.yaml` 例外。
+每个条目的 `resources/` 目录用来存放资料。PDF、网页快照被 Git 忽略，笔记配图放在 `assets/` 子目录并随 Git 同步；来源版本、图号和 PDF 页码直接写在笔记图注中。
 
 ```text
 <分类>/<id>/resources/
 ├── paper.pdf               # 下载的 PDF 或网页快照（不入 Git）
-├── assets/                 # 笔记引用的原图（不入 Git）
-│   └── figure-05-xxx.png
-└── asset-sources.yaml      # 原图来源（入 Git）
+└── assets/                 # 笔记引用的图片（入 Git）
+    └── figure-05-xxx.png
 ```
 
 ### 下载 PDF 或网页快照
@@ -183,13 +182,12 @@ attachments:
 ### 在笔记中引用原图
 
 - 原图放在 `resources/assets/`，笔记用相对路径引用，例如 `![说明](resources/assets/figure-05-xxx.png)`。
-- 图注中写明论文版本、图表编号和 PDF 页码。
-- 在 `resources/asset-sources.yaml` 记录原 PDF、下载网址、页码、裁剪坐标和单位，方便在新设备上重新生成。
-- 笔记中的关键结论仍要用文字写出，缺少本地图片时也能读懂。
+- 图注注明来源版本、图号和 PDF 页码；来源 PDF 或公开网址在条目元数据、笔记中保留，关键结论仍用文字说明。
+
 
 ### 换设备时
 
-克隆仓库会恢复元数据、笔记、索引和 `asset-sources.yaml`，**不会**恢复 PDF 和原图。需要时按 `attachments` 的来源重新下载，原图按 `asset-sources.yaml` 重新裁剪。无法重新获取的资料请自行备份。
+克隆仓库会恢复元数据、笔记、索引和笔记内图片，**不会**恢复 PDF 。
 
 ## 用 agent 收录和阅读
 

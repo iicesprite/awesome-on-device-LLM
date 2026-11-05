@@ -89,16 +89,17 @@ uv run python -m unittest discover -s tests
 
 ## 本地资料的 Git 规则
 
-`.gitignore` 忽略每个条目 `resources/` 下的所有文件，只放行 `asset-sources.yaml`：
+`.gitignore` 忽略每个条目 `resources/` 下的本地资料，只放行笔记配图目录 `assets/`：
 
 ```gitignore
 **/resources/*
-!**/resources/asset-sources.yaml
+!**/resources/assets/
 ```
 
-- 不要用 `git add -f` 强制提交下载的 PDF 或原图。
+- 笔记配图通过普通 `git add` 提交；不要用 `git add -f` 强制提交下载的 PDF 或网页快照。
 - 忽略规则不会取消已经被 Git 跟踪的文件。如果误提交，需要先执行 `git rm --cached <文件>`。
 - 脚本不检查附件是否存在，缺文件不会导致 `check` 或 `build` 失败。
+- 图片来源版本、图号和 PDF 页码写在笔记图注中，来源 PDF 或公开网址保留在条目元数据、笔记中。
 
 ## 安装 agent skill
 
@@ -117,4 +118,4 @@ uv run python -m unittest discover -s tests
 
 - `build` 会先校验所有条目，失败时按报错提示修改。
 - 新增标签时，先在 `tags.yaml` 中加入词条，再用于条目；不同标签不能共用相同的名称或别名。
-- 确认 `git status` 中没有出现 `resources/` 下的 PDF 或图片。
+- 确认 `git status` 中没有出现 `resources/` 下的 PDF 或网页快照；`resources/assets/` 下的笔记配图可以提交。
