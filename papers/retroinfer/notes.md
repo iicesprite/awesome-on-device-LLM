@@ -95,19 +95,10 @@ flowchart TD
 
 作者说明专用 CUDA copy kernel 会跳过块内无效区，并针对不同 head 的复制量调整线程数。论文举例中，128K 上下文的 Llama3-8B 单层 GPU 执行为 720 μs，普通缓存加 PyTorch 传输额外耗时约 1.5 ms；专用复制实现将 miss 时的复制耗时从 1.3 ms 降至 100 μs。这是局部系统开销比较，不是完整模型或请求的加速倍数；该段未单独列出 batch 和生成长度。（§4.3、§4.6，PDF 第 8–9 页）
 
-### 5. 已核查的代码边界
-
-除前述 Python 聚类和 cache 路径，还抽查了 [`wave_buffer_cpu.cpp`](https://github.com/microsoft/RetrievalAttention/blob/03f912c6e917c380d9d90c5ec85bb0f161ba53ef/library/retroinfer/retroinfer_kernels/src/wave_buffer_cpu.cpp) 的 `batch_access`、`batch_update`、线程池提交和同步逻辑：命中与缺失分别生成复制描述，访问完成后异步更新 LRU 和准入元数据。
-
-如果检索簇所需页面超过 execution buffer 的页面预算上限，`batch_access` 会打印警告并跳过剩余簇，提示增大 `buffer_cluster_num`。因此，“wave buffer 不改变精度”依赖于缓冲区能够容纳本步实际选中的簇；仅设置相同检索比例，还不足以保证不同内存配置执行同一个近似集合。这是静态代码观察，本次未触发运行验证。
-
-本次未审计全部 CUDA kernel、外部 weighted-attention 分支及多 GPU 同步，也未确认此提交与论文每条实验曲线逐项对应；这次核查不构成复现。
 
 ## 实验条件与关键结果
 
 ### 平台、模型和预算
-
-以下均为作者实验，不是本人实测。（§5.1，PDF 第 9 页）
 
 | 项目 | 条件 |
 |---|---|
@@ -208,4 +199,4 @@ Llama 蒸馏模型的一项得分上升，Qwen 蒸馏模型的两项则下降。
 5. 实现一致性：当前提交有最后一轮全局聚类分配、组内共享检索与 execution buffer 截断等细节；线程数也与正文不完全一致。复现前应固定提交、外部 kernel 版本和配置，先确认实际执行的近似集合。
 6. 与量化的组合：本文没有量化 KV。作者把 KV 量化列为互补方向，但量化可能改变簇排序、中心代表性和估计误差，组合质量与收益仍需实测，不能直接相乘。
 
-用于本地部署前，我会测包含索引构建的首次请求耗时、同等质量下的 batch=1 解码延迟、峰值显存/主存，以及长生成更新步的延迟，再决定是否采用。
+

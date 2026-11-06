@@ -1,0 +1,39 @@
+id: solidattention
+title: 'SolidAttention: Low-Latency SSD-based Serving on Memory-Constrained PCs'
+type: paper
+url: https://www.usenix.org/conference/fast26/presentation/zheng
+status: unread
+summary: 面向内存受限的个人电脑，将动态稀疏注意力与 SSD 存储管理协同设计，通过 KV 块化存储、利用时间局部性的推测预取及计算与 I/O 编排，降低长上下文推理的 KV 缓存内存占用和 SSD 阻塞延迟。
+tags:
+  - topic/inference
+  - topic/memory
+  - system/offloading
+  - system/heterogeneous
+  - system/memory-layout
+  - system/dynamic-scheduling
+  - system/sparse-inference
+  - system/pipelining
+  - stage/decode
+  - workload/long-context
+  - hardware/nvidia-dgpu
+  - hardware/x86
+  - backend/cuda
+links:
+  pdf: https://www.usenix.org/system/files/fast26-zheng.pdf
+  slides: https://www.usenix.org/system/files/fast26_slides_zheng.pdf
+attachments:
+  - url: https://www.usenix.org/system/files/fast26-zheng.pdf
+    path: resources/solidattention-fast2026.pdf
+    version: FAST 2026 正式版
+authors:
+  - Xinrui Zheng
+  - Dongliang Wei
+  - Jianxiang Gao
+  - Yixin Song
+  - Zeyu Mi
+  - Haibo Chen
+year: 2026
+venue: FAST
+source_checked_on: '2026-11-06'
+version_note: USENIX FAST 2026 正式版，官方 BibTeX 页码为 67–82；发表页未见撤稿或更正提示，未提供 DOI。
+tag_note: 标签依据正式版全文，重点为 decode 阶段的 KV 布局、推测预取及异构调度；实际评测包含 Linux x86 笔记本上的 RTX 4070 Laptop CUDA 后端与 Intel Arc 140T SYCL 后端。KV 为 FP16，权重为 INT4，不把 KV 卸载或稀疏选择标成 KV 量化；未核验源码，不添加 evidence 标签。
