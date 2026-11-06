@@ -1,0 +1,51 @@
+---
+id: squeezellm
+title: 'SqueezeLLM: Dense-and-Sparse Quantization'
+type: paper
+url: https://arxiv.org/abs/2306.07629
+status: unread
+summary: 以敏感度加权的非均匀码本和高精度稀疏例外压缩权重，提供 3/4-bit 打包、LUT CUDA 内核及单请求解码实现；重点分析精度、实际计算 dtype 与稀疏负载均衡的取舍。
+tags:
+- topic/quantization
+- target/weight
+- scheme/weight-only
+- scheme/ptq
+- scheme/nonuniform
+- topic/memory
+- topic/inference
+- granularity/per-channel
+- system/lut
+- system/sparse-inference
+- system/memory-layout
+- stage/decode
+- memory/discrete
+- hardware/nvidia-dgpu
+- backend/cuda
+- evidence/packed-weights
+- evidence/kernel
+- evidence/end-to-end
+links:
+  code: https://github.com/SqueezeAILab/SqueezeLLM
+  publication: https://proceedings.mlr.press/v235/kim24f.html
+attachments:
+- url: https://arxiv.org/pdf/2306.07629v4
+  path: resources/squeezellm.pdf
+  source: zotero
+  version: arXiv:2306.07629v4
+authors:
+- Sehoon Kim
+- Coleman Hooper
+- Amir Gholami
+- Zhen Dong
+- Xiuyu Li
+- Sheng Shen
+- Michael W. Mahoney
+- Kurt Keutzer
+year: 2024
+doi: 10.48550/arXiv.2306.07629
+venue: ICML 2024
+source_checked_on: '2026-10-30'
+tag_note: 3/4-bit 指码本索引存储；论文叙述 FP16 运算，但所查官方 commit 的 NUQ 路径使用 FP32 中间计算。实现证据来自 packed 权重、CUDA 源码及完整模型入口，只读核对而未本地运行。
+---
+
+# SqueezeLLM: Dense-and-Sparse Quantization

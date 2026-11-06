@@ -1,0 +1,38 @@
+---
+id: gptq
+title: 'GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers'
+type: paper
+url: http://arxiv.org/abs/2210.17323
+status: unread
+summary: 近似二阶信息驱动的一次性权重量化，作为算法与推理基线。
+tags:
+- topic/quantization
+- target/weight
+- scheme/weight-only
+- scheme/ptq
+- method/gptq
+links: {}
+attachments:
+- url: http://arxiv.org/pdf/2210.17323v2
+  path: resources/gptq.pdf
+  source: zotero
+- url: https://research-explorer.ista.ac.at/download/17378/17385/2023_ICLR_Frantar.pdf
+  path: resources/gptq-ebsmgni6.pdf
+  source: zotero
+  source_zotero_attachment_key: EBSMGNI6
+  source_zotero_item_key: ETHDJTJQ
+- url: https://openreview.net/pdf?id=tcbBPnfwxS
+  path: resources/gptq-s92hphyx.pdf
+  source: zotero
+  source_zotero_attachment_key: S92HPHYX
+  source_zotero_item_key: CRYACWM2
+authors:
+- Elias Frantar
+- Saleh Ashkboos
+- Torsten Hoefler
+- Dan Alistarh
+year: 2023
+doi: 10.48550/arXiv.2210.17323
+---
+
+# GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers

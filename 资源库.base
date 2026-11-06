@@ -1,0 +1,87 @@
+filters:
+  and:
+    - '/^(papers|blogs|docs)\/[^/]+\/resource\.md$/.matches(file.path)'
+formulas:
+  resource: 'link(file.path, note.id)'
+  # Bases 中的标签值带 # 前缀；frontmatter 仍使用不带 # 的规范键。
+  topics: 'list(note.tags).filter(value.startsWith("#topic/"))'
+  hardware: 'list(note.tags).filter(value.startsWith("#hardware/"))'
+properties:
+  formula.resource:
+    displayName: 打开卡片
+  note.title:
+    displayName: 标题
+  note.type:
+    displayName: 类型
+  note.year:
+    displayName: 年份
+  note.status:
+    displayName: 阅读状态
+  note.tags:
+    displayName: 标签
+  note.summary:
+    displayName: 收藏理由
+  note.url:
+    displayName: 来源
+  formula.topics:
+    displayName: 研究主题
+  formula.hardware:
+    displayName: 设备
+views:
+  - type: table
+    name: 全部资源
+    order:
+      - formula.resource
+      - note.title
+      - note.type
+      - note.year
+      - note.status
+      - note.tags
+      - note.summary
+      - note.url
+    sort:
+      - property: note.year
+        direction: DESC
+      - property: note.title
+        direction: ASC
+  - type: table
+    name: 阅读队列
+    filters:
+      or:
+        - 'note.status == "unread"'
+        - 'note.status == "reading"'
+    order:
+      - formula.resource
+      - note.title
+      - note.status
+      - note.tags
+      - note.summary
+    sort:
+      - property: note.status
+        direction: ASC
+      - property: note.title
+        direction: ASC
+  - type: table
+    name: 主题专题
+    filters:
+      and:
+        - 'formula.topics.length > 0'
+    order:
+      - formula.resource
+      - note.title
+      - formula.topics
+      - note.tags
+      - note.status
+      - note.summary
+  - type: table
+    name: 设备专题
+    filters:
+      and:
+        - 'formula.hardware.length > 0'
+    order:
+      - formula.resource
+      - note.title
+      - formula.hardware
+      - note.tags
+      - note.status
+      - note.summary

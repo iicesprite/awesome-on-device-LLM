@@ -10,6 +10,7 @@
 | --- | --- |
 | 浏览全部资源，按类型或标签查阅 | [INDEX.md](INDEX.md) |
 | 用 Excel 筛选、排序 | [catalog.csv](catalog.csv) |
+| 用 Obsidian 浏览、筛选和编辑资源属性 | [资源库.base](资源库.base)，使用方法见下文 |
 | 用自己的 Zotero 阅读论文与按标签筛选 | [Zotero 联动](ZOTERO.md)，本机入口为 `.local/zotero/index.md` |
 | 查看或新增标签 | [tags.yaml](tags.yaml) |
 | 配置环境、迁移到新设备、运行测试 | [CONTRIBUTING.md](CONTRIBUTING.md) |
@@ -29,19 +30,21 @@ uv run python scripts/catalog.py search --tag 量化 --tag orin   # 试一下搜
 
 以新增论文 `my-paper` 为例。
 
-1. 创建条目目录，复制元数据模板：
+1. 创建条目目录，复制资源卡模板：
 
    ```powershell
    New-Item -ItemType Directory -Path papers/my-paper
-   Copy-Item templates/meta.yaml papers/my-paper/meta.yaml
+   Copy-Item templates/resource.md papers/my-paper/resource.md
    ```
 
-2. 编辑 `meta.yaml`：填写标题、网址、收藏理由和标签，并把 `id` 改成目录名 `my-paper`。
-3. 开始阅读时复制笔记模板，按内容删改章节，并将 `status` 改为 `reading`：
+2. 编辑 `resource.md` 开头的 YAML frontmatter：填写标题、网址、收藏理由和标签，并把 `id` 改成目录名 `my-paper`。卡片正文可选，不作为索引元数据。
+3. 开始阅读时复制独立的笔记模板，按内容删改章节，并将 frontmatter 的 `status` 改为 `reading`：
 
    ```powershell
    Copy-Item templates/notes.md papers/my-paper/notes.md
    ```
+
+   创建后在同目录 `resource.md` 的正文中添加相对链接 `[阅读笔记](notes.md)`；没有笔记时不添加该链接，也不必创建 `notes.md`。
 
 4. 读完后将 `status` 改为 `read`。
 5. 重新生成索引：
@@ -71,11 +74,27 @@ uv run python scripts/catalog.py build
 
 `build` 先校验所有条目，再生成 `INDEX.md`（分类表和标签交叉索引）与 `catalog.csv`。
 
-> **只维护 `meta.yaml` 和 `notes.md`，不要直接编辑 `INDEX.md` 和 `catalog.csv`。** 它们每次都会被覆盖。
+> **只维护 `resource.md` 的 frontmatter、可选卡片正文和独立的 `notes.md`，不要直接编辑 `INDEX.md` 和 `catalog.csv`。** 生成文件每次都会被覆盖。
 
 - 笔记：存在 `notes.md` 时，索引自动生成链接；不存在则显示 `—`。
 - 离线：脚本不检查链接是否可访问，不下载附件，也不要求附件已存在。
 - 公共索引与 CSV 不包含个人 Zotero 链接，也不读取本机绑定或下载状态。登录自己的 Zotero 账号并完成 [联动流程](ZOTERO.md) 后，运行 `uv run --locked python scripts/zotero_sync.py index` 生成 `.local/zotero/index.md`，在本机打开它进入自己的条目或 PDF。该文件不入 Git，不要复制作者的关联。
+
+## 用 Obsidian 管理资源
+
+1. 在 Obsidian 中将仓库根目录打开为 vault，启用核心插件 **Bases**。
+2. 打开根目录 [资源库.base](资源库.base)，使用 **全部资源 / 阅读队列 / 主题专题 / 设备专题** 视图浏览、筛选资源。
+3. 在 Bases 中编辑 `status`、`summary`、`tags` 等简单属性，编辑后点击其他单元格或工具栏完成保存；通过“打开卡片”列进入资源卡，已有笔记可通过正文中的 `[阅读笔记](notes.md)` 打开。新建笔记后再给卡片添加这个相对链接。
+
+   笔记编辑视图中可用 `Ctrl+单击` 跟随链接；在阅读视图中直接单击。
+
+Bases 只纳入 `papers/`、`blogs/`、`docs/` 下的 `resource.md`，不会把 `notes.md`、模板或附件当作资源。元数据只保存于资源卡开头的 YAML frontmatter；正文可选，不参与目录脚本的元数据搜索与索引。`links`、`attachments` 等嵌套 YAML 在源码模式中编辑，避免把结构改成普通字符串。
+
+Obsidian 的编辑界面不替代仓库校验：标签仍须使用 `tags.yaml` 的规范键，状态仍只能是 `unread` / `reading` / `read`。修改后运行 `check` 或 `build` 检查，GitHub 的 `INDEX.md` 与 CSV 必须运行 `build` 才会更新。公共卡片不保存个人 Zotero 绑定；个人入口仍用 `.local/zotero/index.md`。
+
+`.obsidian/` 是各设备自己的设置目录，被 Git 忽略；根目录 `.base` 文件随仓库共享。“主题专题”展示带 `topic/*` 标签的资源，“设备专题”展示带 `hardware/*` 标签的资源；可在视图的“筛选”中按具体规范标签继续收窄。公式列只用于展示，修改标签应使用“标签”列。
+
+已有条目已从独立元数据文件迁移为 `resource.md` frontmatter，保留原有字段、ID、阅读状态、标签、自定义字段、附件相对路径和独立笔记；附件不移动。迁移后没有旧格式读取回退，也不维护第二份 YAML 元数据源。
 
 ## 搜索
 
@@ -101,14 +120,14 @@ uv run python scripts/catalog.py search --query AWQ
 
 | 路径 | 内容 | 是否入 Git |
 | --- | --- | --- |
-| `<分类>/<id>/meta.yaml` | 元数据（必需） | 是 |
+| `<分类>/<id>/resource.md` | 资源卡，YAML frontmatter 为唯一元数据源（必需）；正文可选 | 是 |
 | `<分类>/<id>/notes.md` | 阅读笔记（可选） | 是 |
 | `<分类>/<id>/resources/` | 本地 PDF、网页快照（配图子目录除外） | 否 |
 | `<分类>/<id>/resources/assets/` | 笔记引用的图片 | 是 |
 
 分类只按资源类型划分。量化、异构、具体硬件等一律用标签表达，不建主题子目录。
 
-`meta.yaml` 字段：
+`resource.md` 开头的 YAML frontmatter 字段（以 `---` 开始和结束）：
 
 | 字段 | 是否必填 | 说明 |
 | --- | --- | --- |
@@ -124,7 +143,7 @@ uv run python scripts/catalog.py search --query AWQ
 
 YAML 中的 `summary:`、`tags:` 或显式的 `null` 都不是上述空字符串、空列表，会校验失败。可选字段的信息未知时直接省略，不用 `null` 占位。
 
-其他公开的自定义字段可被关键字搜索，但不会增加 CSV 列。`metadata_path` 和 `notes_path` 是脚本加载时计算的**保留字段**，不能用作自定义字段：同名元数据值会被派生路径覆盖，不参与后续搜索或导出；原始 `meta.yaml` 不会被改写。外部笔记链接应放入 `links` 或其他非保留的自定义字段。
+其他公开的自定义字段可被关键字搜索，但不会增加 CSV 列。`metadata_path` 和 `notes_path` 是脚本加载时计算的**保留字段**，不能用作自定义字段：同名元数据值会被派生路径覆盖，不参与后续搜索或导出；原始 `resource.md` 不会被改写。`metadata_path` 指向资源卡，`notes_path` 仅在独立的 `notes.md` 存在时提供。外部笔记链接应放入 `links` 或其他非保留的自定义字段。
 
 **个人 Zotero 状态不是公开扩展字段**：禁止顶层 `zotero` 以及附件中的 `zotero_item_key`、`zotero_attachment_key`、`local_status`，即使值为空也会校验失败。账号配置、条目/附件关联及可用状态保存在 `.local/zotero/`；个人下载时间 `downloaded_on` 不写进共享元数据。历史 `source_zotero_*` 仅追溯来源，不作为当前绑定，来源和版本事实仍可保留。
 
@@ -168,7 +187,7 @@ YAML 中的 `summary:`、`tags:` 或显式的 `null` 都不是上述空字符串
 
 ### 下载 PDF 或网页快照
 
-在 `meta.yaml` 中记录来源，再把文件保存到 `resources/`：
+在 `resource.md` 的 YAML frontmatter 中记录来源，再把文件保存到 `resources/`：
 
 ```yaml
 attachments:

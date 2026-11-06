@@ -1,0 +1,28 @@
+---
+id: milo
+title: 'MiLo: Efficient Quantized MoE Inference with Mixture of Low-Rank Compensators'
+type: paper
+url: https://openreview.net/forum?id=NXVXiJmhe1
+status: unread
+summary: 低秩补偿恢复低比特 MoE 精度，并设计 Tensor Core 友好的 3-bit 内核。
+tags:
+- topic/quantization
+- architecture/moe
+- target/weight
+- scheme/weight-only
+- topic/inference
+links: {}
+attachments:
+- url: https://openreview.net/pdf?id=NXVXiJmhe1
+  path: resources/milo.pdf
+  source: zotero
+authors:
+- Beichen Huang
+- Yueming Yuan
+- Zelei Shao
+- Minjia Zhang
+year: 2025
+venue: Eighth Conference on Machine Learning and Systems
+---
+
+# MiLo: Efficient Quantized MoE Inference with Mixture of Low-Rank Compensators

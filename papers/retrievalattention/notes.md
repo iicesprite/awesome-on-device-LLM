@@ -188,7 +188,7 @@ $$
 
 - StreamingLLM/SnapKV 保留固定窗口或预先选定的重要 token；RetrievalAttention 按当前 Q 动态检索 CPU 中的完整历史 KV。
 - Quest/InfLLM 通过页或块的代表信息估计相关性，RetrievalAttention 则用适配 Q/K 分布差异的向量索引寻找 key。本文的对照结果取决于具体预算和配置，尚不能涵盖这些方法的全部使用场景。
-- [MagicPIG](../magicpig/meta.yaml) 在本文基线中通过 LSH 哈希碰撞查找相关 key。这里比较的是特定参数下的结果，未完整复核 MagicPIG 自身的采样估计机制和全部实现；RetrievalAttention 使用的是注意力感知图索引。
+- [MagicPIG](../magicpig/resource.md) 在本文基线中通过 LSH 哈希碰撞查找相关 key。这里比较的是特定参数下的结果，未完整复核 MagicPIG 自身的采样估计机制和全部实现；RetrievalAttention 使用的是注意力感知图索引。
 - KV 量化减少每个 KV 的存储与带宽成本，RetrievalAttention 减少每步访问量并改变数据和计算的位置。作者认为二者正交，但未验证组合后的检索排序、质量和速度，组合收益需要另测。（§5，PDF 第 10 页）
 - 正式版将 RetroInfer 列为后续相关工作，当前 `microsoft/RetrievalAttention` 仓库的 README 也介绍 RetroInfer。该仓库的 wave index、wave buffer 等机制属于另一项工作，与本文实现需要分开核查。（参考文献 [48]，PDF 第 14 页；[仓库页面](https://github.com/microsoft/RetrievalAttention/)）
 

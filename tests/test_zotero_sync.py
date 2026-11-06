@@ -10,6 +10,8 @@ import unittest
 from unittest.mock import Mock, patch
 from urllib.error import HTTPError
 
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import zotero_sync as sync
 
@@ -41,9 +43,9 @@ class ZoteroSyncTests(unittest.TestCase):
             patcher = patch.object(sync, target, value)
             patcher.start()
             self.addCleanup(patcher.stop)
-        catalog_patch = patch.object(sync.catalog, 'load_catalog', side_effect=lambda root: (self.entries, {}, {}))
-        catalog_patch.start()
-        self.addCleanup(catalog_patch.stop)
+        self.catalog_patch = patch.object(sync.catalog, 'load_catalog', side_effect=lambda root: (self.entries, {}, {}))
+        self.catalog_patch.start()
+        self.addCleanup(self.catalog_patch.stop)
         api_patch = patch.object(sync, 'get', side_effect=self.api)
         self.get = api_patch.start()
         self.addCleanup(api_patch.stop)
@@ -69,13 +71,43 @@ class ZoteroSyncTests(unittest.TestCase):
     def paper(self, identity='a', attachments=None):
         folder = self.root / 'papers' / identity
         folder.mkdir(parents=True)
-        (folder / 'meta.yaml').write_text('public metadata must not change\n', encoding='utf-8')
         entry = {'id': identity, 'type': 'paper', 'title': f'Paper {identity}',
                  'url': f'https://example.org/{identity}', 'tags': ['topic/inference'],
-                 'metadata_path': f'papers/{identity}/meta.yaml', 'notes_path': '',
+                 'status': 'unread', 'summary': '',
                  'attachments': attachments or []}
+        (folder / 'resource.md').write_text(
+            '---\n' + yaml.safe_dump(entry) + '---\n\n# Resource card\n', encoding='utf-8')
+        entry.update(metadata_path=f'papers/{identity}/resource.md', notes_path='')
         self.entries.append(entry)
         return entry
+
+    def test_resource_frontmatter_loader_keeps_attachment_and_notes_paths_separate(self):
+        self.catalog_patch.stop()
+        for category in ('blogs', 'docs'):
+            (self.root / category).mkdir()
+        (self.root / 'tags.yaml').write_text(
+            'tags:\n  topic/inference: {label: Inference}\n', encoding='utf-8')
+        entry = self.paper(attachments=[{
+            'path': 'resources/a.pdf', 'url': 'https://example.org/a.pdf', 'version': 'v1'}])
+        card = self.root / entry['metadata_path']
+        with card.open('a', encoding='utf-8') as stream:
+            stream.write('\nstatus: read\nzotero: private body text\n')
+        notes = card.with_name('notes.md')
+        notes.write_text('[Read](resources/a.pdf)\n', encoding='utf-8')
+        before = card.read_bytes(), notes.read_bytes()
+        self.items.append(item(ITEM, entry['title'], tags=entry['tags']))
+        pdf = self.root / 'papers/a/resources/a.pdf'
+        self.pdf(pdf)
+        plan = sync.prepare()
+        self.assertEqual(plan['papers'][0]['files'][0]['file'], str(pdf.resolve()))
+        self.assertEqual(plan['papers'][0]['files'][0]['relative_path'], 'resources/a.pdf')
+        sync.record(self.receipt([{
+            'id': 'a', 'key': ITEM,
+            'files': [{'relative_path': 'resources/a.pdf', 'key': PDF}]}]))
+        index = (self.local / 'index.md').read_text(encoding='utf-8')
+        self.assertIn('../../papers/a/notes.md', index)
+        self.assertIn(f'zotero://open-pdf/library/items/{PDF}', index)
+        self.assertEqual((card.read_bytes(), notes.read_bytes()), before)
 
     def pdf(self, path, parent=ITEM, key=PDF, url='https://example.org/a.pdf', title='v1'):
         path.parent.mkdir(parents=True, exist_ok=True)

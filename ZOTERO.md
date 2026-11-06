@@ -1,6 +1,6 @@
 # 用自己的 Zotero 阅读仓库论文
 
-公开仓库只保存资源身份、来源、版本、标签和阅读笔记；每个人独立选择自己的 Zotero 个人库、保存关联并生成个人索引。公共 `INDEX.md` 和 `catalog.csv` 不含个人 Zotero 链接，也不读取 `.local/`。不要复制作者或其他用户的绑定来使用。
+公开仓库只在资源卡 `resource.md` 的 YAML frontmatter 中保存资源身份、来源、版本和标签，阅读笔记仍是可选的独立 `notes.md`；每个人独立选择自己的 Zotero 个人库、保存关联并生成个人索引。公共资源卡、`INDEX.md` 和 `catalog.csv` 不含个人 Zotero 绑定或链接，也不读取 `.local/`。不要复制作者或其他用户的绑定来使用。
 
 同步目标是个人库中的 `awesome-on-device-LLM` 集合。已有论文、标签、笔记、其他集合和阅读状态保留；仓库的 PDF 复制为 Zotero 存储附件，不移动原件。**目前只支持已登录 Zotero 账号的个人库，不支持群组库或未登录的本地库。** 正整数账号 ID 是账号隔离的必要条件，不是本地路由 `0`，也不是插件内部的 libraryID。
 
@@ -102,7 +102,7 @@ uv run --locked python scripts/zotero_sync.py record .local/zotero/receipt.json
 uv run --locked python scripts/zotero_sync.py index
 ```
 
-`record` 核对当前配置、计划与回执的账号和预期附件，再从 Zotero 读取论文身份、规范标签、附件父条目和本机文件。全部通过后才保存当前账号的本地绑定，**从不回写 `meta.yaml`**。不要手工伪造成功回执。`index` 重新生成 `.local/zotero/index.md`；不需要为个人关联执行 `catalog.py build`。
+`record` 核对当前配置、计划与回执的账号和预期附件，再从 Zotero 读取论文身份、规范标签、附件父条目和本机文件。全部通过后才保存当前账号的本地绑定，**从不回写 `resource.md`**。不要手工伪造成功回执。`index` 重新生成 `.local/zotero/index.md`；不需要为个人关联执行 `catalog.py build`。
 
 ## 本地状态与个人索引
 
@@ -147,7 +147,7 @@ uv run --locked python scripts/zotero_sync.py index
 - 每位用户自行配置自己的账号、MCP 与 token，独立执行 `prepare`、MCP 导入、`record`、`index`。克隆仓库不应带来作者的个人绑定。
 - **同一账号换设备**：先登录同一 Zotero 账号，完成 Zotero 数据及文件同步，在新设备配置本机 API/MCP，再重新 `prepare`、经 MCP 补齐、`record` 和 `index`。不复制旧设备的计划、回执或个人索引；本地关联由当前库重新核验。若保留同账号的本地绑定备份，也必须重新核验，不能将旧索引作为成功证据。
 - **换账号**：重新 `configure`，为目标账号生成全新计划和回执；绑定按 `user:<id>` 分开保存，不能挪用其他账号的 key。
-- 仓库现有绑定的移出由本次仓库迁移完成，公共构建不会从旧 `meta.yaml` 自动恢复关联；发现私有字段时会直接拒绝。
+- 公共元数据已迁移到 `resource.md` frontmatter，保留原有身份、状态、标签、自定义字段和附件相对路径，独立笔记与附件不移动。没有独立 `meta.yaml` 的读取回退或第二份可写元数据；公共构建也不会从历史元数据恢复个人关联，发现私有字段时会直接拒绝。
 - 标签只增量添加：仓库删掉某标签不会自动删除 Zotero 原标签，也不反向覆盖仓库。
 - 不同 PDF 版本分别保留；未绑定附件必须同时核对来源与版本标题或文件名，不能仅凭同 URL 复用。已有本地绑定明确指向同一附件且来源、版本一致的多个路径可保留；不据此自动合并其他版本，不替换有批注的旧 PDF。PDF 跨设备传输由 Zotero 文件同步或个人备份负责，Git 不保存它们。
 

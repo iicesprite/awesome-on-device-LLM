@@ -58,12 +58,13 @@ uv run python -m unittest discover -s tests
 | 路径 | 作用 |
 | --- | --- |
 | `papers/`、`blogs/`、`docs/` | 资源条目，按类型分类 |
-| `templates/` | `meta.yaml` 和 `notes.md` 模板 |
+| `templates/` | `resource.md` 资源卡和独立的 `notes.md` 模板 |
 | `tags.yaml` | 标签词表：规范键、中文名称、搜索别名 |
 | `scripts/catalog.py` | 校验、索引生成与搜索 |
 | `scripts/zotero_sync.py`、`scripts/zotero_import.js` | 生成带账号约束的 Zotero MCP 同步计划，核验回执并保存本地关联，见 [ZOTERO.md](ZOTERO.md) |
 | `skills/resource-curator/` | agent 收录与阅读 skill 的源码 |
 | `INDEX.md`、`catalog.csv` | 自动生成，不手工编辑 |
+| `资源库.base` | 共享的 Obsidian Bases 视图，只收录分类目录下的 `resource.md` |
 | `.local/zotero/config.json` | 本机 API 源地址与当前 Zotero 用户 ID，不入 Git，不含 token |
 | `.local/zotero/bindings.json` | 按 `user:<id>` 隔离的个人条目/附件关联与可用状态，不入 Git |
 | `.local/zotero/plan.json`、`import.js`、`receipt.json` | 本机待执行计划、MCP 脚本和实际回执，不入 Git |
@@ -81,7 +82,9 @@ uv run python -m unittest discover -s tests
 - 不再提供 `zotero_item_uri`、`zotero_pdf_uri` 列，也不保留空兼容列；使用这些旧列的下游脚本需迁移。公共 Markdown 同样没有 Zotero 列。
 - 公共构建不读取 `.local/zotero/`，不受个人绑定、下载状态或本机 PDF 是否存在影响。
 
-`INDEX.md` 顶部有自动生成的提示。需要修改内容时，改 `meta.yaml` 后重新运行 `build`。
+`INDEX.md` 顶部有自动生成的提示。需要修改内容时，改 `resource.md` 的 YAML frontmatter 后重新运行 `build`。`metadata_path` 指向资源卡，`notes_path` 仍由可选的独立 `notes.md` 派生；卡片正文不作为索引元数据。创建笔记后在卡片正文添加 `[阅读笔记](notes.md)`，没有笔记时不保留悬空链接。
+
+每条资源只有这一份 frontmatter 元数据，不再维护独立 `meta.yaml`，也没有旧格式回退。迁移保留原字段、ID、状态、标签、自定义字段、附件相对路径和已有笔记，附件不移动。Obsidian 使用方法见 [README](README.md#用-obsidian-管理资源)；简单属性可在 Bases 编辑，嵌套的 `links`、`attachments` 在 YAML 源码中编辑，仍须通过 `check` / `build` 的标签与状态校验。
 
 公开元数据禁止顶层 `zotero`，附件禁止 `zotero_item_key`、`zotero_attachment_key`、`local_status`；校验时即使值为空也会拒绝。个人下载时间 `downloaded_on` 也不应写进共享元数据。可核实的 `downloaded_from`、`downloaded_version` 及历史 `source_zotero_*` 可作为来源事实保留，但不是当前账号绑定。
 
@@ -100,6 +103,7 @@ uv run python -m unittest discover -s tests
 - 忽略规则不会取消已经被 Git 跟踪的文件。如果误提交，需要先执行 `git rm --cached <文件>`。
 - 脚本不检查附件是否存在，缺文件不会导致 `check` 或 `build` 失败。
 - 图片来源版本、图号和 PDF 页码写在笔记图注中，来源 PDF 或公开网址保留在条目元数据、笔记中。
+- `.obsidian/` 是本机 vault 设置，不入 Git；根目录 `资源库.base` 需要提交，供各设备共享视图。
 
 ## 安装 agent skill
 

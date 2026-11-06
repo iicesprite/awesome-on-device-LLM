@@ -1,0 +1,35 @@
+---
+id: aqlm
+title: Extreme Compression of Large Language Models via Additive Quantization
+type: paper
+url: https://proceedings.mlr.press/v235/egiazarian24a.html
+status: unread
+summary: 多码本加性权重量化与 CPU/GPU token generation 实现。
+tags:
+- topic/quantization
+- target/weight
+- scheme/weight-only
+- backend/cpu
+- topic/inference
+links: {}
+attachments:
+- url: https://raw.githubusercontent.com/mlresearch/v235/main/assets/egiazarian24a/egiazarian24a.pdf
+  path: resources/aqlm.pdf
+  source: zotero
+- url: https://arxiv.org/pdf/2401.06118
+  path: resources/aqlm-gr6yvlh4.pdf
+  source: zotero
+  source_zotero_attachment_key: GR6YVLH4
+  source_zotero_item_key: AR3HNYWU
+authors:
+- Vage Egiazarian
+- Andrei Panferov
+- Denis Kuznedelev
+- Elias Frantar
+- Artem Babenko
+- Dan Alistarh
+year: 2024
+venue: Proceedings of the 41st International Conference on Machine Learning
+---
+
+# Extreme Compression of Large Language Models via Additive Quantization

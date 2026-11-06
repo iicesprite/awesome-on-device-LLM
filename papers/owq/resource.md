@@ -1,0 +1,29 @@
+---
+id: owq
+title: 'OWQ: Outlier-Aware Weight Quantization for Efficient Fine-Tuning and Inference of Large Language Models'
+type: paper
+url: https://ojs.aaai.org/index.php/AAAI/article/view/29237
+status: unread
+summary: 敏感权重保留高精度，比较混合精度的存储和计算代价。
+tags:
+- topic/quantization
+- target/weight
+- scheme/weight-only
+- scheme/mixed-precision
+links: {}
+attachments:
+- url: https://ojs.aaai.org/index.php/AAAI/article/download/29237/30335
+  path: resources/owq.pdf
+  source: zotero
+authors:
+- Changhun Lee
+- Jungyu Jin
+- Taesu Kim
+- Hyungjun Kim
+- Eunhyeok Park
+year: 2024
+doi: 10.1609/aaai.v38i12.29237
+venue: Proceedings of the AAAI Conference on Artificial Intelligence
+---
+
+# OWQ: Outlier-Aware Weight Quantization for Efficient Fine-Tuning and Inference of Large Language Models

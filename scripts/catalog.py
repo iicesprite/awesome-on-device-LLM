@@ -79,6 +79,20 @@ def read_yaml(path):
         raise CatalogError(f"{path}: {exc}") from exc
 
 
+def read_frontmatter(path):
+    """Read only the opening YAML block of an Obsidian resource card."""
+    try:
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
+        require(bool(lines) and lines[0] == "---", "缺少文件开头的 YAML frontmatter（---）")
+        closing = next((index for index in range(1, len(lines)) if lines[index] == "---"), None)
+        require(closing is not None, "YAML frontmatter 缺少结束分隔行（---）")
+        result = yaml.load("\n".join(lines[1:closing]), Loader=UniqueLoader)
+        require(isinstance(result, dict), "YAML frontmatter 必须是映射")
+        return result
+    except (OSError, UnicodeError, yaml.YAMLError, CatalogError) as exc:
+        raise CatalogError(f"{path}: {exc}") from exc
+
+
 def load_tags(root):
     vocabulary = read_yaml(root / "tags.yaml").get("tags")
     require(isinstance(vocabulary, dict) and vocabulary, "tags.yaml: tags 必须是非空映射")
@@ -148,8 +162,8 @@ def load_catalog(root):
         for folder in sorted(directory.iterdir()):
             if not folder.is_dir() or folder.name.startswith("."):
                 continue
-            path = folder / "meta.yaml"
-            data = read_yaml(path)
+            path = folder / "resource.md"
+            data = read_frontmatter(path)
             try:
                 validate_entry(data, folder, category, vocabulary)
                 require(data["id"] not in ids, f"跨目录重复 id：{data['id']}")
@@ -186,7 +200,7 @@ def table(entries):
 
 
 def render_index(entries, vocabulary):
-    lines = ["# 资源索引", "", "<!-- 自动生成；请修改各条目的 meta.yaml，然后运行 uv run python scripts/catalog.py build。 -->", "", f"共 **{len(entries)}** 条资源。按类型浏览，或在下方按标签交叉查阅。", "", "[项目说明](README.md) · [CSV 索引](catalog.csv) · [标签词表](tags.yaml)", ""]
+    lines = ["# 资源索引", "", "<!-- 自动生成；请修改各条目 resource.md 的 YAML frontmatter，然后运行 uv run python scripts/catalog.py build。 -->", "", f"共 **{len(entries)}** 条资源。按类型浏览，或在下方按标签交叉查阅。", "", "[项目说明](README.md) · [CSV 索引](catalog.csv) · [标签词表](tags.yaml)", ""]
     if not entries:
         lines += ["尚未收录资源。按 README 添加第一条记录后，重新生成索引。", ""]
         return "\n".join(lines)

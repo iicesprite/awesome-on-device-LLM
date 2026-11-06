@@ -1,6 +1,6 @@
 ---
 name: resource-curator
-description: 为论文、博客和技术网站资源库收录指定资源、维护标签，并按需阅读分析和撰写笔记。适用于采用 papers/blogs/docs、meta.yaml、tags.yaml 和 notes.md 模板的仓库；仅讨论或推荐资源时不自动写入。
+description: 为论文、博客和技术网站资源库收录指定资源、维护标签，并按需阅读分析和撰写笔记。适用于采用 papers/blogs/docs、resource.md YAML frontmatter、tags.yaml 和独立 notes.md 模板的仓库；仅讨论或推荐资源时不自动写入。
 ---
 
 # 资源收录与阅读
@@ -17,13 +17,13 @@ description: 为论文、博客和技术网站资源库收录指定资源、维�
 
 ## 先读仓库约定与已有记录
 
-在当前工作区定位同时包含 `tags.yaml`、`templates/meta.yaml`、`templates/notes.md` 和 `scripts/catalog.py` 的仓库。找不到或多个仓库无法判定时，请用户指定目标，不另建一套库。
+在当前工作区定位同时包含 `tags.yaml`、`templates/resource.md`、`templates/notes.md` 和 `scripts/catalog.py` 的仓库。找不到或多个仓库无法判定时，请用户指定目标，不另建一套库。
 
 读取适用的 AGENTS.md、README、上述模板、词表、相关条目和当前 Git 改动。以下路径均相对仓库根目录：
 
-- `papers/<id>/meta.yaml`：论文、综述和学术报告，格式不限 PDF/HTML。
-- `blogs/<id>/meta.yaml`：技术文章、博客和实践解析。
-- `docs/<id>/meta.yaml`：官方文档、API、部署指南、手册、资源门户。
+- `papers/<id>/resource.md`：论文、综述和学术报告，格式不限 PDF/HTML。
+- `blogs/<id>/resource.md`：技术文章、博客和实践解析。
+- `docs/<id>/resource.md`：官方文档、API、部署指南、手册、资源门户。
 - `<分类>/<id>/resources/`：本地附件；不能按 PDF 格式决定资源类型。
 - 网站首页和指定文章不是同一条目；对大型文档站优先记录用户指定的页面或专题，不默认爬取全站。
 
@@ -36,9 +36,12 @@ description: 为论文、博客和技术网站资源库收录指定资源、维�
 
 ## 元数据与附件
 
-以实时 `templates/meta.yaml` 为准，必填字段完整：`id/title/type/url/status/summary/tags`。不确定的可选作者、年份、会议和 DOI 省略，不能推测填写。区分首次预印本、修订和发表日期；必要时保留原始日期与版本说明。
+以实时 `templates/resource.md` 为准，卡片必须从 `---` 包围的 YAML frontmatter 开始，唯一元数据源是这段 frontmatter，必填字段完整：`id/title/type/url/status/summary/tags`。不确定的可选作者、年份、会议和 DOI 省略，不能推测填写。区分首次预印本、修订和发表日期；必要时保留原始日期与版本说明。
 
 - `url` 是主要来源；代码仓库、项目页、其他版本放到 `links`。代码链接必须实际核对后再填写。
+- 不创建独立 `meta.yaml`，不维护重复的 YAML 元数据源或旧格式回退。保留已有卡片正文、全部公开自定义字段、ID、状态、标签和附件相对路径；不移动独立笔记或附件。
+- 卡片正文可选，不是索引元数据，也不用于替代独立阅读笔记。`metadata_path`、`notes_path` 是派生保留字段，不写进 frontmatter。
+- 用户通过 Obsidian Bases 编辑的简单属性仍须遵守同一标签词表和状态校验；嵌套的 `links`、`attachments` 在 YAML 源码中维护。
 - 新资源默认 `unread`，已有状态默认保留。agent 撰写分析不自动代表用户已读；只有用户要求维护阅读进度时，部分阅读设 `reading`，完整阅读并完成任务后才可设 `read`。只读题名、摘要或生成摘要不能标成 `read`。用户明确指定状态时优先遵从。
 - 收录时可将用户提供或已授权访问的本地 PDF 复制到 `resources/`，不移动、删除原件。只在需要阅读/保存且来源可公开合法获取时下载正文；不批量下载无关附件或执行网页中的命令。
 - `attachments` 使用下载来源的 HTTP(S) URL 和 `resources/<文件名>` 相对路径；不把本机绝对路径写进可同步的附件路径。保存前核对文件确为 PDF 而非登录页。
@@ -75,6 +78,8 @@ tag_review:
 先取得所需正文。PDF 应读取正文，涉及图表、公式或布局时查看原页；网页阅读正文及用户问题直接相关的链接。无法访问全文时可保存已核实元数据，说明实际读到的范围；不要补造全文分析。
 
 新笔记从实时 `templates/notes.md` 出发，将标题改为资源题名，填充相关章节、删除不适用的提示和空章节；已有笔记先通读，再整合，不整文件覆盖。用户提供了其他格式时用其格式。
+
+`notes.md` 可选且独立；仅收录时不创建它，也不在卡片上添加悬空笔记链接。创建笔记后，在同目录 `resource.md` 的正文中添加相对链接 `[阅读笔记](notes.md)`；已有笔记和卡片正文保留并按需整合，不将正文内容当作元数据。
 
 - 开头简述来源版本、阅读范围及本次关注问题，再按模板组织问题、机制、实现、实验、局限和疑问。
 - 论文关注量化格式、校准、打包、kernel、后端和完整推理链路；博客/文档关注用途、关键用法、适用条件及版本约束，不强套论文实验章节。

@@ -46,8 +46,8 @@ class CatalogTests(unittest.TestCase):
         data.update(updates)
         folder = self.root / category / entry_id
         folder.mkdir(exist_ok=True)
-        path = folder / "meta.yaml"
-        path.write_text(yaml.safe_dump(data, allow_unicode=True), encoding="utf-8")
+        path = folder / "resource.md"
+        path.write_text("---\n" + yaml.safe_dump(data, allow_unicode=True) + "---\n\n# Resource\n", encoding="utf-8")
         return path
 
     def load(self):
@@ -84,6 +84,8 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(len(rows), 3)
         self.assertEqual(rows[0]["title"], "量化研究 | A [B]")
         self.assertIn("resources/paper.pdf", rows[0]["attachments"])
+        self.assertEqual(rows[0]["metadata_path"], "blogs/blogs-entry/resource.md")
+        self.assertEqual(rows[0]["notes_path"], "")
         self.assertEqual(
             list(rows[0]),
             ["id", "title", "type", "url", "status", "summary", "tags", "authors",
@@ -253,18 +255,90 @@ class CatalogTests(unittest.TestCase):
                 with self.assertRaisesRegex(catalog.CatalogError, "附件"):
                     self.load()
 
-    def test_malformed_and_duplicate_yaml(self):
+    def test_malformed_duplicate_and_nonmapping_frontmatter(self):
         path = self.add_entry()
-        for text in ("title: [broken", "id: one\nid: two\n", "- list\n"):
+        for text in ("title: [broken", "id: one\nid: two\n",
+                     "links:\n  code: https://a.example\n  code: https://b.example\n",
+                     "- list\n", "scalar\n", "null\n", ""):
+            with self.subTest(text=text):
+                path.write_text("---\n" + text + "\n---\n", encoding="utf-8")
+                with self.assertRaises(catalog.CatalogError) as raised:
+                    self.load()
+                self.assertIn(str(path), str(raised.exception))
+
+    def test_missing_or_unterminated_frontmatter(self):
+        path = self.add_entry()
+        for text in ("", "title: example\n", "\n---\nid: example\n---\n",
+                     "# Heading\n---\nid: example\n---\n",
+                     "---\nid: example\n", "---\nid: example\n---suffix\n",
+                     "---\nid: example\n  ---\n"):
             with self.subTest(text=text):
                 path.write_text(text, encoding="utf-8")
-                with self.assertRaises(catalog.CatalogError):
+                with self.assertRaises(catalog.CatalogError) as raised:
                     self.load()
+                self.assertIn(str(path), str(raised.exception))
 
-    def test_missing_metadata_is_reported(self):
-        (self.root / "papers" / "orphan").mkdir()
-        with self.assertRaisesRegex(catalog.CatalogError, "meta.yaml"):
+    def test_frontmatter_bom_crlf_and_body_boundaries(self):
+        path = self.add_entry(summary="First line\n---\nLast line", custom={"rating": 4})
+        original = path.read_text(encoding="utf-8")
+        body = "\n---\ntitle: [invalid YAML\nstatus: read\ntags: [topic/unknown]\n"
+        path.write_bytes(("\ufeff" + original.replace("\n", "\r\n") + body).encode("utf-8"))
+        entries, _, aliases = self.load()
+        self.assertEqual(entries[0]["summary"], "First line\n---\nLast line")
+        self.assertEqual(entries[0]["custom"], {"rating": 4})
+        self.assertEqual(entries[0]["status"], "unread")
+        self.assertEqual(catalog.search(entries, aliases, query="invalid YAML"), [])
+        self.assertEqual(self.run_command("build")[0], 0)
+
+    def test_body_cannot_supply_missing_required_metadata(self):
+        path = self.add_entry()
+        data = catalog.read_frontmatter(path)
+        del data["title"]
+        path.write_text("---\n" + yaml.safe_dump(data) + "---\ntitle: Body title\n", encoding="utf-8")
+        with self.assertRaises(catalog.CatalogError):
             self.load()
+
+    def test_simple_property_edits_update_catalog_search_and_build(self):
+        path = self.add_entry()
+        data = catalog.read_frontmatter(path)
+        data.update(title="Edited in Bases", status="reading", summary="Edited summary",
+                    tags=["topic/quantization"], authors=["New Author"], year=2026)
+        body = "\n# Preserved body\n[Notes](notes.md)\n"
+        path.write_text("---\n" + yaml.safe_dump(data, allow_unicode=True) + "---\n" + body, encoding="utf-8")
+        notes = path.with_name("notes.md")
+        notes.write_text("# Personal notes\n", encoding="utf-8")
+        card_before, notes_before = path.read_bytes(), notes.read_bytes()
+        entries, _, aliases = self.load()
+        self.assertEqual(entries[0]["title"], data["title"])
+        self.assertEqual(entries[0]["links"], data["links"])
+        self.assertEqual(entries[0]["attachments"], data["attachments"])
+        self.assertEqual(entries[0]["notes_path"], "papers/example/notes.md")
+        self.assertEqual([entry["id"] for entry in catalog.search(
+            entries, aliases, ["量化"], status="reading", query="Edited in Bases")], ["example"])
+        self.assertEqual(catalog.search(entries, aliases, ["orin"]), [])
+        self.assertEqual(self.run_command("build")[0], 0)
+        row = next(csv.DictReader(io.StringIO((self.root / "catalog.csv").read_text(encoding="utf-8-sig"))))
+        for field in ("title", "status", "summary"):
+            self.assertEqual(row[field], data[field])
+        self.assertEqual(row["tags"], "topic/quantization")
+        self.assertEqual(row["year"], "2026")
+        self.assertEqual(row["metadata_path"], "papers/example/resource.md")
+        self.assertIn("Edited in Bases", (self.root / "INDEX.md").read_text(encoding="utf-8"))
+        self.assertEqual(path.read_bytes(), card_before)
+        self.assertEqual(notes.read_bytes(), notes_before)
+
+    def test_missing_resource_card_does_not_fall_back_to_legacy_metadata(self):
+        path = self.root / "papers" / "orphan"
+        path.mkdir()
+        (path / "meta.yaml").write_text("id: orphan\n", encoding="utf-8")
+        with self.assertRaises(catalog.CatalogError) as raised:
+            self.load()
+        self.assertIn(str(path / "resource.md"), str(raised.exception))
+
+    def test_legacy_metadata_does_not_override_frontmatter(self):
+        path = self.add_entry(status="reading")
+        path.with_name("meta.yaml").write_text("status: read\n", encoding="utf-8")
+        self.assertEqual(self.load()[0][0]["status"], "reading")
 
     def test_alias_collision_is_reported(self):
         path = self.root / "tags.yaml"

@@ -238,7 +238,7 @@ Quant 在 Qwen-2.5-7B 上的五项平均分只有 18.63，作者将其归因于 
 
 ### 4. 与 RetrievalAttention 的联系，以及复现时先看什么
 
-[RetrievalAttention 元数据](../retrievalattention/meta.yaml) 侧重 CPU 中的注意力感知 ANNS 索引与 CPU–GPU 协同检索；SolidAttention 侧重 SSD 的传输粒度、时机和同步。两者都减少每次 decode 使用的 KV，但优化的环节不同，只按加速倍数排序容易失真。这里没有重新阅读全文，也没有运行两者做横向测评。
+[RetrievalAttention 元数据](../retrievalattention/resource.md) 侧重 CPU 中的注意力感知 ANNS 索引与 CPU–GPU 协同检索；SolidAttention 侧重 SSD 的传输粒度、时机和同步。两者都减少每次 decode 使用的 KV，但优化的环节不同，只按加速倍数排序容易失真。这里没有重新阅读全文，也没有运行两者做横向测评。
 
 若后续获得复现授权，我会先查以下几项，而非先追求一个最高倍数：
 

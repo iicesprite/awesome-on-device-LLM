@@ -1,0 +1,43 @@
+---
+# 复制到 papers/<id>/、blogs/<id>/ 或 docs/<id>/resource.md。
+# id 必须与目录名一致，且在整个仓库中唯一；使用小写英文、数字和连字符。
+id: resource-id
+title: ""
+type: paper                  # papers → paper；blogs → blog；docs → doc
+url: ""                      # 主要来源，使用完整的 https:// 或 http:// 地址
+status: unread               # unread / reading / read
+summary: ""                  # 字符串，可为 ""；不能留成 summary: 或写 null；详细内容写入 notes.md
+tags: []                     # 规范标签的字符串列表，可为 []；不能写 null、中文名或别名
+
+# 可选：代码、项目主页、关联资源等，名称自定，值为完整网址。
+links: {}
+# links:
+#   code: https://github.com/owner/project
+
+# 可选：记录下载来源，不要求文件已存在；文件放在当前条目的 resources/ 中。
+# 只保存可公开的来源、版本事实；不记录个人下载状态或 downloaded_on。
+attachments: []
+# attachments:
+#   - url: https://example.org/paper.pdf
+#     path: resources/paper.pdf
+
+# 可选论文信息：未知或不适用时省略字段，不用 null 占位。
+# authors 必须是字符串列表，每个姓名非空；year 必须是 1..9999 的整数，不能加引号或用布尔值。
+# venue、doi 如填写则必须是非空字符串。
+# authors: ["作者姓名"]
+# year: 2024
+# venue: MLSys
+# doi: "10.xxxx/xxxx"
+
+# Zotero 账号配置、条目/附件 key 和可用状态只在 .local/zotero/ 中保存，不入 Git。
+# 禁止顶层 zotero，以及附件中的 zotero_item_key、zotero_attachment_key、local_status、downloaded_on。
+# 历史 source_zotero_* 仅用于追溯来源，不代表当前用户绑定；流程见 ZOTERO.md。
+#
+# metadata_path、notes_path 是脚本派生的保留字段，不用于自定义数据。
+# 外部笔记链接放入 links 或其他非保留字段。
+---
+
+# 资源标题
+
+<!-- 标题改为资源题名；正文可选，不参与元数据索引。 -->
+<!-- 阅读笔记独立保存在同目录 notes.md；创建后再添加相对链接 [阅读笔记](notes.md)，没有笔记时不要添加。 -->

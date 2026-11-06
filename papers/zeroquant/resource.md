@@ -1,0 +1,40 @@
+---
+id: zeroquant
+title: 'ZeroQuant: Efficient and Affordable Post-Training Quantization for Large-Scale Transformers'
+type: paper
+url: https://proceedings.neurips.cc/paper_files/paper/2022/hash/adf7fa39d65e2983d724ff7da57f00ac-Abstract-Conference.html
+status: unread
+summary: 结合权重激活量化、逐层蒸馏与后端优化的推理流水线。
+tags:
+- topic/quantization
+- scheme/weight-activation
+- scheme/ptq
+- precision/w8a8
+- topic/inference
+links: {}
+attachments:
+- url: https://proceedings.neurips.cc/paper_files/paper/2022/file/adf7fa39d65e2983d724ff7da57f00ac-Paper-Conference.pdf
+  path: resources/zeroquant.pdf
+  source: zotero
+- url: https://arxiv.org/pdf/2206.01861
+  path: resources/zeroquant-zathrbd8.pdf
+  source: zotero
+  source_zotero_attachment_key: ZATHRBD8
+  source_zotero_item_key: 9KJY9PPD
+- url: https://arxiv.org/pdf/2206.01861
+  path: resources/zeroquant-yicka85g.pdf
+  source: zotero
+  source_zotero_attachment_key: YICKA85G
+  source_zotero_item_key: 3WUXDXS9
+authors:
+- Zhewei Yao
+- Reza Yazdani Aminabadi
+- Minjia Zhang
+- Xiaoxia Wu
+- Conglong Li
+- Yuxiong He
+year: 2022
+venue: Advances in Neural Information Processing Systems
+---
+
+# ZeroQuant: Efficient and Affordable Post-Training Quantization for Large-Scale Transformers

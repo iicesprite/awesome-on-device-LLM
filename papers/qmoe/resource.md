@@ -1,0 +1,26 @@
+---
+id: qmoe
+title: 'QMoE: Practical Sub-1-Bit Compression of Trillion-Parameter Models'
+type: paper
+url: http://arxiv.org/abs/2310.16795
+status: unread
+summary: 亚 1-bit MoE 压缩格式与 GPU 解码内核协同设计。
+tags:
+- topic/quantization
+- architecture/moe
+- target/weight
+- topic/memory
+- backend/cuda
+links: {}
+attachments:
+- url: http://arxiv.org/pdf/2310.16795v1
+  path: resources/qmoe.pdf
+  source: zotero
+authors:
+- Elias Frantar
+- Dan Alistarh
+year: 2023
+doi: 10.48550/arXiv.2310.16795
+---
+
+# QMoE: Practical Sub-1-Bit Compression of Trillion-Parameter Models

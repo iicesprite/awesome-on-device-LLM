@@ -1,0 +1,34 @@
+---
+id: llm-npu
+title: Fast On-device LLM Inference with NPUs
+type: paper
+url: http://arxiv.org/abs/2407.05858
+status: unread
+summary: 手机 NPU 的 prefill 卸载、离群值拆分与异构调度。
+tags:
+- topic/inference
+- backend/npu
+- system/heterogeneous
+- system/offloading
+- stage/prefill
+links: {}
+attachments:
+- url: https://arxiv.org/pdf/2407.05858
+  path: resources/llm-npu-aggggkdz.pdf
+  source: zotero
+- url: https://arxiv.org/pdf/2407.05858v1
+  path: resources/llm-npu.pdf
+  version: arXiv:2407.05858v1
+authors:
+- Daliang Xu
+- Hao Zhang
+- Liming Yang
+- Ruiqi Liu
+- Gang Huang
+- Mengwei Xu
+- Xuanzhe Liu
+year: 2024
+doi: 10.48550/arXiv.2407.05858
+---
+
+# Fast On-device LLM Inference with NPUs
