@@ -11,7 +11,19 @@ tags:
 - target/weight
 - target/activation
 - topic/inference
-links: {}
+- availability/open-source
+links:
+  code: https://github.com/abdelfattah-lab/NVFP4-RaZeR
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: MIT
+  license_url: https://raw.githubusercontent.com/abdelfattah-lab/NVFP4-RaZeR/main/LICENSE
+  evidence:
+  - https://github.com/abdelfattah-lab/NVFP4-RaZeR
+  - https://raw.githubusercontent.com/abdelfattah-lab/NVFP4-RaZeR/main/quantize/quantizer.py
+  - https://raw.githubusercontent.com/abdelfattah-lab/NVFP4-RaZeR/main/LICENSE
+  note: 官方 README 对应当前 NVFP4 论文题名、作者和 arXiv；已核对 RaZeR 特殊值搜索量化实现及根目录 MIT 许可。README 另声明康奈尔大学专利申请，未运行实现或核验专利许可。
 attachments:
 - url: http://arxiv.org/pdf/2501.04052v3
   path: resources/razer.pdf

@@ -39,6 +39,13 @@ doi: 10.48550/arXiv.2605.07719
 first_published: '2026-05-08'
 source_checked_on: '2026-10-30'
 tag_note: 稀疏选择与 KV 卸载不等于 KV 量化；UVA 不等于统一物理内存。已读正文和附录，未找到可确认的官方源码入口，故不添加实现核验类 evidence 标签，未本地运行。
+code_review:
+  checked_on: '2026-11-06'
+  status: not-found
+  evidence:
+  - https://arxiv.org/abs/2605.07719
+  - https://arxiv.org/html/2605.07719v1
+  note: 本次核对论文及按题名、作者检索，未找到可确认对应的公开实现与许可证；检索中的同名 Fluxion 数据管道项目与本论文无关，未关联或打标。
 ---
 
 # An Efficient Hybrid Sparse Attention with CPU-GPU Parallelism for Long-Context Inference

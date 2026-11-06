@@ -43,6 +43,13 @@ first_published: '2026-10-02'
 source_checked_on: '2026-10-30'
 publication_note: year 记录首次预印本年份；PDF 带 ASPLOS 2027 引用信息，作者主页确认录用，当前阅读附件为 arXiv v1。
 tag_note: 实验全部为 FP16，未标量化或量化 kernel 标签；Apple M4/M4 Pro 为实测平台，不把可迁移讨论当作 Orin/高通支持。论文给出端到端实现与测量，但本次未找到可确认的官方代码入口，未核验源码。
+code_review:
+  checked_on: '2026-11-06'
+  status: not-found
+  evidence:
+  - https://arxiv.org/html/2610.03394
+  - https://dujiangsu.github.io/
+  note: 本次检索论文题名、arXiv 编号并核对论文及作者主页，未找到可确认对应本文的公开实现；未将其他同名 EdgeAgent 仓库视为本文代码。
 ---
 
 # EdgeAgent: Orchestrating On-Device LLM inference for End-User Multi-Agent Systems on CPU-GPU Unified Memory Architectures

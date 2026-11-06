@@ -11,7 +11,19 @@ tags:
 - scheme/weight-only
 - backend/cpu
 - topic/inference
-links: {}
+- availability/open-source
+links:
+  code: https://github.com/Vahe1994/AQLM
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: Apache-2.0
+  license_url: https://raw.githubusercontent.com/Vahe1994/AQLM/main/LICENSE
+  evidence:
+  - https://github.com/Vahe1994/AQLM/blob/main/README.md
+  - https://raw.githubusercontent.com/Vahe1994/AQLM/main/aq_engine.py
+  - https://raw.githubusercontent.com/Vahe1994/AQLM/main/LICENSE
+  note: 官方 README 对应本论文，已核实加性量化训练实现及根目录 Apache-2.0 许可；未运行代码。
 attachments:
 - url: https://raw.githubusercontent.com/mlresearch/v235/main/assets/egiazarian24a/egiazarian24a.pdf
   path: resources/aqlm.pdf

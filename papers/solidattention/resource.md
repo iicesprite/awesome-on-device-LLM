@@ -1,9 +1,9 @@
 ---
 id: solidattention
-title: 'SolidAttention: Low-Latency SSD-based Serving on Memory-Constrained PCs'
+title: "SolidAttention: Low-Latency SSD-based Serving on Memory-Constrained PCs"
 type: paper
 url: https://www.usenix.org/conference/fast26/presentation/zheng
-status: unread
+status: read
 summary: 面向内存受限的个人电脑，将动态稀疏注意力与 SSD 存储管理协同设计，通过 KV 块化存储、利用时间局部性的推测预取及计算与 I/O 编排，降低长上下文推理的 KV 缓存内存占用和 SSD 阻塞延迟。
 tags:
   - topic/inference
@@ -35,9 +35,16 @@ authors:
   - Haibo Chen
 year: 2026
 venue: FAST
-source_checked_on: '2026-11-06'
+source_checked_on: 2026-11-06
 version_note: USENIX FAST 2026 正式版，官方 BibTeX 页码为 67–82；发表页未见撤稿或更正提示，未提供 DOI。
 tag_note: 标签依据正式版全文，重点为 decode 阶段的 KV 布局、推测预取及异构调度；实际评测包含 Linux x86 笔记本上的 RTX 4070 Laptop CUDA 后端与 Intel Arc 140T SYCL 后端。KV 为 FP16，权重为 INT4，不把 KV 卸载或稀疏选择标成 KV 量化；未核验源码，不添加 evidence 标签。
+code_review:
+  checked_on: 2026-11-06
+  status: not-found
+  evidence:
+    - https://www.usenix.org/conference/fast26/presentation/zheng
+    - https://ipads.sjtu.edu.cn/pub/publication/haibo_chen
+  note: 已查 USENIX 正式发表页、作者实验室论文列表及题名代码检索；本次未找到可确认的公开实现仓库与适用代码许可。论文、幻灯片和视频开放访问不代表代码已开源。
 ---
 
 # SolidAttention: Low-Latency SSD-based Serving on Memory-Constrained PCs

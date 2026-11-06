@@ -22,6 +22,7 @@ tags:
 - backend/cpu
 - backend/cuda
 - evidence/end-to-end
+- availability/open-source
 links:
   code: https://github.com/NEO-MLSys25/NEO
 attachments:
@@ -41,6 +42,16 @@ implementation_evidence:
 - tag: evidence/end-to-end
   url: https://github.com/NEO-MLSys25/NEO/blob/master/examples/example.py
   detail: 已检查真实模型加载、prefill、逐步 decode 和 token 输出路径；该示例注明使用对称流水线，论文非对称配置另见 evaluation。未运行复现。
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: Apache-2.0
+  license_url: https://raw.githubusercontent.com/NEO-MLSys25/NEO/master/LICENSE
+  evidence:
+  - https://github.com/NEO-MLSys25/NEO
+  - https://raw.githubusercontent.com/NEO-MLSys25/NEO/master/examples/example.py
+  - https://raw.githubusercontent.com/NEO-MLSys25/NEO/master/LICENSE
+  note: README 标明同题 MLSys 2025 论文，已核对实际引擎调用、prefill/decode 示例及根目录 Apache-2.0 许可正文。示例使用对称流水线，不能据此声称论文全部配置已复现；未运行代码。
 ---
 
 # NEO: Saving GPU Memory Crisis with CPU Offloading for Online LLM Inference

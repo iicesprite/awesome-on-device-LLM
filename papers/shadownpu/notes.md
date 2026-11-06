@@ -3,7 +3,7 @@
 
 [arXiv v4](https://arxiv.org/abs/2508.16703v4)
 [正式发表页面](https://doi.org/10.1145/3745756.3809205)
-[原文 PDF](ShadowNPU_2508.16703v4.pdf)
+
 
 ## 1. 核心结论与要解决的问题
 

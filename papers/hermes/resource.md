@@ -44,6 +44,13 @@ implementation_evidence:
 - tag: evidence/simulation
   url: https://arxiv.org/pdf/2502.16963v1
   detail: 实验方法中，RTX 4090 部分用 Nsight Compute 测量；NDP-DIMM 用修改后的 Ramulator 2.0 仿真，NDP 核进行 RTL 实现及 TSMC 7nm 工艺综合。
+code_review:
+  checked_on: '2026-11-06'
+  status: not-found
+  evidence:
+  - https://arxiv.org/abs/2502.16963
+  - https://arxiv.org/html/2502.16963v1
+  note: 本次核对论文并按题名、NDP-DIMM 和 Hermes 检索，未找到可确认的系统实现仓库。正文引用的 Ramulator 2.0、SparseLLM 与 PuLP 是基础工具或模型，不等同于 Hermes 实现，未据此标记开源。
 ---
 
 # Make LLM Inference Affordable to Everyone: Augmenting GPU Memory with NDP-DIMM

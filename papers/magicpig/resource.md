@@ -13,6 +13,7 @@ tags:
   - system/sparse-inference
   - stage/decode
   - workload/long-context
+  - availability/open-source
 links:
   arxiv_version: https://arxiv.org/abs/2410.16179v4
   publication: https://proceedings.iclr.cc/paper_files/paper/2025/hash/6d50d824ae819d5a961c1d8edc15e833-Abstract-Conference.html
@@ -41,6 +42,16 @@ venue: ICLR
 doi: 10.48550/arXiv.2410.16179
 version_note: arXiv 首次提交为 2024-10-21（v1），后续版本为 2024-10-28（v2）、2024-12-17（v3）和 2024-12-18（v4）；附件固定 v4，另关联正式会议版。
 publication_note: ICLR 官方发表页标记为 Conference，发表日期为 2025-05-01，因此 year 使用正式发表年份 2025；doi 为 arXiv 签发的预印本 DOI，官方会议页未提供会议 DOI。核对的 arXiv 页面未列 Comments 或 Journal reference，arXiv 与 ICLR 发表页均未见撤稿或更正标记。
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: Apache-2.0
+  license_url: https://raw.githubusercontent.com/Infini-AI-Lab/MagicPIG/v0.2/LICENSE
+  evidence:
+    - https://raw.githubusercontent.com/Infini-AI-Lab/MagicPIG/v0.2/README.md
+    - https://raw.githubusercontent.com/Infini-AI-Lab/MagicPIG/v0.2/library/sparse_attention/sparse_attention.cc
+    - https://raw.githubusercontent.com/Infini-AI-Lab/MagicPIG/v0.2/LICENSE
+  note: 官方 README 对应题名、作者和 arXiv 编号；已查看 v0.2 的 CPU 稀疏注意力 C++ 实现及根目录 Apache-2.0 许可，非仅占位仓库；未运行实现。
 ---
 
 # MagicPIG: LSH Sampling for Efficient LLM Generation

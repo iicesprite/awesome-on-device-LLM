@@ -24,6 +24,7 @@ tags:
 - evidence/packed-weights
 - evidence/kernel
 - evidence/end-to-end
+- availability/open-source
 links:
   code: https://github.com/SqueezeAILab/SqueezeLLM
   publication: https://proceedings.mlr.press/v235/kim24f.html
@@ -46,6 +47,16 @@ doi: 10.48550/arXiv.2306.07629
 venue: ICML 2024
 source_checked_on: '2026-10-30'
 tag_note: 3/4-bit 指码本索引存储；论文叙述 FP16 运算，但所查官方 commit 的 NUQ 路径使用 FP32 中间计算。实现证据来自 packed 权重、CUDA 源码及完整模型入口，只读核对而未本地运行。
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: MIT
+  license_url: https://raw.githubusercontent.com/SqueezeAILab/SqueezeLLM/main/LICENSE
+  evidence:
+  - https://github.com/SqueezeAILab/SqueezeLLM
+  - https://raw.githubusercontent.com/SqueezeAILab/SqueezeLLM/main/llama.py
+  - https://raw.githubusercontent.com/SqueezeAILab/SqueezeLLM/main/LICENSE
+  note: 官方 README 对应论文题名及 arXiv；本次核对模型评测入口和根目录 MIT 许可，保留既有实现分析，未运行实现。
 ---
 
 # SqueezeLLM: Dense-and-Sparse Quantization

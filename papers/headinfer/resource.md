@@ -38,6 +38,16 @@ year: 2025
 doi: 10.48550/arXiv.2502.12574
 first_published: '2025-02-18'
 source_checked_on: '2026-10-30'
+code_review:
+  checked_on: '2026-11-06'
+  status: source-available
+  evidence:
+  - https://github.com/wdlctc/headinfer
+  - https://github.com/wdlctc/headinfer/tree/main/headinfer
+  - https://raw.githubusercontent.com/wdlctc/headinfer/main/main.py
+  - https://raw.githubusercontent.com/wdlctc/headinfer/main/setup.py
+  - https://raw.githubusercontent.com/wdlctc/headinfer/main/pyproject.toml
+  note: README 引用 arXiv 2502.12574，已确认推理入口及按头卸载代码。README 徽章与 setup.py 声明 MIT，但根目录及实现目录未见许可证文件，本次未取得完整许可正文，暂不添加开源标签；未运行代码。
 ---
 
 # HeadInfer: Memory-Efficient LLM Inference by Head-wise Offloading

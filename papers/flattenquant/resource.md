@@ -11,6 +11,14 @@ tags:
 - granularity/per-tensor
 - scheme/mixed-precision
 links: {}
+code_review:
+  checked_on: '2026-11-06'
+  status: not-found
+  evidence:
+  - https://aclanthology.org/2024.lrec-main.648/
+  - https://arxiv.org/abs/2402.17985
+  - https://arxiv.org/html/2402.17985v1
+  note: 本次检查发表页、arXiv 摘要和 HTML 正文并检索题名，未找到可核实的本论文公开实现；近名 FlatQuant 是另一篇论文，未混用其代码。
 attachments:
 - url: https://aclanthology.org/2024.lrec-main.648.pdf
   path: resources/flattenquant.pdf

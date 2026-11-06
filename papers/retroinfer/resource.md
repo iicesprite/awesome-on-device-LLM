@@ -15,6 +15,7 @@ tags:
   - system/pipelining
   - stage/decode
   - workload/long-context
+  - availability/open-source
 links:
   publication: https://doi.org/10.14778/3796195.3796212
   arxiv-doi: https://doi.org/10.48550/arXiv.2505.02922
@@ -50,6 +51,17 @@ last_revised: '2026-04-27'
 source_checked_on: '2026-11-04'
 version_note: '主链接为 arXiv，附件固定为 v3；正式发表信息为 PVLDB 19(5): 1016–1031, 2026，year 采用发表年份。v2 题名为 RetroInfer: A Vector-Storage Approach for Scalable Long-Context LLM Inference，v3 已更名并调整作者列表及实验报告。已核对 arXiv 版本记录与正式 DOI 元数据，未见撤稿或更正标记。'
 tag_note: 标签已按 v3 全文复核；KV 卸载及稀疏检索不等于 KV 量化。已只读抽查提交 03f912c6e917c380d9d90c5ec85bb0f161ba53ef 的聚类、KV 管理、CPU 缓存管理和部分实验脚本，未完整审计底层 kernel 或运行实验，本次不新增 evidence 标签。RetroInfer 与 RetrievalAttention 是不同论文，虽共用代码仓库仍分别收录。
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: MIT
+  license_url: https://raw.githubusercontent.com/microsoft/RetrievalAttention/main/LICENSE
+  evidence:
+    - https://raw.githubusercontent.com/microsoft/RetrievalAttention/main/README.md
+    - https://raw.githubusercontent.com/microsoft/RetrievalAttention/main/cache_hub/retroinfer_cache.py
+    - https://raw.githubusercontent.com/microsoft/RetrievalAttention/main/attn_hub/retroinfer_attn.py
+    - https://raw.githubusercontent.com/microsoft/RetrievalAttention/main/LICENSE
+  note: 仓库虽名为 RetrievalAttention，README 明确对应 RetroInfer 及 arXiv 2505.02922；已查看含分段聚类、steady/retrieval/estimation 参数与 WaveBufferCPU 的缓存实现和注意力入口，确认属于本论文，根目录为 MIT 许可；未运行实现。
 ---
 
 # RetroInfer: A Vector Storage Engine for Scalable Long-Context LLM Inference

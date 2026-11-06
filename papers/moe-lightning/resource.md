@@ -50,6 +50,18 @@ code_availability:
   checked_on: '2026-10-30'
   status: http-404
   detail: 作者主页提供的代码链接本次返回 404；未以第三方 fork 替代官方实现。
+code_review:
+  checked_on: '2026-11-06'
+  status: unverified
+  evidence:
+  - https://pschafhalter.com/moe-lightning/
+  - https://github.com/caoshiyi/FastMoE
+  - https://api.github.com/repos/caoshiyi/FastMoE
+  - https://shiyicao.com/
+  - https://github.com/caoshiyi/artifacts
+  - https://github.com/caoshiyi/artifacts/branches
+  - https://raw.githubusercontent.com/caoshiyi/artifacts/main/README.md
+  note: 项目页的 FastMoE 链接返回 404，GitHub API 重试受限；第一作者现主页改指 artifacts，但所查唯一 main 分支仅有一句 README，未见论文实现或许可。本次未能核实公开实现，不添加代码链接或开源标签；保留历史失效链接记录。
 ---
 
 # MoE-Lightning: High-Throughput MoE Inference on Memory-constrained GPUs

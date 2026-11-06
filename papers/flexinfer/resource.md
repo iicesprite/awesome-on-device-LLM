@@ -39,6 +39,14 @@ year: 2025
 venue: Proceedings of Machine Learning and Systems 7 (MLSys 2025)
 source_checked_on: '2026-10-30'
 source_note: 以 MLSys 2025 发表版收录；这是 Seonjin Na 等人的 CPU 计算论文，不是另一篇同名的端侧 FlexInfer 论文。
+code_review:
+  checked_on: '2026-11-06'
+  status: not-found
+  evidence:
+  - https://proceedings.mlsys.org/paper_files/paper/2025/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html
+  - https://seonjinna.github.io/publications/
+  - https://seonjinna.github.io/assets/pdf/MLSys25_FlexInfer.pdf
+  note: 本次核对 MLSys 发表页、第一作者论文列表和发表版，未找到可确认对应的代码仓库或许可。未将另一篇同名 FlexInfer 或 FlexGen 的实现作为本条目代码。
 ---
 
 # FlexInfer: Flexible LLM Inference with CPU Computations

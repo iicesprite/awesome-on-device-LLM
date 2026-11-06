@@ -12,8 +12,10 @@ tags:
   - system/sparse-inference
   - stage/decode
   - workload/long-context
+  - availability/open-source
 links:
   doi: https://doi.org/10.18653/2026.emnlp-main.279
+  code: https://github.com/thunlp/NOSA
 attachments:
   - url: https://aclanthology.org/2026.emnlp-main.279.pdf
     path: resources/nosa-emnlp2026.pdf
@@ -34,6 +36,17 @@ authors:
 year: 2026
 venue: EMNLP
 doi: 10.18653/2026.emnlp-main.279
+code_review:
+  checked_on: '2026-11-06'
+  status: open-source
+  license: MIT
+  license_url: https://raw.githubusercontent.com/thunlp/NOSA/main/LICENSE
+  evidence:
+    - https://aclanthology.org/2026.emnlp-main.279/
+    - https://raw.githubusercontent.com/thunlp/NOSA/main/README.md
+    - https://raw.githubusercontent.com/thunlp/NOSA/main/modeling_llama_nosa.py
+    - https://raw.githubusercontent.com/thunlp/NOSA/main/LICENSE
+  note: 官方仓库 README 的题名、作者及 EMNLP 2026 信息与论文相符，已发布 NOSA 模型代码及 NOSI 系统目录；已查看稀疏分块逻辑与 MIT 许可。模型代码另保留上游 Apache-2.0 声明；未运行实现。
 ---
 
 # NOSA: Native and Offloadable Sparse Attention

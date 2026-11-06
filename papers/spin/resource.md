@@ -32,6 +32,14 @@ authors:
   - Fan Yang
 year: 2026
 doi: 10.48550/arXiv.2604.26837
+code_review:
+  checked_on: '2026-11-06'
+  status: not-found
+  evidence:
+    - https://arxiv.org/abs/2604.26837
+    - https://arxiv.org/html/2604.26837
+    - https://www.microsoft.com/en-us/research/publication/unifying-sparse-attention-with-hierarchical-memory-for-scalable-long-context-llm-serving/
+  note: 已查论文 HTML、微软研究院官方发表页及题名代码检索；本次未找到可核对的 SPIN 公开实现与代码许可。基于 vLLM 及集成 RetroInfer 的描述不能代替本框架源码发布证据，也不与其他同名 SPIN 项目混用。
 ---
 
 # Unifying Sparse Attention with Hierarchical Memory for Scalable Long-Context LLM Serving

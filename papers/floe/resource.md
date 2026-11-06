@@ -48,6 +48,14 @@ implementation_evidence:
 - tag: evidence/end-to-end
   url: https://github.com/zju-stu-lizheng/FloE/blob/main/start.py
   detail: 已检查 HQQ 量化模型加载、PipelineLLM 转换和 llm.generate 评测路径；脚本中的模型、阈值及数据集路径需配置。未运行复现。
+code_review:
+  checked_on: '2026-11-06'
+  status: source-available
+  evidence:
+  - https://github.com/zju-stu-lizheng/FloE
+  - https://raw.githubusercontent.com/zju-stu-lizheng/FloE/main/start.py
+  - https://raw.githubusercontent.com/zju-stu-lizheng/FloE/main/kernel/kernels.py
+  note: 仓库明确对应论文题名及 arXiv 2505.05950，已核对模型加载、生成入口和 Triton 稀疏 GEMV 实现；本次在根目录、README 及所查源码中未找到适用于本项目的明确开源许可，不以依赖库许可替代。未运行代码。
 ---
 
 # FloE: On-the-Fly MoE Inference on Memory-constrained GPU

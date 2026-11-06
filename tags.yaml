@@ -10,7 +10,7 @@ tags:
   topic/benchmark: {label: 性能评测, aliases: [benchmark]}
   architecture/moe: {label: 混合专家架构, aliases: [moe]}
   transform/rotation: {label: 旋转变换, aliases: [rotation]}
-  publication/withdrawn: {label: 已撤稿, aliases: [withdrawn]}
+  availability/open-source: {label: 开源, aliases: [open-source, opensource]}
   target/weight: {label: 权重, aliases: [weight]}
   target/activation: {label: 激活, aliases: [activation]}
   target/kv-cache: {label: KV缓存, aliases: [kv-cache, KV cache]}
