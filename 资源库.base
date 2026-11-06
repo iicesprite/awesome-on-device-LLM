@@ -1,11 +1,10 @@
 filters:
   and:
-    - '/^(papers|blogs|docs)\/[^/]+\/resource\.md$/.matches(file.path)'
+    - /^(papers|blogs|docs)\/[^/]+\/resource\.md$/.matches(file.path)
 formulas:
-  resource: 'link(file.path, note.id)'
-  # Bases 中的标签值带 # 前缀；frontmatter 仍使用不带 # 的规范键。
-  topics: 'list(note.tags).filter(value.startsWith("#topic/"))'
-  hardware: 'list(note.tags).filter(value.startsWith("#hardware/"))'
+  resource: link(file.path, note.id)
+  topics: list(note.tags).filter(value.startsWith("#topic/"))
+  hardware: list(note.tags).filter(value.startsWith("#hardware/"))
 properties:
   formula.resource:
     displayName: 打开卡片
@@ -32,56 +31,79 @@ views:
     name: 全部资源
     order:
       - formula.resource
-      - note.title
-      - note.type
-      - note.year
-      - note.status
-      - note.tags
-      - note.summary
-      - note.url
+      - title
+      - type
+      - year
+      - status
+      - tags
+      - summary
+      - url
     sort:
-      - property: note.year
+      - property: year
         direction: DESC
-      - property: note.title
+      - property: title
         direction: ASC
   - type: table
     name: 阅读队列
     filters:
       or:
-        - 'note.status == "unread"'
-        - 'note.status == "reading"'
+        - note.status == "unread"
+        - note.status == "reading"
     order:
       - formula.resource
-      - note.title
-      - note.status
-      - note.tags
-      - note.summary
+      - title
+      - status
+      - tags
+      - summary
     sort:
-      - property: note.status
+      - property: tags
         direction: ASC
-      - property: note.title
+      - property: status
         direction: ASC
+      - property: title
+        direction: ASC
+    columnSize:
+      note.tags: 287
   - type: table
     name: 主题专题
     filters:
       and:
-        - 'formula.topics.length > 0'
+        - formula.topics.length > 0
     order:
       - formula.resource
-      - note.title
+      - title
       - formula.topics
-      - note.tags
-      - note.status
-      - note.summary
+      - tags
+      - status
+      - summary
   - type: table
     name: 设备专题
     filters:
       and:
-        - 'formula.hardware.length > 0'
+        - formula.hardware.length > 0
     order:
       - formula.resource
-      - note.title
+      - title
       - formula.hardware
-      - note.tags
-      - note.status
-      - note.summary
+      - tags
+      - status
+      - summary
+  - type: table
+    name: 稀疏注意力
+    filters:
+      and:
+        - file.hasTag("system/sparse-inference")
+        - /attention|注意力|\bkv\b/i.matches(note.title + " " + note.summary)
+    order:
+      - formula.resource
+      - title
+      - year
+      - status
+      - tags
+      - summary
+      - url
+    sort:
+      - property: year
+        direction: DESC
+      - property: title
+        direction: ASC
