@@ -9,10 +9,12 @@ status: unread               # unread / reading / read
 summary: ""                  # 字符串，可为 ""；不能留成 summary: 或写 null；详细内容写入 notes.md
 tags: []                     # 规范标签的字符串列表，可为 []；不能写 null、中文名或别名
 
-# 可选：代码、项目主页、关联资源等，名称自定，值为完整网址。
+# 可选：代码仓库使用 links.code，值为已核实的完整 HTTP(S) 代码网址。
+# 无代码仓库时省略 code；项目主页、其他版本等仍放在 links 的其他键中。
 links: {}
 # links:
 #   code: https://github.com/owner/project
+# 有公开网址不等于开源；核实代码和开源许可证后才添加 availability/open-source 标签。
 
 # 可选：记录下载来源，不要求文件已存在；文件放在当前条目的 resources/ 中。
 # 只保存可公开的来源、版本事实；不记录个人下载状态或 downloaded_on。

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-端侧 LLM 推理与量化的学习资源库：每条资源一个目录，`resource.md` 的 YAML frontmatter 是唯一元数据源，独立的 `notes.md` 是可选阅读笔记，索引由脚本生成。没有应用代码；`scripts/catalog.py` 负责校验、构建与搜索，`scripts/zotero_sync.py` 和 `scripts/zotero_import.js` 负责 Zotero 联动，流程见 [ZOTERO.md](ZOTERO.md)。
+端侧 LLM 推理与量化的学习资源库：每条资源一个目录，`resource.md` 的 YAML frontmatter 是唯一元数据源，独立的 `notes.md` 是可选阅读笔记，索引由脚本生成。`scripts/catalog.py` 负责校验、构建与搜索，`scripts/web.py` 和 `web/` 提供本地前端，`scripts/zotero_sync.py` 和 `scripts/zotero_import.js` 负责 Zotero 联动，流程见 [ZOTERO.md](ZOTERO.md)。
 
 用户文档在 [README.md](README.md)，维护流程在 [CONTRIBUTING.md](CONTRIBUTING.md)。本文只写 agent 容易出错的约束。
 
@@ -16,10 +16,11 @@
 uv run --locked python scripts/catalog.py check    # 只校验，不写文件
 uv run --locked python scripts/catalog.py build    # 校验并重新生成 INDEX.md、catalog.csv
 uv run --locked python scripts/catalog.py search --tag 量化 --tag orin
+uv run --locked python scripts/web.py --open       # 启动本机前端，不需要 Node.js
 uv run --locked python -m unittest discover -s tests   # 仅在修改 scripts/ 时需要
 ```
 
-- 改了 `resource.md`、`notes.md` 或 `tags.yaml` 后，运行 `build`。
+- 手动或通过 Obsidian 修改 `resource.md`、`notes.md`、`tags.yaml` 后运行 `build`；Web 成功创建或保存元数据会自动更新索引，不与其写入同时运行 CLI `build`。
 - 校验失败时按报错修改数据，不要为了通过校验去放宽 `scripts/catalog.py`。
 
 ## 目录
@@ -34,6 +35,11 @@ templates/                     resource.md、notes.md 模板，以模板为准
 tags.yaml                      标签词表
 skills/resource-curator/       收录与阅读 skill 的源码
 资源库.base                    共享 Obsidian Bases 视图，只纳入分类目录下的 resource.md
+scripts/web.py                 仅监听本机的 HTTP 服务
+scripts/web_store.py           资源卡读写、冲突检查与索引更新
+scripts/resource_import.py     公网 HTML 元数据预览与查重
+scripts/note_render.py         只读笔记的安全渲染
+web/                          浏览器界面及本地 Mermaid 组件
 ```
 
 ## 硬性规则
@@ -52,6 +58,8 @@ skills/resource-curator/       收录与阅读 skill 的源码
 - `status` 只表示用户的阅读进度：`unread` / `reading` / `read`。新条目默认 `unread`。agent 写了分析也不代表用户已读，不要改成 `read`。
 - 同一篇论文的不同版本、发表页和代码放进同一条目，用 `links` 关联。添加前先按 DOI、arXiv ID、网址、标题在三个分类里查重。
 - 代码链接要实际核对后再写进 `links`。
+- Web 预览只是页面声明的元数据，不证明全文已读、版本最新或撤稿状态已核实。确认收录前仍需核对来源；Web 不下载 PDF、不创建笔记、不调用 Zotero。
+- Web 和 Obsidian 编辑同一份资源卡。遇到 revision 冲突，保留输入、重新读取并合并，不绕过检查强行覆盖。只运行一个 Web 写入服务，不把单进程锁当作跨进程保护。
 
 **标签**
 
@@ -71,6 +79,7 @@ skills/resource-curator/       收录与阅读 skill 的源码
 - 笔记里用相对路径引用：`resources/xxx.pdf`、`resources/assets/xxx.png`。
 - 不用 `git add -f` 提交 `resources/` 下的 PDF。
 - 个人 Zotero 绑定、账号和可用状态只存 `.local/zotero/`，不得放入公共资源卡；具体禁止字段见模板与 ZOTERO。
+- Zotero `prepare` 遍历全库论文，无单篇参数；执行全库下载或 MCP 写入前确认授权范围。`--download` 不会把已在 Zotero 可读的 PDF 自动复制回仓库，不是单篇下载或全量恢复工具。
 
 **Git**
 
@@ -82,7 +91,7 @@ skills/resource-curator/       收录与阅读 skill 的源码
 
 - 从 `templates/notes.md` 出发，标题改成资源题名，删掉不适用的章节和 HTML 注释提示。已有笔记先通读再整合，不整体覆盖。
 - `notes.md` 可选且独立，不把笔记迁入资源卡；创建后在同目录卡片正文添加 `[阅读笔记](notes.md)`，未创建时不写悬空链接。
-- 开头写来源版本。页码一律注明是 PDF 页码还是论文页码。
+- 开头写来源版本、阅读范围和本次关注问题。页码一律注明是 PDF 页码还是论文页码。
 - 数字要带单位、基线、设备、模型、batch、输入输出长度，以及 prefill 或 decode 条件。
 - 区分三类内容：作者报告的结果、你的解释、本人实测。没运行过的东西不要写复现结果。
 - 不把 kernel 加速当端到端收益，不把云端结果直接当端侧结论。
@@ -102,7 +111,8 @@ skills/resource-curator/       收录与阅读 skill 的源码
 ## 修改脚本或模板
 
 - `scripts/catalog.py` 的校验规则、`templates/` 和 `skills/resource-curator/SKILL.md` 需保持一致。改其中一个，要检查另外两个是否需要同步。
-- 修改 `scripts/` 后运行测试。`tests/test_catalog.py` 和 `tests/test_zotero_sync.py` 分别覆盖目录脚本与 Zotero 联动。
+- 修改 `scripts/` 后运行测试。`tests/test_catalog.py` 和 `tests/test_zotero_sync.py` 分别覆盖目录脚本与 Zotero 联动；`tests/test_web*.py`、`tests/test_resource_import.py` 覆盖本地前端后端。
+  修改 `web/` 后用浏览器实际验证受影响的操作。写入测试使用临时资源库，不改现有条目；前端不得建立第二份元数据源或放宽 `catalog.py` 校验。
 - 修改 `skills/resource-curator/` 后，需要提醒用户重新复制到本机 skill 目录，见 CONTRIBUTING。
 
 ## 交付时说明
