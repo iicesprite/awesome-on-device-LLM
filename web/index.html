@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>端侧 LLM · 研究资源工作台</title>
+    <link rel="stylesheet" href="/vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <script defer src="/vendor/katex/katex.min.js"></script>
+    <script defer src="/vendor/mermaid.min.js"></script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#resource-list">跳到资源列表</a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="研究资源工作台首页"
+        ><span class="brand-mark" aria-hidden="true">端</span
+        ><span>端侧 LLM<small>研究资源工作台</small></span></a
+      >
+      <div class="header-note">
+        本地优先 <span aria-hidden="true">/</span> 与仓库实时连接
+      </div>
+      <div class="header-actions">
+        <button id="refresh" type="button">刷新仓库</button
+        ><button id="open-import" class="primary" type="button">
+          ＋ 收录资源
+        </button>
+      </div>
+    </header>
+    <div class="workspace">
+      <aside class="sidebar" aria-label="标签筛选">
+        <div class="sidebar-title">
+          <h2>研究维度</h2>
+          <span class="eyebrow">标签交集</span>
+        </div>
+        <p class="muted small">组合多个标签，缩小你的研究范围。</p>
+        <label class="sr-only" for="tag-search">搜索标签、规范键或别名</label
+        ><input
+          id="tag-search"
+          type="search"
+          placeholder="查找标签、规范键、别名…"
+          autocomplete="off"
+        />
+        <div id="tag-vocabulary"></div>
+      </aside>
+      <main class="main">
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">ON-DEVICE INTELLIGENCE / LIBRARY</p>
+            <h1>把线索，变成研究积累。</h1>
+            <p class="muted">
+              论文、技术博客与工程文档，在同一个可追溯的资源库中。
+            </p>
+          </div>
+          <div class="library-stat">
+            <strong id="library-count">—</strong><span>仓库资源</span>
+          </div>
+        </section>
+        <form id="filter-form" class="filters" role="search">
+          <div class="search-field">
+            <label class="sr-only" for="query">搜索资源</label
+            ><input
+              id="query"
+              name="q"
+              type="search"
+              placeholder="搜索标题、摘要、作者或元数据…"
+              autocomplete="off"
+            />
+          </div>
+          <label
+            >类型<select id="filter-type" name="type">
+              <option value="">全部类型</option>
+              <option value="paper">论文</option>
+              <option value="blog">博客</option>
+              <option value="doc">文档</option>
+            </select></label
+          >
+          <label
+            >阅读状态<select id="filter-status" name="status">
+              <option value="">全部状态</option>
+              <option value="unread">未读</option>
+              <option value="reading">在读</option>
+              <option value="read">已读</option>
+            </select></label
+          >
+          <button type="submit">搜索</button>
+        </form>
+        <div class="selection-row">
+          <div id="selected-filters" aria-label="已选筛选条件"></div>
+          <button id="reset-filters" class="text-button" type="button">
+            清除筛选
+          </button>
+        </div>
+        <div class="list-heading">
+          <h2>资源目录 <span id="result-count" class="muted"></span></h2>
+          <span class="muted small">标签筛选使用 AND 交集</span>
+        </div>
+        <div id="catalog-message" role="status" aria-live="polite"></div>
+        <div
+          id="resource-list"
+          class="resource-list"
+          tabindex="-1"
+          aria-label="资源列表"
+        ></div>
+      </main>
+    </div>
+    <dialog
+      id="detail-dialog"
+      class="detail-dialog"
+      aria-labelledby="detail-title"
+    >
+      <div class="dialog-top">
+        <span class="eyebrow">RESOURCE / 资源档案</span
+        ><button id="close-detail" type="button" aria-label="关闭资源详情">
+          关闭 ×
+        </button>
+      </div>
+      <div id="detail-message" role="status" aria-live="polite"></div>
+      <div id="detail-content"></div>
+    </dialog>
+    <dialog
+      id="import-dialog"
+      class="import-dialog"
+      aria-labelledby="import-title"
+    >
+      <div class="dialog-top">
+        <div>
+          <p class="eyebrow">CAPTURE / 收录</p>
+          <h2 id="import-title">为下一次研究，留下入口。</h2>
+        </div>
+        <button id="close-import" type="button" aria-label="关闭收录窗口">
+          关闭 ×
+        </button>
+      </div>
+      <p class="muted">
+        先读取来源元数据，再确认收藏理由与标签。不会下载全文，也不会创建笔记。
+      </p>
+      <form id="preview-form" class="url-form">
+        <label for="import-url">资源网址</label>
+        <div class="inline-fields">
+          <input
+            id="import-url"
+            type="url"
+            required
+            placeholder="https://…"
+          /><button id="preview-button" class="primary" type="submit">
+            读取网址
+          </button>
+        </div>
+      </form>
+      <button id="manual-import" class="text-button" type="button">
+        无法读取？直接手动填写（未经来源核实）
+      </button>
+      <div id="import-message" role="status" aria-live="polite"></div>
+      <div id="import-preview"></div>
+      <div id="import-editor"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

@@ -5,6 +5,8 @@ description = "端侧 LLM 推理与量化工程资源索引"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "markdown-it-py>=3,<5",
+    "mdit-py-plugins>=0.4,<1",
     "PyYAML>=6.0.2,<7",
 ]
 
