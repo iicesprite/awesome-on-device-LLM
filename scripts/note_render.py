@@ -119,7 +119,8 @@ def _destination(value, resource_id, image=False):
     return target
 
 
-def render_markdown(source, resource_id):
+def render_markdown(source, resource_id, *, url_resolver=None):
+    """Render inert HTML; optional resolver accepts (URL, image=bool)."""
     parser = MarkdownIt("commonmark", {"html": False, "linkify": False}).enable("table")
     parser.use(dollarmath_plugin, allow_labels=False, double_inline=True)
     parser.inline.ruler.before("escape", "math_bracket_inline", _bracket_inline)
@@ -137,8 +138,18 @@ def render_markdown(source, resource_id):
                 image = token.type == "image"
                 attribute = "src" if image else "href"
                 original = token.attrGet(attribute) or ""
-                destination = _destination(original, resource_id, image=image)
+                destination = (
+                    url_resolver(original, image=image) if url_resolver is not None
+                    else _destination(original, resource_id, image=image)
+                )
                 if destination is None:
+                    if image and url_resolver is not None:
+                        token.type = "text"
+                        token.tag = ""
+                        token.content = "[图片不可用：" + token.content + "]"
+                        token.children = None
+                        token.attrs = {}
+                        continue
                     token.attrs.pop(attribute, None)
                     token.attrSet("title", "已阻止不安全或不受支持的链接")
                 else:

@@ -81,6 +81,37 @@ uv run --locked python scripts/web.py --root C:/path/to/catalog-copy --port 8766
 公式变更后用浏览器检查 `$...$`、`$$...$$`、`\(...\)`、`\[...\]`，以及代码不被误解析、错误公式不阻断后文、重复切换页签不重复渲染。还应检查本地字体响应、窄屏长公式的横向滚动，以及 Mermaid 图和笔记配图没有被公式样式影响。后端解析变更须重启服务后再刷新页面，不能只刷新仍运行旧 Python 模块的服务。
 
 
+## GitHub Pages 开发与部署
+
+`site/` 是独立的 VitePress 默认主题站点，Node.js 22+ 构建；`web/` 仍为原有本地 Python 工作台，两者不相互替代。站点依赖及版本由 `site/package.json`、`site/package-lock.json` 管理，使用 `npm ci --prefix site` 安装，不提交 `node_modules`。
+
+```powershell
+uv run --locked python -m unittest discover -s tests
+npm ci --prefix site
+npm run build --prefix site
+npm run preview --prefix site
+```
+
+构建命令先调用 `site/prepare.mjs`，通过 uv 运行 `scripts/site_export.py`，再构建 VitePress。导出结果 `site/.generated/`、缓存和 `site/.vitepress/dist/` 都被 Git 忽略，不手工维护。`resource.md` 和独立笔记仍为源文件，分类目录 `docs/` 不是 VitePress 站点目录。
+
+验证项目子路径（PowerShell）：
+
+```powershell
+$env:SITE_BASE = "/awesome-on-decive-LLM/"
+npm run build --prefix site
+npm run preview --prefix site
+# 完成后恢复本地默认根路径；改变 base 需要重新构建
+Remove-Item Env:SITE_BASE
+```
+
+默认本地 `base` 为 `/`；构建时记录到生成配置中，preview 自动使用对应路径。GitHub Actions 对普通项目使用 `/<仓库名>/`，对 `<用户>.github.io` 仓库使用 `/`。部署到自定义域名根目录时，需要相应调整工作流的 `SITE_BASE`。
+
+导出仅包含白名单元数据，未知扩展字段与附件列表不进入公开 JSON。笔记标签从资源卡派生；本地链接只映射到已知资源/笔记页面。原始 HTML 禁用，Vue 模板插值保持为文本，公式复用本地工作台的四种分隔符解析，浏览器通过 KaTeX 排版。仅复制笔记实际引用的 `resources/assets/` 栅格图，缺图显示提示；不复制 PDF、个人配置、任意本地文件或符号链接目标。图表脚本从已锁定的本地 Mermaid 组件复制，不使用运行时 CDN。
+
+`tests/test_site_export.py` 覆盖只读源文件、输出目录保护、公开字段、注入、图片与 PDF 边界、相对链接和 base。除了测试，还需用实际生产构建检查标签交集、可分享网址、同页“阅读笔记”导航、中文全文搜索与命中跳转、SPA 切页后的公式/图表、深色模式和窄屏。重新构建后重启 preview 服务，避免服务仍缓存旧产物。
+
+发布工作流只上传 `site/.vitepress/dist`，无写回资源权限。`main` 推送和手动执行可构建，只有 `main` 可以部署到 `github-pages` 环境；PR 不发布。首次需在仓库设置启用 Pages 的 GitHub Actions 来源。本地构建不会自动提交、推送或修改 GitHub 设置。
+
 ## 项目文件
 
 | 路径 | 作用 |
@@ -92,6 +123,8 @@ uv run --locked python scripts/web.py --root C:/path/to/catalog-copy --port 8766
 | `scripts/web.py`、`scripts/web_store.py` | 本机 HTTP 服务、元数据读写与索引更新 |
 | `scripts/resource_import.py`、`scripts/note_render.py` | 公网来源预览查重、安全笔记渲染 |
 | `web/` | 浏览器界面及离线 Mermaid 组件 |
+| `site/`、`.github/workflows/pages.yml` | VitePress 只读站点、锁定的 Node 依赖与 GitHub Pages 部署 |
+| `scripts/site_export.py`、`tests/test_site_export.py` | 静态内容导出及隐私/路由边界回归 |
 | `scripts/zotero_sync.py`、`scripts/zotero_import.js` | 生成带账号约束的 Zotero MCP 同步计划，核验回执并保存本地关联，见 [ZOTERO.md](ZOTERO.md) |
 | `skills/resource-curator/` | agent 收录与阅读 skill 的源码 |
 | `INDEX.md`、`catalog.csv` | 自动生成，不手工编辑 |

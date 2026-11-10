@@ -9,3 +9,9 @@
 .obsidian/
 __pycache__/
 *.py[cod]
+
+# GitHub Pages: generated content, dependencies and build outputs.
+site/node_modules/
+site/.generated/
+site/.vitepress/cache/
+site/.vitepress/dist/

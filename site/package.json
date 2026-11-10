@@ -1,0 +1,17 @@
+{
+  "name": "on-device-llm-pages",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:content": "node prepare.mjs",
+    "dev": "npm run prepare:content && vitepress dev",
+    "build": "npm run prepare:content && vitepress build",
+    "preview": "vitepress preview"
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "vitepress": "1.6.4",
+    "vue": "3.5.30",
+    "katex": "0.19.1"
+  }
+}

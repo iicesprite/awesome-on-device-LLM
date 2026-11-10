@@ -1,0 +1,62 @@
+name: Build and deploy resource website
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Set project base path
+        shell: bash
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          name="${REPOSITORY##*/}"
+          if [[ "$name" == *.github.io ]]; then
+            echo 'SITE_BASE=/' >> "$GITHUB_ENV"
+          else
+            echo "SITE_BASE=/$name/" >> "$GITHUB_ENV"
+          fi
+      - run: uv sync --locked
+      - run: uv run --locked python -m unittest discover -s tests
+      - run: npm ci --prefix site
+      - run: npm run build --prefix site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/.vitepress/dist
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

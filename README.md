@@ -9,6 +9,7 @@
 | 想做什么 | 去哪里 |
 | --- | --- |
 | 浏览全部资源，按类型或标签查阅 | [INDEX.md](INDEX.md) |
+| 在 GitHub Pages 上只读检索资源与阅读笔记 | [静态网站](#github-pages-静态网站) |
 | 在浏览器中筛选、编辑、按网址收录和阅读笔记 | [本地前端](#本地前端) |
 | 用 Excel 筛选、排序 | [catalog.csv](catalog.csv) |
 | 用 Obsidian 浏览、筛选和编辑资源属性 | [资源库.base](资源库.base)，使用方法见下文 |
@@ -26,6 +27,34 @@
 uv sync --locked                           # 准备 Python 环境，首次需要联网
 uv run python scripts/catalog.py search --tag 量化 --tag orin   # 试一下搜索
 ```
+
+## GitHub Pages 静态网站
+
+`site/` 使用 VitePress 1.6.4 默认主题和定制资源检索首页，与本地工作台独立：
+
+- 首页按关键词、资源类型、多标签交集筛选；标签支持中文名、规范键和别名。
+- “仅有笔记”使用所属资源的标签，不给 `notes.md` 维护第二份标签。
+- 导航栏“全文搜索”检索资源与笔记正文；首页关键词检索资源元数据。
+- 支持深浅色、移动端、KaTeX 公式、本地配图和 Mermaid 图。筛选条件保存在网址中，可复制分享。
+- 站点只读，不提供编辑、抓取收录或 PDF 打开/下载。仅发布必要的笔记栅格配图；PDF、个人 Zotero 配置和其他本机文件不会进入发布目录。
+
+本地预览需要 **Node.js 22+、npm 和 uv**，在仓库根目录运行：
+
+```powershell
+npm ci --prefix site
+npm run build --prefix site
+npm run preview --prefix site
+```
+
+打开终端打印的地址。`build` 自动读取资源卡与笔记、校验并生成网站，不修改源文件或根目录索引。更新资源后重新构建；主题开发可用 `npm run dev --prefix site`，资源文件变动后需重新运行该命令。
+
+首次部署：
+
+1. 将网站相关改动合入并推送到 `main`。
+2. 仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
+3. `.github/workflows/pages.yml` 在 `main` 推送时构建并发布；也可在 Actions 手动运行。PR 只构建验证，不发布。
+
+该仓库部署成功后的默认地址为 **https://iicesprite.github.io/awesome-on-decive-LLM/**。这是部署目标地址，不表示本地构建完成后已上线。子路径由工作流按仓库名设置，详细说明见 [维护指南](CONTRIBUTING.md#github-pages-开发与部署)。
 
 ## 本地前端
 

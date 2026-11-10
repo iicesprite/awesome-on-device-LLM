@@ -1,9 +1,9 @@
 ---
 id: retroinfer
-title: 'RetroInfer: A Vector Storage Engine for Scalable Long-Context LLM Inference'
+title: "RetroInfer: A Vector Storage Engine for Scalable Long-Context LLM Inference"
 type: paper
 url: https://arxiv.org/abs/2505.02922
-status: unread
+status: read
 summary: 将 KV 缓存组织为向量存储，以注意力感知的 wave index 结合三分区注意力近似、带精度界的估计和分段聚类，并由 wave buffer 协调 CPU–GPU 数据放置及计算与传输重叠，降低长上下文解码的访存与检索开销。
 tags:
   - topic/inference
@@ -46,13 +46,13 @@ authors:
 year: 2026
 venue: Proceedings of the VLDB Endowment
 doi: 10.14778/3796195.3796212
-first_published: '2025-05-05'
-last_revised: '2026-04-27'
-source_checked_on: '2026-11-04'
-version_note: '主链接为 arXiv，附件固定为 v3；正式发表信息为 PVLDB 19(5): 1016–1031, 2026，year 采用发表年份。v2 题名为 RetroInfer: A Vector-Storage Approach for Scalable Long-Context LLM Inference，v3 已更名并调整作者列表及实验报告。已核对 arXiv 版本记录与正式 DOI 元数据，未见撤稿或更正标记。'
+first_published: 2025-05-05
+last_revised: 2026-04-27
+source_checked_on: 2026-11-04
+version_note: "主链接为 arXiv，附件固定为 v3；正式发表信息为 PVLDB 19(5): 1016–1031, 2026，year 采用发表年份。v2 题名为 RetroInfer: A Vector-Storage Approach for Scalable Long-Context LLM Inference，v3 已更名并调整作者列表及实验报告。已核对 arXiv 版本记录与正式 DOI 元数据，未见撤稿或更正标记。"
 tag_note: 标签已按 v3 全文复核；KV 卸载及稀疏检索不等于 KV 量化。已只读抽查提交 03f912c6e917c380d9d90c5ec85bb0f161ba53ef 的聚类、KV 管理、CPU 缓存管理和部分实验脚本，未完整审计底层 kernel 或运行实验，本次不新增 evidence 标签。RetroInfer 与 RetrievalAttention 是不同论文，虽共用代码仓库仍分别收录。
 code_review:
-  checked_on: '2026-11-06'
+  checked_on: 2026-11-06
   status: open-source
   license: MIT
   license_url: https://raw.githubusercontent.com/microsoft/RetrievalAttention/main/LICENSE

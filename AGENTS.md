@@ -9,6 +9,7 @@
 - 文档、笔记、`summary` 用中文；标签键、ID、命令用英文。
 - 默认 Windows + PowerShell，仓库根目录运行命令。
 - 用 uv，不手动激活 `.venv`，不用 `pip install`。依赖变更见 CONTRIBUTING。
+- `site/` 是独立的 VitePress 只读站点，使用 Node.js 22+ 与 `npm ci --prefix site`；Python 导出仍通过 uv。`docs/` 是资源分类，不能当作站点源码目录。
 
 ## 命令
 
@@ -18,10 +19,12 @@ uv run --locked python scripts/catalog.py build    # 校验并重新生成 INDEX
 uv run --locked python scripts/catalog.py search --tag 量化 --tag orin
 uv run --locked python scripts/web.py --open       # 启动本机前端，不需要 Node.js
 uv run --locked python -m unittest discover -s tests   # 仅在修改 scripts/ 时需要
+npm run build --prefix site                        # 生成静态资料并构建 GitHub Pages
 ```
 
 - 手动或通过 Obsidian 修改 `resource.md`、`notes.md`、`tags.yaml` 后运行 `build`；Web 成功创建或保存元数据会自动更新索引，不与其写入同时运行 CLI `build`。
 - 校验失败时按报错修改数据，不要为了通过校验去放宽 `scripts/catalog.py`。
+- Pages 的 `site/.generated/` 和 `site/.vitepress/dist/` 是忽略的生成物，不手工编辑。元数据仍来自资源卡，笔记沿用其标签；不发布 PDF、私人配置或第二份可写元数据。改站点后实际验证生产构建、项目子路径、中文搜索与笔记渲染。
 
 ## 目录
 
@@ -40,6 +43,9 @@ scripts/web_store.py           资源卡读写、冲突检查与索引更新
 scripts/resource_import.py     公网 HTML 元数据预览与查重
 scripts/note_render.py         只读笔记的安全渲染
 web/                          浏览器界面及本地 Mermaid 组件
+scripts/site_export.py          只读导出公开静态页面、检索数据与必要配图
+site/                         VitePress 默认主题与资源检索首页
+.github/workflows/pages.yml    GitHub Pages 构建与发布（仅 main 部署）
 ```
 
 ## 硬性规则
