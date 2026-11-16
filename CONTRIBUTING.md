@@ -97,7 +97,7 @@ npm run preview --prefix site
 验证项目子路径（PowerShell）：
 
 ```powershell
-$env:SITE_BASE = "/awesome-on-decive-LLM/"
+$env:SITE_BASE = "/awesome-on-device-LLM/"
 npm run build --prefix site
 npm run preview --prefix site
 # 完成后恢复本地默认根路径；改变 base 需要重新构建
@@ -146,7 +146,7 @@ Remove-Item Env:SITE_BASE
 - 不再提供 `zotero_item_uri`、`zotero_pdf_uri` 列，也不保留空兼容列；使用这些旧列的下游脚本需迁移。公共 Markdown 同样没有 Zotero 列。
 - 公共构建不读取 `.local/zotero/`，不受个人绑定、下载状态或本机 PDF 是否存在影响。
 
-`INDEX.md` 顶部有自动生成的提示。手动或通过 Obsidian 修改 `resource.md` 的 YAML frontmatter 后需运行 `build`；Web 成功创建或保存元数据会自动更新两个索引。`metadata_path` 指向资源卡，`notes_path` 仍由可选的独立 `notes.md` 派生；卡片正文不作为索引元数据。创建笔记后在卡片正文添加 `[阅读笔记](notes.md)`，没有笔记时不保留悬空链接。
+`INDEX.md` 顶部有自动生成的提示。手动或通过 Obsidian 修改 `resource.md` 的 YAML frontmatter 后需运行 `build`；Web 成功创建或保存元数据会自动更新两个索引。新收录时同时创建零字节 `notes.md`，并在资源卡正文添加 `[阅读笔记](notes.md)`；空文件不表示已阅读，开始撰写时再按模板填写。历史条目允许缺少笔记，不自动补建或覆盖已有内容。`metadata_path` 指向资源卡，`notes_path` 由独立笔记是否存在派生；卡片正文不作为索引元数据。`check`、`build` 仍只校验及生成索引，不替收录者创建笔记或改写资源卡。
 
 每条资源只有这一份 frontmatter 元数据，不再维护独立 `meta.yaml`，也没有旧格式回退。迁移保留原字段、ID、状态、标签、自定义字段、附件相对路径和已有笔记，附件不移动。Obsidian 使用方法见 [README](README.md#用-obsidian-管理资源)；简单属性可在 Bases 编辑，嵌套的 `links`、`attachments` 在 YAML 源码中编辑，仍须通过 `check` / `build` 的标签与状态校验。
 

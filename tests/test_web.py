@@ -82,12 +82,13 @@ class WebTests(unittest.TestCase):
         self.assertEqual(web.catalog.read_frontmatter(self.card)["summary"], "更新的收藏理由")
         self.assertIn("更新的收藏理由", (self.root / "INDEX.md").read_text(encoding="utf-8"))
 
-    def test_new_resource_is_persisted_without_notes_and_duplicate_is_conflict(self):
+    def test_new_resource_has_empty_notes_and_duplicate_is_conflict(self):
         data = {**self.metadata, "id": "new-article", "type": "blog", "title": "另一个明确不同的文章", "url": "https://example.org/new"}
         status, detail, _ = self.request("POST", "/api/resources", {"metadata": data})
         self.assertEqual(status, 201)
         self.assertEqual(detail["entry"]["metadata_path"], "blogs/new-article/resource.md")
-        self.assertFalse((self.root / "blogs/new-article/notes.md").exists())
+        self.assertEqual((self.root / "blogs/new-article/notes.md").read_bytes(), b"")
+        self.assertEqual(detail["entry"]["notes_path"], "blogs/new-article/notes.md")
         status, result, _ = self.request("POST", "/api/resources", {"metadata": {**data, "id": "duplicate"}})
         self.assertEqual(status, 409)
         self.assertEqual(result["duplicates"][0]["id"], "new-article")

@@ -1,6 +1,6 @@
 # 用自己的 Zotero 阅读仓库论文
 
-公开仓库只在资源卡 `resource.md` 的 YAML frontmatter 中保存资源身份、来源、版本和标签，阅读笔记仍是可选的独立 `notes.md`；每个人独立选择自己的 Zotero 个人库、保存关联并生成个人索引。公共资源卡、`INDEX.md` 和 `catalog.csv` 不含个人 Zotero 绑定或链接，也不读取 `.local/`。不要复制作者或其他用户的绑定来使用。
+公开仓库只在资源卡 `resource.md` 的 YAML frontmatter 中保存资源身份、来源、版本和标签，独立的 `notes.md` 在新收录时创建为空文件，开始阅读后再填写，历史条目可缺省；每个人独立选择自己的 Zotero 个人库、保存关联并生成个人索引。公共资源卡、`INDEX.md` 和 `catalog.csv` 不含个人 Zotero 绑定或链接，也不读取 `.local/`。不要复制作者或其他用户的绑定来使用。
 
 同步目标是个人库中的 `awesome-on-device-LLM` 集合。已有论文、标签、笔记、其他集合和阅读状态保留；仓库的 PDF 复制为 Zotero 存储附件，不移动原件。**目前只支持已登录 Zotero 账号的个人库，不支持群组库或未登录的本地库。** 正整数账号 ID 是账号隔离的必要条件，不是本地路由 `0`，也不是插件内部的 libraryID。
 

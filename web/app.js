@@ -426,7 +426,9 @@
       notes.append(
         node(
           "p",
-          "尚无研究笔记。在仓库对应目录中创建 notes.md 后，点击「重新读取文件」查看。",
+          entry.notes_path
+            ? "研究笔记仍为空。请在仓库对应目录的 notes.md 中填写内容，再点击「重新读取文件」查看。"
+            : "尚无研究笔记。在仓库对应目录中创建 notes.md 后，点击「重新读取文件」查看。",
           "muted",
         ),
       );
@@ -440,7 +442,11 @@
     const panels = [body, notes];
     [
       "资源正文",
-      entry.notes_path ? "研究笔记 · 已记录" : "研究笔记 · 未创建",
+      entry.notes_path
+        ? data.notes_markdown?.trim()
+          ? "研究笔记 · 已记录"
+          : "研究笔记 · 空白"
+        : "研究笔记 · 未创建",
     ].forEach((label, index) => {
       const tab = button(label, () => activateTab(index));
       tab.id = `detail-tab-${index}`;
@@ -608,7 +614,7 @@
       node(
         "p",
         creating
-          ? "请确认 ID、类型与中文收藏理由；只有显式选择的标签会被写入。"
+          ? "请确认 ID、类型与中文收藏理由；只有显式选择的标签会被写入。收录时会创建空 notes.md 并添加阅读笔记入口。"
           : "仅提交你修改的字段。正文、笔记、未知字段及未修改的数据类型保持不变。ID 与类型不可更改。",
         "readonly-note",
       ),
@@ -891,7 +897,7 @@
         renderDetail();
         toast(
           creating
-            ? "资源已收录；未下载全文或创建笔记。"
+            ? "资源已收录，已创建空笔记和阅读入口；未下载全文。"
             : "已保存元数据并更新仓库索引。",
         );
         try {

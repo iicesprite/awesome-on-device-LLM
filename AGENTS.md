@@ -1,6 +1,6 @@
 # AGENTS.md
 
-端侧 LLM 推理与量化的学习资源库：每条资源一个目录，`resource.md` 的 YAML frontmatter 是唯一元数据源，独立的 `notes.md` 是可选阅读笔记，索引由脚本生成。`scripts/catalog.py` 负责校验、构建与搜索，`scripts/web.py` 和 `web/` 提供本地前端，`scripts/zotero_sync.py` 和 `scripts/zotero_import.js` 负责 Zotero 联动，流程见 [ZOTERO.md](ZOTERO.md)。
+端侧 LLM 推理与量化的学习资源库：每条资源一个目录，`resource.md` 的 YAML frontmatter 是唯一元数据源，新收录时创建独立的空 `notes.md`，索引由脚本生成。`scripts/catalog.py` 负责校验、构建与搜索，`scripts/web.py` 和 `web/` 提供本地前端，`scripts/zotero_sync.py` 和 `scripts/zotero_import.js` 负责 Zotero 联动，流程见 [ZOTERO.md](ZOTERO.md)。
 
 用户文档在 [README.md](README.md)，维护流程在 [CONTRIBUTING.md](CONTRIBUTING.md)。本文只写 agent 容易出错的约束。
 
@@ -31,7 +31,7 @@ npm run build --prefix site                        # 生成静态资料并构建
 ```text
 papers/ blogs/ docs/           资源条目，目录即类型
 <分类>/<id>/resource.md        必需，开头是 --- 包围的 YAML frontmatter
-<分类>/<id>/notes.md           可选，阅读后才创建
+<分类>/<id>/notes.md           新收录时创建空文件，开始阅读后填写；历史条目可缺省
 <分类>/<id>/resources/         本地 PDF、网页快照，被 Git 忽略
 <分类>/<id>/resources/assets/  笔记配图，随 Git 同步
 templates/                     resource.md、notes.md 模板，以模板为准
@@ -64,7 +64,7 @@ site/                         VitePress 默认主题与资源检索首页
 - `status` 只表示用户的阅读进度：`unread` / `reading` / `read`。新条目默认 `unread`。agent 写了分析也不代表用户已读，不要改成 `read`。
 - 同一篇论文的不同版本、发表页和代码放进同一条目，用 `links` 关联。添加前先按 DOI、arXiv ID、网址、标题在三个分类里查重。
 - 代码链接要实际核对后再写进 `links`。
-- Web 预览只是页面声明的元数据，不证明全文已读、版本最新或撤稿状态已核实。确认收录前仍需核对来源；Web 不下载 PDF、不创建笔记、不调用 Zotero。
+- Web 预览只是页面声明的元数据，不证明全文已读、版本最新或撤稿状态已核实。确认收录前仍需核对来源；Web 不下载 PDF、不调用 Zotero，确认新建时创建空笔记及跳转链接。
 - Web 和 Obsidian 编辑同一份资源卡。遇到 revision 冲突，保留输入、重新读取并合并，不绕过检查强行覆盖。只运行一个 Web 写入服务，不把单进程锁当作跨进程保护。
 
 **标签**
@@ -96,7 +96,7 @@ site/                         VitePress 默认主题与资源检索首页
 ## 写笔记
 
 - 从 `templates/notes.md` 出发，标题改成资源题名，删掉不适用的章节和 HTML 注释提示。已有笔记先通读再整合，不整体覆盖。
-- `notes.md` 可选且独立，不把笔记迁入资源卡；创建后在同目录卡片正文添加 `[阅读笔记](notes.md)`，未创建时不写悬空链接。
+- 新收录时在同目录创建零字节 `notes.md`，并在 `resource.md` 正文添加 `[阅读笔记](notes.md)`；不填模板或占位内容，不改变阅读状态。历史条目可缺少笔记，不批量补建或覆盖已有内容；笔记独立保存，不迁入资源卡。
 - 开头写来源版本、阅读范围和本次关注问题。页码一律注明是 PDF 页码还是论文页码。
 - 数字要带单位、基线、设备、模型、batch、输入输出长度，以及 prefill 或 decode 条件。
 - 区分三类内容：作者报告的结果、你的解释、本人实测。没运行过的东西不要写复现结果。

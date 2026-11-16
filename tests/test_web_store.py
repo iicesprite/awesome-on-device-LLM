@@ -165,19 +165,23 @@ class StoreTests(unittest.TestCase):
         self.assertEqual(self.store.update("example", detail["revision"], {}), detail)
         self.assertEqual(before, self.files())
 
-    def test_create_defaults_status_and_builds_indexes_without_notes_or_downloads(self):
+    def test_create_initializes_empty_notes_and_indexes_without_downloading(self):
         metadata = self.metadata()
         del metadata["status"]
         metadata["attachments"] = [{"url": "https://example.org/file.pdf", "path": "resources/file.pdf"}]
         detail = self.store.create(metadata)
         self.assertEqual(detail["entry"]["status"], "unread")
-        self.assertIsNone(detail["notes_markdown"])
-        self.assertIsNone(detail["notes_html"])
-        self.assertEqual(detail["entry"]["notes_path"], "")
+        self.assertEqual(detail["notes_markdown"], "")
+        self.assertEqual(detail["notes_html"], "")
+        self.assertEqual(detail["entry"]["notes_path"], "papers/example/notes.md")
         folder = self.root / "papers" / "example"
-        self.assertEqual({p.name for p in folder.iterdir()}, {"resource.md"})
+        self.assertEqual({p.name for p in folder.iterdir()}, {"resource.md", "notes.md"})
+        self.assertEqual((folder / "notes.md").read_bytes(), b"")
+        self.assertIn('#resource=example&amp;tab=notes', detail["body_html"])
+        self.assertEqual(detail, self.store.detail("example"))
         self.assertEqual(catalog.read_frontmatter(folder / "resource.md")["attachments"], metadata["attachments"])
         self.assertIn("量化研究", (self.root / "INDEX.md").read_text(encoding="utf-8"))
+        self.assertIn("(papers/example/notes.md)", (self.root / "INDEX.md").read_text(encoding="utf-8"))
         self.assertTrue((self.root / "catalog.csv").is_file())
         self.assertNotIn("status", metadata)
 
@@ -206,24 +210,26 @@ class StoreTests(unittest.TestCase):
         self.assert_error(400, self.store.create, self.metadata())
         self.assertEqual(before, self.files())
 
-    def test_create_index_failure_rolls_back_card_and_directory(self):
+    def test_create_write_failure_rolls_back_notes_card_indexes_and_directory(self):
         (self.root / "INDEX.md").write_bytes(b"old index")
         (self.root / "catalog.csv").write_bytes(b"old csv")
         before = self.files()
         atomic = web_store._atomic_bytes
-        failed = False
+        for failing_file in ("notes.md", "catalog.csv"):
+            with self.subTest(failing_file=failing_file):
+                failed = False
 
-        def fail_once(path, content):
-            nonlocal failed
-            if path.name == "catalog.csv" and not failed:
-                failed = True
-                raise OSError("simulated disk failure")
-            return atomic(path, content)
+                def fail_once(path, content):
+                    nonlocal failed
+                    if path.name == failing_file and not failed:
+                        failed = True
+                        raise OSError("simulated disk failure")
+                    return atomic(path, content)
 
-        with patch.object(web_store, "_atomic_bytes", side_effect=fail_once):
-            self.assert_error(400, self.store.create, self.metadata())
-        self.assertEqual(before, self.files())
-        self.assertFalse((self.root / "papers" / "example").exists())
+                with patch.object(web_store, "_atomic_bytes", side_effect=fail_once):
+                    self.assert_error(400, self.store.create, self.metadata())
+                self.assertEqual(before, self.files())
+                self.assertFalse((self.root / "papers" / "example").exists())
 
     def test_update_index_failure_restores_metadata_and_absent_indexes(self):
         self.add_entry()

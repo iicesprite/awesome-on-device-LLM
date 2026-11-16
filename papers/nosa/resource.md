@@ -10,6 +10,7 @@ tags:
   - topic/memory
   - system/offloading
   - system/sparse-inference
+  - system/native-sparse-attention
   - stage/decode
   - workload/long-context
   - availability/open-source
@@ -50,3 +51,5 @@ code_review:
 ---
 
 # NOSA: Native and Offloadable Sparse Attention
+
+[阅读笔记](notes.md)

@@ -152,12 +152,11 @@ class Store:
         except OSError as exc:
             raise StoreError(f"无法读取资源：{exc}") from exc
 
-    def _detail(self, entry, raw, notes=True):
+    def _detail(self, entry, raw, notes_markdown=None):
         _, _, body = _frontmatter_parts(raw)
         try:
             text = body.decode("utf-8")
-            notes_markdown = None
-            if notes and entry["notes_path"]:
+            if notes_markdown is None and entry["notes_path"]:
                 notes_markdown = self._safe(self.root / entry["notes_path"]).read_bytes().decode("utf-8-sig")
             return {
                 "entry": copy.deepcopy(entry),
@@ -309,11 +308,13 @@ class Store:
             if any(item["id"] == resource_id for item in entries) or folder.exists():
                 raise StoreError("该 id 或资源目录已存在，请使用其他 id", 409)
             path = folder / "resource.md"
-            entry = dict(data, metadata_path=path.relative_to(self.root).as_posix(), notes_path="")
-            raw = _card(data)
-            result = self._detail(entry, raw, notes=False)
+            notes_path = folder / "notes.md"
+            entry = dict(data, metadata_path=path.relative_to(self.root).as_posix(),
+                         notes_path=notes_path.relative_to(self.root).as_posix())
+            raw = _card(data) + "\n[阅读笔记](notes.md)\n".encode("utf-8")
+            result = self._detail(entry, raw, notes_markdown="")
             changed = sorted([*entries, entry], key=lambda item: (item["type"], item["id"]))
-            writes = self._writes(path, raw, changed, vocabulary)
+            writes = {notes_path: b"", **self._writes(path, raw, changed, vocabulary)}
             self._commit(writes, new_folder=folder)
             return result
 

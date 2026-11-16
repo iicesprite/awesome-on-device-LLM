@@ -54,7 +54,7 @@ npm run preview --prefix site
 2. 仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
 3. `.github/workflows/pages.yml` 在 `main` 推送时构建并发布；也可在 Actions 手动运行。PR 只构建验证，不发布。
 
-该仓库部署成功后的默认地址为 **https://iicesprite.github.io/awesome-on-decive-LLM/**。这是部署目标地址，不表示本地构建完成后已上线。子路径由工作流按仓库名设置，详细说明见 [维护指南](CONTRIBUTING.md#github-pages-开发与部署)。
+该仓库部署成功后的默认地址为 **https://iicesprite.github.io/awesome-on-device-LLM/**。这是部署目标地址，不表示本地构建完成后已上线。子路径由工作流按仓库名设置，详细说明见 [维护指南](CONTRIBUTING.md#github-pages-开发与部署)。
 
 ## 本地前端
 
@@ -73,7 +73,7 @@ uv run --locked python scripts/web.py --open
 
 公式使用本地 KaTeX 的 HTML/CSS 排版，并附带供辅助技术使用的 MathML；不依赖浏览器原生 MathML 完成视觉排版，也不访问 CDN。行内支持 `$x^2$` 和 `\(x^2\)`，块级支持 `$$...$$` 和 `\[...\]`，块内可换行。反引号、代码块和转义的分隔符不参与公式渲染；不支持的公式会保留 LaTeX 源码并提示错误。
 
-网址预览只解析返回的 HTML 元数据，不执行网页 JavaScript，不登录网站，不下载 PDF，也不核实全文、撤稿状态或最新版本。受限页面、纯 PDF 或无法读取的来源可转入明确标注的手动填写流程；未知作者、年份等应留空，不能推测。新收录不创建空笔记。
+网址预览只解析返回的 HTML 元数据，不执行网页 JavaScript，不登录网站，不下载 PDF，也不核实全文、撤稿状态或最新版本。受限页面、纯 PDF 或无法读取的来源可转入明确标注的手动填写流程；未知作者、年份等应留空。确认新收录时会同时创建空 `notes.md`，并在资源卡正文添加阅读笔记跳转；空笔记不表示已阅读。
 
 网址预览需要联网；预览本身不写仓库，点击确认后才创建资源卡并更新索引。遇到重复论文应打开已有条目，不通过换 ID 绕过去重。Web 工作台不会下载附件或同步 Zotero，附件字段只记录来源和预期路径；Zotero 联动需单独执行[导入与核验流程](ZOTERO.md#准备导入与核验)。
 
@@ -94,9 +94,10 @@ uv run --locked python scripts/web.py --open
    ```powershell
    New-Item -ItemType Directory -Path papers/my-paper
    Copy-Item templates/resource.md papers/my-paper/resource.md
+   New-Item -ItemType File -Path papers/my-paper/notes.md
    ```
 
-2. 编辑 `resource.md` 开头的 YAML frontmatter：核实标题、来源网址、版本及可选作者和年份，填写中文收藏理由和规范标签，并把 `id` 改成目录名 `my-paper`。新条目默认 `status: unread`；卡片正文可选，不作为索引元数据。
+2. 编辑 `resource.md` 开头的 YAML frontmatter：核实标题、来源网址、版本及可选作者和年份，填写中文收藏理由和规范标签，并把 `id` 改成目录名 `my-paper`。新条目默认 `status: unread`；保留模板正文中的 `[阅读笔记](notes.md)`，`notes.md` 此时保持零字节，不填模板或占位内容。
 3. 如需保存原文，按[附件说明](#下载-pdf-或网页快照)记录来源和路径，将核对过版本的文件保存到该位置。只有附件记录、不含本地文件时，应保留这一缺口，不宣称原文已保存。
 4. 手动建卡或在 Obsidian 中修改后，重新生成索引；Web 确认收录已自动完成此步骤：
 
@@ -104,7 +105,7 @@ uv run --locked python scripts/web.py --open
    uv run --locked python scripts/catalog.py build
    ```
 
-校验通过、索引出现新条目，即完成收录。此时不必创建 `notes.md`。
+校验通过、索引出现新条目，即完成收录。新条目应有空 `notes.md` 及资源卡跳转链接；不补建历史条目的笔记，不覆盖已有内容。
 
 命名规则：
 
@@ -135,13 +136,13 @@ uv run --locked python scripts/web.py --open
 
 ### 3. 开始阅读后再写笔记
 
-将资源卡的 `status` 改为 `reading`，复制独立笔记模板：
+开始阅读时，将资源卡的 `status` 改为 `reading`。确认 `notes.md` 仍为空或不存在后，可复制笔记模板；已有内容应先通读再整合，不能覆盖：
 
 ```powershell
 Copy-Item templates/notes.md papers/my-paper/notes.md
 ```
 
-在卡片正文添加相对链接 `[阅读笔记](notes.md)`；没有笔记时不添加该链接。笔记开头记录来源版本和阅读范围，正文按需删改模板。用户读完后再改为 `read`，agent 生成分析不自动代表用户已读。修改状态或笔记后运行 `uv run --locked python scripts/catalog.py build`。
+新收录的卡片已带 `[阅读笔记](notes.md)`；历史条目首次创建笔记时再补这个链接，不重复添加。笔记开头记录来源版本和阅读范围，正文按需删改模板。用户读完后再改为 `read`，agent 生成分析不自动代表用户已读。修改状态或笔记后运行 `uv run --locked python scripts/catalog.py build`。
 
 ## 生成索引
 
@@ -153,7 +154,7 @@ uv run python scripts/catalog.py build
 
 > **只维护 `resource.md` 的 frontmatter、可选卡片正文和独立的 `notes.md`，不要直接编辑 `INDEX.md` 和 `catalog.csv`。** 生成文件每次都会被覆盖。
 
-- 笔记：存在 `notes.md` 时，索引自动生成链接；不存在则显示 `—`。
+- 笔记：存在 `notes.md` 时（包括空文件），索引自动生成链接；历史条目不存在时显示 `—`。空文件不表示已阅读或已有分析。
 - 离线：脚本不检查链接是否可访问，不下载附件，也不要求附件已存在。
 - 公共索引与 CSV 不包含个人 Zotero 链接，也不读取本机绑定或下载状态。登录自己的 Zotero 账号并完成 [联动流程](ZOTERO.md) 后，运行 `uv run --locked python scripts/zotero_sync.py index` 生成 `.local/zotero/index.md`，在本机打开它进入自己的条目或 PDF。该文件不入 Git，不要复制作者的关联。
 
@@ -161,7 +162,7 @@ uv run python scripts/catalog.py build
 
 1. 在 Obsidian 中将仓库根目录打开为 vault，启用核心插件 **Bases**。
 2. 打开根目录 [资源库.base](资源库.base)，使用 **全部资源 / 阅读队列 / 主题专题 / 设备专题 / 稀疏注意力** 视图浏览、筛选资源。
-3. 在 Bases 中编辑 `status`、`summary`、`tags` 等简单属性，编辑后点击其他单元格或工具栏完成保存；通过“打开卡片”列进入资源卡，已有笔记可通过正文中的 `[阅读笔记](notes.md)` 打开。新建笔记后再给卡片添加这个相对链接。
+3. 在 Bases 中编辑 `status`、`summary`、`tags` 等简单属性，编辑后点击其他单元格或工具栏完成保存；通过“打开卡片”列进入资源卡，再从正文的 `[阅读笔记](notes.md)` 打开笔记。新收录已有空笔记及入口；历史条目首次创建笔记时再补相对链接。
 
    笔记编辑视图中可用 `Ctrl+单击` 跟随链接；在阅读视图中直接单击。
 
@@ -202,7 +203,7 @@ uv run python scripts/catalog.py search --query AWQ
 | 路径 | 内容 | 是否入 Git |
 | --- | --- | --- |
 | `<分类>/<id>/resource.md` | 资源卡，YAML frontmatter 为唯一元数据源（必需）；正文可选 | 是 |
-| `<分类>/<id>/notes.md` | 阅读笔记（可选） | 是 |
+| `<分类>/<id>/notes.md` | 独立阅读笔记（新收录时创建空文件，历史条目可缺省） | 是 |
 | `<分类>/<id>/resources/` | 本地 PDF、网页快照（配图子目录除外） | 否 |
 | `<分类>/<id>/resources/assets/` | 笔记引用的图片 | 是 |
 

@@ -10,6 +10,7 @@ tags:
   - topic/memory
   - system/offloading
   - system/sparse-inference
+  - system/native-sparse-attention
   - system/operator-fusion
   - stage/decode
   - workload/long-context

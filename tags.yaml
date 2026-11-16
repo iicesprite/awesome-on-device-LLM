@@ -44,6 +44,8 @@ tags:
   system/memory-layout: {label: 内存布局, aliases: [memory-layout]}
   system/speculative-decoding: {label: 推测解码, aliases: [speculative-decoding]}
   system/sparse-inference: {label: 稀疏推理, aliases: [sparse-inference]}
+  # 稀疏模式参与模型训练，或系统直接针对该类模型做设计与评测；不含仅推理时裁剪稠密注意力。
+  system/native-sparse-attention: {label: 原生稀疏注意力, aliases: [native-sparse-attention, 原生稀疏]}
   system/kv-eviction: {label: KV淘汰, aliases: [kv-eviction]}
   system/lut: {label: 查表计算, aliases: [lut, table-lookup]}
   system/error-compensation: {label: 运行时误差补偿, aliases: [error-compensation, dynamic-error-compensation]}
