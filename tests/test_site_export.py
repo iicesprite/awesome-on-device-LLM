@@ -88,6 +88,19 @@ class SiteExportTests(unittest.TestCase):
             self.assertNotIn('href="' + target, result)
         self.assertIn(">PDF</a>", result)
 
+    def test_only_opted_in_translation_is_exported_and_linked(self):
+        folder = self.add_entry("pariskv", notes="# 阅读笔记")
+        (folder / "part_translate.md").write_text("# 部分译文正文", encoding="utf-8")
+        (self.root / "papers" / "alpha" / "part_translate.md").write_text("非公开译稿", encoding="utf-8")
+        self.export(base="/project/")
+        for page in ("resources/pariskv.md", "notes/pariskv.md"):
+            body = (self.output / page).read_text(encoding="utf-8")
+            self.assertIn('href="/project/translations/pariskv.html"', body)
+        translation = (self.output / "translations" / "pariskv.md").read_text(encoding="utf-8")
+        self.assertIn("部分译文正文", translation)
+        self.assertIn('href="/project/notes/pariskv.html"', translation)
+        self.assertFalse((self.output / "translations" / "alpha.md").exists())
+
     def test_only_referenced_note_rasters_are_copied(self):
         folder = self.root / "papers" / "alpha"
         assets = folder / "resources" / "assets"

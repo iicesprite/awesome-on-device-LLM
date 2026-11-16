@@ -2,6 +2,10 @@
 
 来源：[ICML 2026 正式版](https://proceedings.mlr.press/v306/qi26b.html)（[PDF](https://raw.githubusercontent.com/mlresearch/v306/main/assets/qi26b/qi26b.pdf)）。阅读正文 §1–6 与附录 B–D，核对了图 2、7–10 和表 2、3、5–7。本次想弄清两件事：长生成时粗检索为什么容易失效？原精度 KV 放在主存后，每步还要付多少检索和传输成本？
 
+## Drifting——漂移是什么？
+
+生成过程中，新产生的 key 的分布逐渐偏离最初输入阶段（prefill）的 key 分布
+
 ## 长生成会让按 prompt 聚类的质心过时（§1–3）
 
 长上下文下，全注意力每步 decode 都要读取所有历史 KV，开销随上下文线性增长。按 query 只取相关 KV 可以降低带宽消耗。不过，若质心只用 prefill 的 key 拟合，后续生成的 key 越积越多，原先的分桶就不一定适合现在的数据。图 1 把 prefill 拟合的质心和用全程 key 重拟合的质心画在一起：两者有明显偏移。对短提示、长输出的推理任务，这比长提示、短输出更值得担心。
@@ -10,15 +14,360 @@ ParisKV 保留完整历史，每步找一批候选，只在候选中估计真正
 
 ## Prefill：用固定方向分桶，顺手建好重排摘要（§4.1）
 
-对 query 和 key 做 L2 归一化，再用相同的随机正交变换（实现采用 SRHT）旋转。然后把旋转后的向量分为多个低维子空间，分别记录方向和半径。每个子空间的质心取坐标绝对值全相等的所有符号组合；最近质心的编号可从方向的符号得到。这样不用在 prefill 跑 K-means，也不用在 decode 重训质心。旋转不改变归一化向量之间的内积；近似各向同性是选这种码本的依据，不等于给任意 query 保证固定召回率。
+对 query 和 key 做 L2 归一化，再用相同的随机正交变换（实现采用 SRHT）旋转。然后把旋转后的向量分为**多个低维子空间**，分别记录方向和半径。每个子空间的质心取坐标绝对值全相等的所有符号组合；最近质心的编号可从方向的符号得到。这样不用在 prefill 跑 K-means，也不用在 decode 重训质心。旋转不改变归一化向量之间的内积；近似各向同性是选这种码本的依据，不等于给任意 query 保证固定召回率。
 
 每个 key 在 GPU 上留两份用于检索的信息：粗筛用的质心 ID，以及重排用的方向码和校准权重。方向码每坐标 4 bit（1 bit 符号、3 bit 幅值）；权重把原 key 的模、子空间半径和量化方向与真实方向的对齐因子合在一起。重排时再乘回 query 的模，估计的是原始内积，不是余弦相似度。主存中的原始 K、V 不按 4 bit 压缩。
+
+![ParisKV 流程：prefill 建立索引并卸载 KV，decode 粗筛、重排后按需取回](resources/assets/Pasted%20image%2020261116201425.png)
+
+图 2（ICML 2026 正式版，PDF 第 4 页）：prefill 把检索摘要留在 GPU；decode 先用摘要粗筛和重排，再通过 UVA 取回选中的原始 KV。
+### B.2.2精读
+
+**B.2.2 解决的是：全精度 key 已经放在 CPU 上，GPU 如何只靠 4-bit 摘要，估计候选的真实 $q^\top k$ 并重新排序。**
+
+它与 B.2.1 的区别是：
+
+- **B.2.1：** 看 key 属于哪些中心，通过整数加分粗筛。
+- **B.2.2：** 读取候选 key 更细致的量化表示，估计内积，选出最终 Top-k。
+
+下面按原文公式（16）—（24）展开。
+
+#### 1. 最终要估计什么？
+
+目标是原始 key 与 query 的内积：
+
+$$s_i=\langle k_i,q\rangle.$$
+
+**不是只估计方向相似度。**因为两个 key 即使方向相同，长度不同，内积也可能不同。
+
+例如：
+
+$$k_1=(1,0),\qquad k_2=(3,0),\qquad q=(1,0).$$
+
+两者与 query 的余弦相似度都是 1，但内积分别是 1 和 3。因此，前面归一化时去掉的长度信息，最后必须补回来。
+
+#### 2. 先把精确内积分解成几个部分
+
+##### ① 取出原始向量长度
+
+定义单位向量：
+
+$$\hat k_i=\frac{k_i}{\|k_i\|_2},
+\qquad
+\hat q=\frac{q}{\|q\|_2}.$$
+
+于是：
+
+$$\langle k_i,q\rangle
+=
+\|k_i\|_2\|q\|_2
+\langle\hat k_i,\hat q\rangle.$$
+
+##### ② 旋转，但不改变归一化后的内积
+
+使用同一个正交矩阵 $R$：
+
+$$\tilde k_i=R\hat k_i,\qquad
+\tilde q=R\hat q.$$
+
+由于正交旋转保持内积：
+
+$$\langle\hat k_i,\hat q\rangle
+=
+\langle\tilde k_i,\tilde q\rangle.$$
+
+##### ③ 拆成子空间，再分离半径与方向
+
+对每个子空间 $b$：
+
+$$\tilde k_{i,b}=r_{i,b}u_{i,b},$$
+
+其中：
+
+- $r_{i,b}=\|\tilde k_{i,b}\|_2$：这一块的长度；
+- $u_{i,b}$：这一块的单位方向。
+
+因此，精确的原始内积可以写成：
+
+$$\boxed{
+\langle k_i,q\rangle
+=
+\|k_i\|_2\|q\|_2
+\sum_{b=1}^{B}
+r_{i,b}
+\langle u_{i,b},\tilde q_b\rangle
+}$$
+
+这就是后面估计器的起点：**长度信息单独保存，主要压缩方向 $u_{i,b}$。**
+
+注意，$\tilde q_b$ 是“整个 query 归一化、旋转后的一个分块”，**不是再次归一化到单位长度的子向量**。
+
+#### 3. 用 4 bit 编码方向的每个坐标
+
+原文 Step 1 将 $u_{i,b}$ 的每个坐标编码为：
+
+$$\underbrace{1\text{ bit}}_{\text{正负号}}
++
+\underbrace{3\text{ bit}}_{\text{幅值档位}}.$$
+
+##### 符号直接保留
+
+$$s_{i,b,j}=\operatorname{sign}\big((u_{i,b})_j\big).$$
+
+##### 绝对值分成 8 档
+
+利用 7 个阈值，将坐标绝对值映射到编号：
+
+$$t_{i,b,j}\in\{0,\ldots,7\}.$$
+
+每个编号对应一个重建幅值 $a[t]$。解码后：
+
+$$(v_{i,b})_j=s_{i,b,j}\,a[t_{i,b,j}].$$
+
+**这里的 $v_{i,b}$ 是“量化后重建的 key 方向”，不是 KV 中的 value。**
+
+例如，某坐标只需保存：
+
+```
+负号 + 幅值档位 5
+```
+
+重排时查表恢复成：
+
+```
+−a[5]
+```
+
+整个方向向量由这些坐标重建出来，但不需要保存原来的全精度坐标。
+
+##### 这 8 个幅值怎么选？
+
+B.1.2 根据旋转后单位方向坐标的理论分布，离线运行 Lloyd–Max 标量量化，得到阈值与重建值，而不是简单等间隔量化；这些值在相同子空间维度配置下共享。其 Beta 分布推导假设 Haar 随机正交旋转，实际 SRHT 实现则在近似各向同性假设下复用这些先验。
+
+#### 4. 为什么还需要对齐修正 $\alpha$？
+
+如果直接用重建方向 $v_{i,b}$ 代替真实方向 $u_{i,b}$，就会得到：
+
+$$\langle u_{i,b},\tilde q_b\rangle
+\approx
+\langle v_{i,b},\tilde q_b\rangle.$$
+
+但量化会改变向量，因此原文 Step 2 定义：
+
+$$\alpha_{i,b}
+=
+\langle v_{i,b},u_{i,b}\rangle,$$
+
+并采用修正估计：
+
+$$\boxed{
+\langle u_{i,b},\tilde q_b\rangle
+\approx
+\frac{\langle v_{i,b},\tilde q_b\rangle}
+{\alpha_{i,b}}
+}
+\tag{19}$$
+
+$\alpha$ 衡量重建向量在真实方向上的投影；由于 $v$ 不一定是单位向量，**它不应直接被理解为两个单位方向的余弦相似度**。
+
+##### 用向量分解理解这个除法
+
+下面是对公式（19）的数学解释。
+
+因为 $u$ 是单位向量，可以精确地写成：
+
+$$v=\alpha u+e,
+\qquad e\perp u.$$
+
+也就是说，量化后的 $v$ 包含：
+
+- 沿真实方向的部分 $\alpha u$；
+- 偏离真实方向的误差 $e$。
+
+于是：
+
+$$\frac{\langle v,\tilde q_b\rangle}{\alpha}
+=
+\langle u,\tilde q_b\rangle
++
+\frac{\langle e,\tilde q_b\rangle}{\alpha}.$$
+
+**除以 $\alpha$，能校正沿真实方向的缩放失真，但不能消除所有方向误差。** 所以它是近似内积估计，而不是恢复出原始 key。
+
+##### 一个数值示例
+
+以下数值仅用于说明修正机制，不是论文实际的量化级别。
+
+设：
+
+$$u=(0.6,0.8),\quad
+v=(0.5,0.75),\quad
+\tilde q_b=(0.8,0.6).$$
+
+则：
+
+$$\alpha=v^\top u=0.9.$$
+
+真实方向内积为：
+
+$$u^\top\tilde q_b=0.96.$$
+
+直接使用量化方向得到：
+
+$$v^\top\tilde q_b=0.85.$$
+
+修正后为：
+
+$$\frac{0.85}{0.9}\approx0.9444.$$
+
+在这个例子中，修正让估计更接近真实值，但仍不是完全相等。
+
+#### 5. 把方向估计变回原始内积
+
+将修正后的方向内积代回第 2 节的分解：
+
+$$\widehat{\langle k_i,q\rangle}
+=
+\|q\|_2
+\sum_{b=1}^{B}
+\left(
+\|k_i\|_2
+\frac{r_{i,b}}{\alpha_{i,b}}
+\right)
+\langle v_{i,b},\tilde q_b\rangle.$$
+
+看括号里的部分：
+
+$$\|k_i\|_2\frac{r_{i,b}}{\alpha_{i,b}}.$$
+
+**它完全不依赖当前 query。** 所以论文将它预先合并为一个权重：
+
+$$\boxed{
+w_{i,b}
+=
+\|k_i\|_2
+\frac{r_{i,b}}{\alpha_{i,b}}
+}
+\tag{23}$$
+
+最终在线计算只剩下：
+
+$$\boxed{
+\hat s_i
+=
+\|q\|_2
+\sum_{b=1}^{B}
+w_{i,b}
+\langle v_{i,b},\tilde q_b\rangle
+}
+\tag{24}$$
+
+这几个因子的作用分别是：
+
+|因子|作用|
+|---|---|
+|$\|k_i\|_2$|恢复原始 key 的长度|
+|$r_{i,b}$|恢复该子空间的长度／贡献大小|
+|$1/\alpha_{i,b}$|校正量化方向的对齐失真|
+|$\langle v_{i,b},\tilde q_b\rangle$|当前 query 与重建方向的匹配程度|
+|$\|q\|_2$|恢复原始 query 的长度|
+
+这里的 $w_{i,b}$ 是**重排缩放权重**，与 B.2.1 的整数奖励档位权重不是一回事。
+
+#### 6. Prefill 和 decode 分别做什么？
+
+##### 建立摘要时：把只依赖 key 的计算提前做完
+
+在完整 key 还可访问时：
+
+```
+归一化、旋转 key
+    ↓
+拆成子空间，得到半径 r 和真实方向 u
+    ↓
+把 u 量化成 4-bit 编码
+    ↓
+得到重建方向 v，计算 α = vᵀu
+    ↓
+合并计算 w = ||k|| × r / α
+    ↓
+GPU 保存 4-bit 编码和 w
+```
+
+因此，重排时不需要重新取得真实方向 $u$，也不需要单独保存 $\alpha$ 和 $r$：它们已经合并进 $w$。
+##### Decode 重排时：只处理粗筛留下的候选
+
+```
+取出候选 key 的 4-bit 编码和 w
+    ↓
+解码每个坐标的符号、幅值
+    ↓
+与当前 query 的对应子空间做点积
+    ↓
+乘以 w，跨子空间累加
+    ↓
+按估计分数选最终 Top-k
+```
+
+由公式还可以直接推导：**对于同一个非零 query，$\|q\|_2$ 对所有候选都相同，因此仅为了确定 Top-k 排名时，可以省略这个公共正因子。** 但不同 key 的长度不同，$\|k_i\|_2$ 不能同样省掉。
+
+**概括起来，B.2.2 就是：用 4-bit 编码保存 key 的细粒度方向，再用预计算权重补回长度并校正量化失真，让 GPU 不读取全精度 key，也能估计原始内积来精排。**
 
 ## Decode：先用方向投票，再取回选中的 KV（§4.2–4.3）
 
 最早的 sink token、最近的 local 窗口与新生成 token 的更新缓冲留在 GPU。缓冲攒满后向前滑动窗口，给移出窗口的 key 建索引，异步把对应原始 KV 搬去主存。这样既不会每步重建索引，也不会把刚生成的数据立即送去往返 PCIe。
 
 检索时，query 在各子空间给方向相近的桶投票，累加后常只保留历史区约 5%–10% 的候选。融合 CUDA kernel 解包候选的低位码、计算并校准内积，再从中选 top-k。GPU 通过 UVA 直接读主存中这些 token 的原始 KV，避免每步由 CPU 发起细碎的拷贝。实验里检索预算为 100 个历史 token，不包括常驻的 sink/local 区；论文也按任务设定了短序列走全注意力的阈值（表 1）。
+
+### UVA：如何减小开销
+
+论文给出的解释是：**GPU 内核直接按需读取 CPU 内存中的 Top-k KV，不必让 CPU 为每次检索结果组织拷贝。** 下面结合 CUDA 的内存机制解释这个过程。[作者实现说明](https://github.com/amy-77/ParisKV#how-it-works)
+
+#### 1. UVA 让 GPU 能“找到”CPU 内存里的数据
+
+UVA（统一虚拟寻址）把 CPU 和 GPU 的内存放进统一的虚拟地址空间；配合**映射的锁页主机内存（mapped pinned memory）**，GPU 内核就能通过指针访问 CPU 内存。**不是开启 UVA 后，任意普通 CPU 内存都自动能被 GPU 直接读取。**[CUDA 文档](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/understanding-memory.html#unified-virtual-address-space)
+
+于是，GPU 内核里的读取逻辑可以概念性地写成：
+
+```
+// 示意：在 GPU 内核中执行
+id = topk_indices[j];
+value = host_kv[id];   // 指向已映射的 CPU 内存
+```
+
+这条读取指令会触发跨 CPU–GPU 互连的数据传输，而不需要 CPU 另外发出一次 `cudaMemcpy`。[CUDA 映射内存说明](https://docs.nvidia.com/cuda/archive/12.3.2/cuda-c-programming-guide/index.html#mapped-memory)
+
+#### 2. 为什么能减少 CPU 调度？
+
+对比下面两种**示意流程**：
+
+```
+CPU 组织搬运：
+GPU 得到 Top-k 索引
+    → CPU 获取索引
+    → CPU 收集对应 KV、提交拷贝
+    → GPU 使用 KV
+
+GPU 按需读取：
+GPU 得到 Top-k 索引
+    → GPU 内核根据索引直接读取 CPU 中的 KV
+    → GPU 使用 KV
+```
+
+关键不只是地址统一，而是 **“选哪些 KV”和“读取这些 KV”都由 GPU 完成**。ParisKV 的检索结果本来就在 GPU 上，因此不必为了搬运再把这份结果交给 CPU 处理；作者的实现把检索和 UVA 读取都放在 GPU 路径上。[作者实现说明](https://github.com/amy-77/ParisKV#how-it-works)
+
+由此省掉的是这条路径中的**索引回传、CPU 端收集与拷贝提交，以及相应的协调等待**，而不是整个程序不再需要 CPU。
+
+#### 3. “没有显式拷贝”不等于“没有传输”
+
+KV 数据仍要经过 PCIe 或相应的 CPU–GPU 互连到达 GPU；改变的是**传输由谁发起**：
+
+- 显式拷贝：CPU 提交搬运命令。
+- 映射内存读取：GPU 的访存指令触发传输。
+
+远程读取仍受互连带宽和延迟限制，也不等同于读取本地显存；因此这种方式并不保证对所有访问模式都更快。[CUDA 文档](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/understanding-memory.html#mapped-memory)
+
+**一句话：UVA 配合映射内存，让 GPU 从“算好索引后等 CPU 搬数据”，变成“算好索引后自己去取数据”。**
 
 ## 实验：分开看准确率、decode 和 prefill（§5、附录 D）
 

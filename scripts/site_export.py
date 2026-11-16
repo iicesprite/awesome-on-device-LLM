@@ -25,6 +25,8 @@ MARKER = ".site-export"
 MARKER_CONTENT = "awesome-on-device-llm site export v1\n"
 PUBLIC_FIELDS = ("id", "title", "type", "url", "status", "summary", "tags", "authors", "year", "venue", "doi")
 RASTER = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".ico"}
+# Only these explicitly selected companion documents are public.
+TRANSLATIONS = {"pariskv": "part_translate.md"}
 
 
 def plain_path(path):
@@ -102,9 +104,11 @@ class Resolver:
         self.pages = {}
         for item in entries:
             self.pages[item["metadata_path"]] = item["resource_path"]
+            folder = PurePosixPath(item["metadata_path"]).parent
             if item["notes_path"]:
-                category = PurePosixPath(item["metadata_path"]).parent
-                self.pages[(category / "notes.md").as_posix()] = item["notes_path"]
+                self.pages[(folder / "notes.md").as_posix()] = item["notes_path"]
+            if item.get("translation_path"):
+                self.pages[(folder / TRANSLATIONS[item["id"]]).as_posix()] = item["translation_path"]
 
     def __call__(self, value, *, image=False):
         if not isinstance(value, str) or "\\" in value or any(ord(c) < 32 for c in value):
@@ -156,9 +160,9 @@ class Resolver:
         return self.base + page + fragment if page else None
 
 
-def page(entry, vocabulary, body, resolver, *, notes=False):
+def page(entry, vocabulary, body, resolver, *, suffix=""):
     escape = html.escape
-    title = entry["title"] + (" · 阅读笔记" if notes else "")
+    title = entry["title"] + suffix
     frontmatter = yaml.safe_dump({"title": title, "description": entry["summary"]}, allow_unicode=True, sort_keys=False).strip()
     chunks = [f"<p>{escape(entry['summary'])}</p>"]
     details = [catalog.TYPE_LABELS[entry["type"]], catalog.STATUS_LABELS[entry["status"]]]
@@ -173,6 +177,8 @@ def page(entry, vocabulary, body, resolver, *, notes=False):
     navigation.append(("资源详情", resolver.base + entry["resource_path"]))
     if entry["notes_path"]:
         navigation.append(("阅读笔记", resolver.base + entry["notes_path"]))
+    if entry.get("translation_path"):
+        navigation.append(("部分译文", resolver.base + entry["translation_path"]))
     chunks.append('<nav aria-label="资源导航">' + " · ".join(f'<a href="{escape(url, quote=True)}">{label}</a>' for label, url in navigation) + "</nav>")
     chunks.append('<p class="resource-tags">' + " ".join(f'<a href="{escape(resolver.base + "?tag=" + quote(tag, safe=""), quote=True)}">{escape(vocabulary[tag]["label"])}</a>' for tag in entry["tags"]) + "</p>")
     chunks.append(note_render.render_markdown(body, entry["id"], url_resolver=resolver))
@@ -211,6 +217,10 @@ def export_site(root=catalog.DEFAULT_ROOT, output=None, base="/"):
         item = {key: entry[key] for key in PUBLIC_FIELDS if key in entry}
         item["resource_path"] = f"resources/{entry['id']}.html"
         item["notes_path"] = f"notes/{entry['id']}.html" if entry["notes_path"] else ""
+        if filename := TRANSLATIONS.get(entry["id"]):
+            translation = plain_path((root / entry["metadata_path"]).parent / filename)
+            if translation.is_file():
+                item["translation_path"] = f"translations/{entry['id']}.html"
         item["search_text"] = " ".join(str(value) for key in PUBLIC_FIELDS for value in (item.get(key, []) if isinstance(item.get(key), list) else [item.get(key, "")]))
         public.append(item)
     assets, pages = {}, {}
@@ -223,7 +233,11 @@ def export_site(root=catalog.DEFAULT_ROOT, output=None, base="/"):
         pages[f"resources/{item['id']}.md"] = page(item, vocabulary, without_frontmatter(source.read_text(encoding="utf-8-sig")), resolver)
         if original["notes_path"]:
             resolver.allow_images = True
-            pages[f"notes/{item['id']}.md"] = page(item, vocabulary, without_frontmatter((root / original["notes_path"]).read_text(encoding="utf-8-sig")), resolver, notes=True)
+            pages[f"notes/{item['id']}.md"] = page(item, vocabulary, without_frontmatter((root / original["notes_path"]).read_text(encoding="utf-8-sig")), resolver, suffix=" · 阅读笔记")
+        if item.get("translation_path"):
+            resolver.allow_images = True
+            translation = source.with_name(TRANSLATIONS[item["id"]])
+            pages[f"translations/{item['id']}.md"] = page(item, vocabulary, without_frontmatter(translation.read_text(encoding="utf-8-sig")), resolver, suffix=" · 部分译文")
     pages["index.md"] = '---\nlayout: page\ntitle: 端侧 LLM 资源库\n---\n\n<ResourceCatalog />\n'
     pages["catalog.json"] = json.dumps({"entries": public, "tags": {tag: {"label": info["label"], "aliases": info.get("aliases", [])} for tag, info in vocabulary.items()}}, ensure_ascii=False, indent=2) + "\n"
     # Validate and read all sources before replacing any previous generated output.
