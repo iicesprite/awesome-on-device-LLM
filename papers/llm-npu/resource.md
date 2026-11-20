@@ -10,6 +10,7 @@ tags:
   - backend/npu
   - system/heterogeneous
   - system/offloading
+  - workload/agent-serving
   - stage/prefill
   - availability/open-source
 links:

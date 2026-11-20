@@ -23,6 +23,7 @@ tags:
   - backend/cuda
 links:
   code: https://github.com/sjtu-zhao-lab/ECHO
+  artifact: https://github.com/MachineLearningSystem/26OSDI-ECHO
 attachments:
   - url: https://www.usenix.org/system/files/osdi26-liu-guangda.pdf
     path: resources/echo-osdi2026.pdf

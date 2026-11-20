@@ -54,6 +54,8 @@ tags:
   system/near-data-processing: {label: 近数据处理, aliases: [near-data-processing, ndp, ndp-dimm]}
   system/expert-caching: {label: 专家缓存, aliases: [expert-caching, expert-cache]}
   workload/online-serving: {label: 在线推理服务, aliases: [online-serving]}
+  # 针对智能体请求设计推理服务，或用实际/模拟的智能体请求测量服务性能；仅在引言提及或可作基线不算。
+  workload/agent-serving: {label: 智能体推理服务, aliases: [agent serving, agent-serving, agentic serving]}
   workload/offline-batch: {label: 离线批量推理, aliases: [offline-batch, batch-inference]}
   workload/long-context: {label: 长上下文推理, aliases: [long-context]}
   stage/prefill: {label: 预填充, aliases: [prefill]}

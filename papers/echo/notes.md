@@ -22,6 +22,10 @@ ECHO 支持混合执行，但作者更推荐 prefill/decode 分离：长 prefill
 
 **Prefill 跨 query 块。** 算完块 i 的索引分数后，不跑完整 radix top-k，先做一轮 256 桶的粗直方图，只取肯定高于临界桶的一部分。第 k 高分的预测值用来平移分数，减少积在临界桶里的 token。块 i 回读这部分时，indexer 同时计算块 i+1；没提前取到的数据仍等精确选择后补齐。
 
+![ECHO 的跨 query 预取：处理完 Q0 的分数后从主存加载候选 KV，此时计算单元已开始处理 Q1](resources/assets/fig11-inter-query.png)
+
+图源：Liu 等，[OSDI 2026 正式版，图 11，PDF 第 11 页（论文页 26）](https://www.usenix.org/system/files/osdi26-liu-guangda.pdf#page=11)。看右上角的时间线：紫色 L0 是为 Q0 取数据，蓝色 S10、S11 是给 Q1 算分。能省下的是两者重叠的那段时间。
+
 这两条路共用一个做法：在 DeepGEMM indexer kernel 里给预取单独分配 warp，让 TMA 搬入 indexer 用的 K、GEMM 计算分数、预取 warp 根据已得分数拉取 MLA KV，尽可能并行。论文所称「无损」，指新增的预取流程只改数据到达的时机，不换掉原生 DSA 确定的 top-k；它没有把稀疏注意力变回全注意力。
 
 ## 吞吐能上去，轻负载下的逐 token 延迟仍会增加（§6）
@@ -35,11 +39,21 @@ ECHO 支持混合执行，但作者更推荐 prefill/decode 分离：长 prefill
 | ShareGPT 的 100 条短请求，prefill/decode 混合运行，连续批处理 | 对 SGLang，平均首 token 时延最多增加 7.9%，ITL 增加 2.7%–27.8%；请求率为每秒 0.1–0.2 条时，平均端到端时延增加 15.9%–19.2%（图 15）。正文未给这组短请求的固定输入输出长度。 |
 | Decode 预取开关；图 18、19 | 在 32K–128K token、batch 1–8 的微基准中，命中率 90% 时 indexer 与保证取回合计最高约加速 1.51×；同 §6.2 的 InfiniteBench 测试里，仅打开 decode 预取最高多 4% 的生成吞吐。 |
 
-图 17 中，多数层的 GPU 池命中率已经达到 97%–99%，而图 16 的延迟分解显示 MoE 约占整步 decode 时间的 70%。这两点解释了为何微基准的 1.51× 没变成整条链路的同比加速。Prefill 的跨 query 预取只报告了微基准：256 或 512 个 query token、32K–128K 历史上下文，最高约 1.1×；上面的 PD 分离实验用预计算 KV，不能代替 prefill 端到端消融。
+图 17 中，多数层的 GPU 池命中率已达 97%–99%；图 16 里，MoE 又占了整步 decode 时间的约 70%。真正要等回读的时间原本就不多，所以把一段操作加速到 1.51×，并不会让整步生成也快这么多。
+
+## 追加 1K token 时，应该拿图 20 比什么？
+
+![256 和 512 个 query token 在三种历史长度下，开启预取前后的索引计算和回读耗时](resources/assets/fig20-prefill-latency.png)
+
+图源：Liu 等，[OSDI 2026 正式版，图 20，PDF 第 14 页（论文页 29）](https://www.usenix.org/system/files/osdi26-liu-guangda.pdf#page=14)。每组左柱关闭预取，右柱开启。青色是索引计算，黄色是还需等待的 KV 回读；看总高度才能判断预取赚回了多少时间。
+
+这是论文里最接近 agent 追加输入的实验：已有 32K、64K 或 128K 历史，再处理 256 或 512 个 query token。§6.4.3 报告，开启预取后，**索引加回读**这一段最高约快 1.1×。作者假设不同 query 的 top-k 位置随机分布。真实工具输出的相邻 token 可能反复选到同一批历史页，实际要传多少数据，取决于这些页去重后的并集。上表中 2.15× 的吞吐来自用预计算 KV 的 decode 实验；论文没有测 batch=1、追加 1K 时的端到端首 token 延迟。
+
+若在单张 5090 上做这个实验，值得保留图 20 的开关：固定选页结果和显存预算，只改变何时从 CPU 取页。然后和完整历史逐层双缓冲读取相比，同时看首 token 延迟和 PCIe 字节数。[Janus 的多轮实验](../janus/notes.md)给了一个反例：等精确选择结束再稀疏读取，有时比提前顺序读取整段历史还慢。Janus 从 SSD 读，ECHO 从主存读；两者不能共用一个速度数字。
 
 ## 读完之后：先问瓶颈在容量还是时延
 
-我会把 2.15× 记成「主存扩大并发容量」带来的结果，把 4% 记成「融合预取在这组负载里额外省掉的时间」。对于一个短请求，没被用来扩 batch 的 HBM 容量并不会转化成收益，反而要付缓存管理的固定成本。全长度自然生成也会出现长尾，个别 DP worker 留着长请求，图 14 的 Code.Run 就比 SGLang 慢 1.74%。
+这组实验里，把 KV 放到主存后能同时服务更多请求，decode 吞吐达到 SGLang 的 2.15 倍。在 ECHO 上单独打开融合预取，生成吞吐最多再提高 4%。单条短请求用不上多出来的并发容量，却照样要付缓存管理的成本。让请求自然生成到结束还会遇到长尾：少数 DP worker 最后只剩长请求，图 14 的 Code.Run 就比 SGLang 慢 1.74%。
 
 [FreeKV](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5137e40ee586c4f1fc3615cf8cee4f87-Abstract-Conference.html) 用上一 decode 步的信息提议下一步要取的 KV，并在难预测处做细粒度纠错；ECHO 在原模型的 indexer 里找提前量，最后取齐原模型的精确 top-k。[NSA](https://aclanthology.org/2025.acl-long.1126/) 和 InfLLM-V2 是模型注意力机制，ECHO 实验跑的是 DSA，不是这两个方案。§7 只说明块稀疏可改缓存粒度并扩展 GQA 的 KV-head 维度；预取也要求索引器给得出可提前利用的分数，不能把 DSA 的实验数字直接搬过去。
 

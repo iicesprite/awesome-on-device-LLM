@@ -15,6 +15,7 @@ tags:
 - system/speculative-decoding
 - system/dynamic-scheduling
 - workload/online-serving
+- workload/agent-serving
 - stage/prefill
 - stage/decode
 - memory/unified

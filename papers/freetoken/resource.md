@@ -19,6 +19,7 @@ tags:
   - system/expert-caching
   - system/memory-layout
   - workload/online-serving
+  - workload/agent-serving
   - workload/long-context
   - stage/prefill
   - stage/decode

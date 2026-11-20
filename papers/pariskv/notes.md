@@ -387,3 +387,99 @@ KV 数据仍要经过 PCIe 或相应的 CPU–GPU 互连到达 GPU；改变的�
 - 表 2 的 MATH500 列头和正文写 pass@1，图表题注却把它和 AIME25 放进 pass@8；读 MATH500 时以列头和正文为准。同一个百万 token 对照，摘要写 PQCache 约 44×、引言写 45×，上表采用 §5.2 的时延值计算。
 - PQCache 按推荐的 20% 预算运行，MagicPIG 的有效预算随长度变化，ParisKV 固定取 100 个历史 token。这是整套方法的对比，不能把速度倍数都归给 CUDA kernel 或 4-bit 编码。正文也没有用百万 token 的准确率结果验证该长度下的 top-100 质量。
 - [FreeKV](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5137e40ee586c4f1fc3615cf8cee4f87-Abstract-Conference.html) 把相邻 decode 步的检索与搬运排进流水线；ParisKV 则每步在 GPU 扫紧凑索引，减少要重排的历史 key 和要跨总线取回的 KV。对工作站或 UMA 设备，值得单独量的是粗筛 GPU 时间、实际传输量和首 token 时间。上述数据均来自论文，未做本机实测。
+
+## 一些锐评
+
+### 关于rebuttal
+
+#### 准确率基线问题
+
+**没有针对“DS-R1-Llama-8B 原模型为什么只有13.12分”给出具体解释。** 我重新核对了你下载的全部 rebuttal，作者回应的是“为什么检索能超过全注意力”，但没有解释这个基线为何这么低。
+
+Reviewer **pA8H**直接问：
+
+> For DS-R1-Llama-8B, what is the reason for the improved accuracy relative to the baseline?
+
+作者的回答是：
+
+- 检索可能具有**隐式去噪作用**，排除低重要性KV，使注意力分布更集中；
+- 增益很小，**小于0.5%**，处于正常评测波动范围；
+- 主要结论是接近无损，而非稳定超过全注意力。[作者回复 pA8H](https://openreview.net/forum?id=wxD4wTYQXt&noteId=1b8cJrzBHf)
+
+但这解释不了表3的差距
+
+|DS-R1-Llama-8B，LongBench v2|Overall|
+|---|--:|
+|Full Attention|13.12|
+|ParisKV|28.43|
+|差值|**+15.31个百分点**|
+
+**15.31个百分点显然不是作者所说的“小于0.5%”。Reviewer qwkG**也质疑了大幅超过全注意力的现象，作者仍使用相同的“小增益＋去噪＋正常波动”解释，没有针对这组数字展开。[作者回复 qwkG](https://openreview.net/forum?id=wxD4wTYQXt&noteId=OBOGtZ6RVN)
+
+而且，补充实验里多种方法都超过该Full基线，例如Quest为23.51、SOCKET为21.51。这进一步说明，问题不只是“ParisKV为何更好”，而是**这条Full基线是否在正确、相同的评测协议下运行**。[补充结果](https://github.com/amy-77/ParisKV/blob/main/rebuttal_exp.md)
+
+#### 与FreeKV的对比
+
+**审稿人确实质疑了“只比 MagicPIG、PQCache，基线不够强”；作者在 rebuttal 中补上了 FreeKV，但 FreeKV 的速度数据仍存在前面发现的矛盾。**
+
+审稿人从三个角度要求补充强基线：
+
+|审稿人|主要质疑|
+|---|---|
+|**5xn6**|MagicPIG、PQCache 在延迟上不够有竞争力；应比较优化过的 GPU 检索方法，并明确询问与 Quest、Twilight 相比的实际速度。|
+|**qwkG**|只比较 MagicPIG、PQCache，缺少近期 SOTA KV 检索方法，无法全面判断性能。|
+|**JGZR**|缺少 RetroInfer、ShadowKV、RetrievalAttention、SOCKET 等方法；要求在可比预算、相同硬件下比较准确率与吞吐量。|
+
+作者承认原稿基线覆盖有限，并补充 Quest、Twilight、RetroInfer、ShadowKV、SOCKET、FreeKV 等方法，声称使用相同硬件、对齐有效检索预算；回复中列出的目标预算为 LongBench-v2／GPQA 约 **420 token**，RULER 约 **2048 token**。
+
+补充结果明确优于 FreeKV
+
+| 任务／模型                         | FreeKV |   ParisKV |
+| ----------------------------- | -----: | --------: |
+| LongBench-v2 Overall，Qwen3-4B |  19.68 | **24.60** |
+| RULER Avg，Llama3.1-8B         |  71.87 | **83.49** |
+| GPQA-Diamond，Qwen3-4B         |  58.16 | **72.22** |
+
+作者还特意将 **FreeKV 58.16** 列为 GPQA 上最强的非 ParisKV 基线，报告 ParisKV 高出 **14.06 个百分点**。[作者回复 qwkG](https://openreview.net/forum?id=wxD4wTYQXt&noteId=OBOGtZ6RVN)
+
+但是速度对比中，页面本身也保留着矛盾
+
+作者对 JGZR 的回复同时提供了两张表：
+
+| 128K、batch size 1     |    FreeKV |   ParisKV |
+| --------------------- | --------: | --------: |
+| 标为吞吐量，tokens/s        |     21.78 | **41.10** |
+| 标为 decode 延迟，ms/token | **21.78** |     24.42 |
+
+两张表确实在你下载的讨论页中同时存在。[作者原回复](https://openreview.net/forum?id=wxD4wTYQXt&noteId=1Iocr5gUP2)
+
+**这会导致相反结论：**
+
+- 按吞吐量表：ParisKV 更快。
+- 按延迟表：FreeKV 更快。
+
+按单请求持续解码的换算，我计算：
+
+\[ 21.78\ \text{ms/token} \quad\Longleftrightarrow\quad 45.91\ \text{tokens/s}, \]
+
+并不对应表中的 21.78 tokens/s。MagicPIG、PQCache 两列也出现了吞吐量表与延迟表重复同一数值的现象，**提示可能有录入或单位混用，但页面没有说明哪张表有误**。
+
+另外，作者把 FreeKV 在 256K、384K 的 decode 结果标为 NA；**仅凭这些 NA，不能推断 ParisKV 在这些长度上比 FreeKV 快**。[作者回复 5xn6](https://openreview.net/forum?id=wxD4wTYQXt&noteId=NLQJyi595u)
+
+这里的数字矛盾是我核对页面发现的，**不是审稿人后续提出的问题**。
+
+## 4. 审稿人是否继续追问？
+
+页面中的后续 acknowledgement 显示：
+
+- 5xn6 认为问题已充分解决，并表示会提高评分；
+- qwkG 选择了“Fully resolved”；
+- JGZR 也选择“Fully resolved”，后续主要关注代码开放。[5xn6 后续](https://openreview.net/forum?id=wxD4wTYQXt&noteId=uaeYwJiXi7)、[qwkG 后续](https://openreview.net/forum?id=wxD4wTYQXt&noteId=1lnCijqtz6)、[JGZR 后续](https://openreview.net/forum?id=wxD4wTYQXt&noteId=SXQM0VtmLk)
+
+**没有看到针对 FreeKV 速度表矛盾的进一步追问或作者勘误。**
+
+### 我的判断
+
+**这份 rebuttal 能支持“作者补做了 FreeKV 比较，且所报告配置下 ParisKV 的质量更好”；但目前不能可靠支持“ParisKV 的 decode 比 FreeKV 更快”。**
+
+至于为什么主文仍重点展示 MagicPIG、PQCache，这页能确认的是：**原稿确实主要比较这两者，强基线是在审稿要求后补充的**；作者没有进一步解释，为什么最终主文没有把这些新增强基线放到同等显著的位置。

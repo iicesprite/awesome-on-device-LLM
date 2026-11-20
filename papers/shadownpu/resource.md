@@ -10,6 +10,7 @@ tags:
 - backend/npu
 - system/heterogeneous
 - system/sparse-inference
+- workload/agent-serving
 - availability/open-source
 links:
   code: https://github.com/yinwangsong/mllm/tree/feat/shadownpu-sparse-attention
